@@ -1,0 +1,45 @@
+aid: cycloid
+name: Cycloid
+description: >-
+  Cycloid is an internal developer platform offering self-service
+  infrastructure, FinOps, GreenOps, and compliance management for engineering
+  teams.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Developer Experience
+  - Internal Developer Platform
+  - FinOps
+  - Platform Engineering
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/cycloid/refs/heads/main/apis.yml
+created: '2026-03-27'
+modified: '2026-03-27'
+specificationVersion: '0.19'
+apis:
+  - aid: cycloid:cycloid
+    name: Cycloid
+    description: >-
+      Cycloid is an internal developer platform offering self-service
+      infrastructure, FinOps, GreenOps, and compliance management for
+      engineering teams.
+    humanURL: https://www.cycloid.io
+    tags:
+      - Developer Experience
+      - Internal Developer Platform
+      - FinOps
+    properties:
+      - type: Documentation
+        url: https://docs.cycloid.io
+      - type: Getting Started
+        url: https://docs.cycloid.io/getting-started
+common:
+  - type: Website
+    url: https://www.cycloid.io
+  - type: Documentation
+    url: https://docs.cycloid.io
+  - type: GitHub Organization
+    url: https://github.com/cycloidio
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
