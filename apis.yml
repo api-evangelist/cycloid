@@ -8,8 +8,8 @@ type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
   - Developer Experience
-  - Internal Developer Platform
   - FinOps
+  - Internal Developer Platform
   - Platform Engineering
 url: >-
   https://raw.githubusercontent.com/api-evangelist/cycloid/refs/heads/main/apis.yml
@@ -26,8 +26,8 @@ apis:
     humanURL: https://www.cycloid.io
     tags:
       - Developer Experience
-      - Internal Developer Platform
       - FinOps
+      - Internal Developer Platform
     properties:
       - type: Documentation
         url: https://docs.cycloid.io
