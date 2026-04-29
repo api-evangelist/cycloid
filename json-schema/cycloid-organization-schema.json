@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/cycloid/refs/heads/main/json-schema/cycloid-organization-schema.json",
+  "title": "Organization",
+  "description": "A Cycloid organization tenant.",
+  "type": "object",
+  "required": ["canonical", "name"],
+  "properties": {
+    "canonical": {
+      "type": "string",
+      "description": "URL-safe slug used in API paths."
+    },
+    "name": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "owner": {
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "email": { "type": "string", "format": "email" }
+      }
+    }
+  }
+}

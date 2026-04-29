@@ -1,0 +1,43 @@
+name: Cycloid Vocabulary
+description: >-
+  Controlled vocabulary describing the core concepts of the Cycloid
+  Internal Developer Portal & Platform: organizations, projects,
+  environments, stacks (Service Catalog), pipelines, infrastructure
+  resources, credentials, config repositories, and cloud cost
+  dashboards.
+modified: '2026-04-28'
+terms:
+  - term: Organization
+    description: A top-level Cycloid tenant identified by a canonical slug, owning members, teams, projects, and stacks.
+    properties:
+      - canonical
+      - name
+      - members
+      - teams
+  - term: Project
+    description: A unit of work inside an organization grouping environments, pipelines, and infrastructure.
+    properties:
+      - canonical
+      - name
+      - environments
+  - term: Environment
+    description: A deployable target (e.g., dev / staging / prod) inside a project.
+  - term: Stack
+    description: A reusable Service Catalog template combining Terraform, configuration, and StackForms used to power self-service.
+    properties:
+      - ref
+      - name
+      - author
+      - version
+  - term: StackForm
+    description: A user-facing form definition used to collect inputs when deploying a Stack.
+  - term: Pipeline
+    description: A CI/CD pipeline (Concourse-based) attached to a project for build and deploy automation.
+  - term: InfrastructureResource
+    description: A managed cloud resource tracked in the Cycloid inventory.
+  - term: Credential
+    description: A securely stored credential (cloud key, SSH key, password, custom) referenced by stacks and pipelines.
+  - term: ConfigRepository
+    description: A Git repository holding stack configuration referenced by Cycloid stacks.
+  - term: CloudCostDashboard
+    description: A FinOps dashboard aggregating cloud spend by provider, project, tag, or environment.

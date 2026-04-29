@@ -1,0 +1,57 @@
+name: Cycloid API Capabilities
+description: >-
+  Capability profile for the Cycloid HTTP API derived from the public
+  Swagger / Redoc reference. Each capability maps to one or more
+  endpoints exposed at https://http-api.cycloid.io and reflects
+  operational scope inside the Cycloid Internal Developer Portal.
+modified: '2026-04-28'
+api: cycloid-api
+capabilities:
+  - id: manage-organizations
+    name: Manage Organizations
+    description: List, create, and inspect organizations and their members and teams.
+    operations:
+      - GET /organizations
+      - POST /organizations
+      - GET /organizations/{organization_canonical}
+      - GET /organizations/{organization_canonical}/members
+      - GET /organizations/{organization_canonical}/teams
+  - id: manage-projects
+    name: Manage Projects and Environments
+    description: List and create projects, list environments under each project.
+    operations:
+      - GET /organizations/{organization_canonical}/projects
+      - POST /organizations/{organization_canonical}/projects
+      - GET /organizations/{organization_canonical}/projects/{project_canonical}/environments
+  - id: manage-pipelines
+    name: Manage Pipelines
+    description: List CI/CD pipelines and inspect builds.
+    operations:
+      - GET /organizations/{organization_canonical}/pipelines
+  - id: manage-service-catalogs
+    name: Manage Service Catalogs (Stacks)
+    description: List and create Stacks used to power self-service in the Internal Developer Portal.
+    operations:
+      - GET /organizations/{organization_canonical}/service_catalogs
+      - POST /organizations/{organization_canonical}/service_catalogs
+  - id: manage-credentials
+    name: Manage Credentials
+    description: Create and list credentials used by stacks and pipelines.
+    operations:
+      - GET /organizations/{organization_canonical}/credentials
+      - POST /organizations/{organization_canonical}/credentials
+  - id: manage-config-repositories
+    name: Manage Config Repositories
+    description: List Git config repositories backing stacks and pipelines.
+    operations:
+      - GET /organizations/{organization_canonical}/config_repositories
+  - id: cloud-cost-providers
+    name: Manage Cloud Cost Provider Accounts
+    description: List provider accounts feeding Cloud Cost Management dashboards.
+    operations:
+      - GET /organizations/{organization_canonical}/cloud_cost_management/provider_accounts
+  - id: inventory
+    name: List Inventory
+    description: Retrieve inventory of cloud resources tracked across the organization.
+    operations:
+      - GET /organizations/{organization_canonical}/inventory

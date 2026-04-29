@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/cycloid/refs/heads/main/json-schema/cycloid-stack-schema.json",
+  "title": "Stack",
+  "description": "A Cycloid Service Catalog Stack template.",
+  "type": "object",
+  "required": ["ref", "name"],
+  "properties": {
+    "ref": {
+      "type": "string",
+      "description": "Stack reference (organization:stack-canonical)."
+    },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "author": { "type": "string" },
+    "version": { "type": "string" },
+    "technologies": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "config_repository_canonical": { "type": "string" },
+    "service_catalog_source_canonical": { "type": "string" }
+  }
+}

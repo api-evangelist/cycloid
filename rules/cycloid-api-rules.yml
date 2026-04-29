@@ -1,0 +1,47 @@
+extends: spectral:oas
+rules:
+  cycloid-info-contact:
+    description: Cycloid API spec must declare a contact.
+    severity: warn
+    given: $.info
+    then:
+      field: contact
+      function: truthy
+  cycloid-server-https:
+    description: Cycloid server URLs must use HTTPS.
+    severity: error
+    given: $.servers[*].url
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https://'
+  cycloid-base-url:
+    description: Cycloid base URL must be http-api.cycloid.io.
+    severity: error
+    given: $.servers[*].url
+    then:
+      function: pattern
+      functionOptions:
+        match: '^https://http-api\.cycloid\.io'
+  cycloid-tags-required:
+    description: Every operation must declare at least one tag.
+    severity: warn
+    given: $.paths[*][get,post,put,patch,delete]
+    then:
+      field: tags
+      function: truthy
+  cycloid-operation-id-required:
+    description: Every operation must declare an operationId.
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete]
+    then:
+      field: operationId
+      function: truthy
+  cycloid-organization-scoped:
+    description: Resource paths must be scoped under /organizations/{organization_canonical}.
+    severity: warn
+    given: $.paths
+    then:
+      function: pattern
+      functionOptions:
+        match: 'organizations/\{organization_canonical\}'

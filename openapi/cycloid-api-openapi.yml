@@ -1,0 +1,232 @@
+openapi: 3.0.3
+info:
+  title: Cycloid HTTP API
+  description: >-
+    The Cycloid HTTP API is the programmatic surface of the Cycloid
+    Internal Developer Portal & Platform. It enables management of
+    organizations, projects, environments, infrastructure resources,
+    pipelines, service catalogs (Stacks and StackForms), credentials,
+    config repositories, cloud cost dashboards, inventory and state,
+    and audit events. Authentication uses an API key (passed via
+    header or `api_key` query parameter) or OAuth2 with refresh
+    tokens. The canonical Swagger / Redoc reference is published at
+    docs.cycloid.io.
+  version: '1.0'
+  contact:
+    name: Cycloid Support
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+externalDocs:
+  description: Cycloid API Documentation
+  url: https://docs.cycloid.io
+servers:
+  - url: https://http-api.cycloid.io
+    description: Cycloid production HTTP API
+security:
+  - ApiKeyAuth: []
+  - OAuth2: []
+tags:
+  - name: Organizations
+    description: Manage organizations, members, teams, and events.
+  - name: Projects
+    description: Projects and environments inside an organization.
+  - name: Pipelines
+    description: CI/CD pipelines, components, and build tracking.
+  - name: ServiceCatalogs
+    description: Stacks (Service Catalog) and StackForms.
+  - name: Infrastructure
+    description: Infrastructure resources, policies, and Terraform integration.
+  - name: Credentials
+    description: Credential storage and rotation.
+  - name: ConfigRepositories
+    description: Git config repositories used by stacks and pipelines.
+  - name: CloudCost
+    description: Cloud cost provider accounts, dashboards, and tag mappings.
+  - name: Inventory
+    description: Inventory of cloud resources and state locking.
+paths:
+  /organizations:
+    get:
+      tags: [Organizations]
+      summary: List organizations
+      operationId: listOrganizations
+      responses:
+        '200':
+          description: List of organizations
+    post:
+      tags: [Organizations]
+      summary: Create organization
+      operationId: createOrganization
+      responses:
+        '201':
+          description: Organization created
+  /organizations/{organization_canonical}:
+    get:
+      tags: [Organizations]
+      summary: Get organization
+      operationId: getOrganization
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Organization detail
+  /organizations/{organization_canonical}/members:
+    get:
+      tags: [Organizations]
+      summary: List members
+      operationId: listOrganizationMembers
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Members
+  /organizations/{organization_canonical}/teams:
+    get:
+      tags: [Organizations]
+      summary: List teams
+      operationId: listOrganizationTeams
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Teams
+  /organizations/{organization_canonical}/projects:
+    get:
+      tags: [Projects]
+      summary: List projects
+      operationId: listProjects
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Projects
+    post:
+      tags: [Projects]
+      summary: Create project
+      operationId: createProject
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '201':
+          description: Project created
+  /organizations/{organization_canonical}/projects/{project_canonical}/environments:
+    get:
+      tags: [Projects]
+      summary: List environments
+      operationId: listEnvironments
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+        - $ref: '#/components/parameters/ProjectCanonical'
+      responses:
+        '200':
+          description: Environments
+  /organizations/{organization_canonical}/pipelines:
+    get:
+      tags: [Pipelines]
+      summary: List pipelines
+      operationId: listPipelines
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Pipelines
+  /organizations/{organization_canonical}/service_catalogs:
+    get:
+      tags: [ServiceCatalogs]
+      summary: List service catalogs (Stacks)
+      operationId: listServiceCatalogs
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Service catalogs
+    post:
+      tags: [ServiceCatalogs]
+      summary: Create service catalog
+      operationId: createServiceCatalog
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '201':
+          description: Service catalog created
+  /organizations/{organization_canonical}/credentials:
+    get:
+      tags: [Credentials]
+      summary: List credentials
+      operationId: listCredentials
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Credentials
+    post:
+      tags: [Credentials]
+      summary: Create credential
+      operationId: createCredential
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '201':
+          description: Credential created
+  /organizations/{organization_canonical}/config_repositories:
+    get:
+      tags: [ConfigRepositories]
+      summary: List config repositories
+      operationId: listConfigRepositories
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Config repositories
+  /organizations/{organization_canonical}/cloud_cost_management/provider_accounts:
+    get:
+      tags: [CloudCost]
+      summary: List cloud cost provider accounts
+      operationId: listCloudCostProviderAccounts
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Provider accounts
+  /organizations/{organization_canonical}/inventory:
+    get:
+      tags: [Inventory]
+      summary: List inventory resources
+      operationId: listInventory
+      parameters:
+        - $ref: '#/components/parameters/OrganizationCanonical'
+      responses:
+        '200':
+          description: Inventory
+components:
+  parameters:
+    OrganizationCanonical:
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+    ProjectCanonical:
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://console.cycloid.io/oauth/authorize
+          tokenUrl: https://http-api.cycloid.io/oauth/token
+          refreshUrl: https://http-api.cycloid.io/oauth/refresh
+          scopes:
+            organization:read: Read organization data
+            organization:write: Modify organization data

@@ -1,0 +1,28 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://raw.githubusercontent.com/api-evangelist/cycloid/refs/heads/main/vocabulary/cycloid-vocabulary.yml#",
+    "schema": "https://schema.org/",
+    "cycloid": "https://raw.githubusercontent.com/api-evangelist/cycloid/refs/heads/main/vocabulary/cycloid-vocabulary.yml#",
+    "Organization": "cycloid:Organization",
+    "Project": "cycloid:Project",
+    "Environment": "cycloid:Environment",
+    "Stack": "cycloid:Stack",
+    "StackForm": "cycloid:StackForm",
+    "Pipeline": "cycloid:Pipeline",
+    "InfrastructureResource": "cycloid:InfrastructureResource",
+    "Credential": "cycloid:Credential",
+    "ConfigRepository": "cycloid:ConfigRepository",
+    "CloudCostDashboard": "cycloid:CloudCostDashboard",
+    "id": "@id",
+    "type": "@type",
+    "canonical": "cycloid:canonical",
+    "name": "schema:name",
+    "members": "cycloid:members",
+    "teams": "cycloid:teams",
+    "environments": "cycloid:environments",
+    "ref": "cycloid:ref",
+    "author": "schema:author",
+    "version": "schema:version"
+  }
+}
