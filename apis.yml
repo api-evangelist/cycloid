@@ -1,6 +1,6 @@
 aid: cycloid
 name: Cycloid
-x-type: company
+kind: company
 description: >-
   Cycloid is a unified Internal Developer Portal & Platform combining
   self-service Service Catalogs (Stacks and StackForms), Infrastructure
@@ -87,7 +87,7 @@ common:
     url: https://github.com/cycloidio
   - type: Blog
     url: https://www.cycloid.io/blog
-  - type: Status
+  - type: StatusPage
     url: https://status.cycloid.io
   - type: Login
     url: https://console.cycloid.io
@@ -97,7 +97,7 @@ common:
     url: https://www.cycloid.io/legal/privacy-policy
   - type: Contact
     url: https://www.cycloid.io/contact
-  - type: JSON-LD
+  - type: JSONLD
     url: json-ld/cycloid-context.jsonld
   - type: JSONSchema
     url: json-schema/cycloid-organization-schema.json
