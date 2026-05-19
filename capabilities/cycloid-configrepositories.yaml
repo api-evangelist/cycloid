@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Cycloid HTTP API — ConfigRepositories
+  description: 'Cycloid HTTP API — ConfigRepositories. 1 operations. Lead operation: List config repositories. Self-contained
+    Naftiko capability covering one Cycloid business surface.'
+  tags:
+  - Cycloid
+  - ConfigRepositories
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CYCLOID_API_KEY: CYCLOID_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cycloid-configrepositories
+    baseUri: https://http-api.cycloid.io
+    description: Cycloid HTTP API — ConfigRepositories business capability. Self-contained, no shared references.
+    resources:
+    - name: organizations-organization_canonical-config_repositories
+      path: /organizations/{organization_canonical}/config_repositories
+      operations:
+      - name: listconfigrepositories
+        method: GET
+        description: List config repositories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CYCLOID_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: cycloid-configrepositories-rest
+    port: 8080
+    description: REST adapter for Cycloid HTTP API — ConfigRepositories. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/organizations/{organization-canonical}/config-repositories
+      name: organizations-organization-canonical-config-repositories
+      description: REST surface for organizations-organization_canonical-config_repositories.
+      operations:
+      - method: GET
+        name: listconfigrepositories
+        description: List config repositories
+        call: cycloid-configrepositories.listconfigrepositories
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cycloid-configrepositories-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Cycloid HTTP API — ConfigRepositories. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-config-repositories
+      description: List config repositories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cycloid-configrepositories.listconfigrepositories
+      outputParameters:
+      - type: object
+        mapping: $.

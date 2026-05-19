@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Cycloid HTTP API — Pipelines
+  description: 'Cycloid HTTP API — Pipelines. 1 operations. Lead operation: List pipelines. Self-contained Naftiko capability
+    covering one Cycloid business surface.'
+  tags:
+  - Cycloid
+  - Pipelines
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CYCLOID_API_KEY: CYCLOID_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cycloid-pipelines
+    baseUri: https://http-api.cycloid.io
+    description: Cycloid HTTP API — Pipelines business capability. Self-contained, no shared references.
+    resources:
+    - name: organizations-organization_canonical-pipelines
+      path: /organizations/{organization_canonical}/pipelines
+      operations:
+      - name: listpipelines
+        method: GET
+        description: List pipelines
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CYCLOID_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: cycloid-pipelines-rest
+    port: 8080
+    description: REST adapter for Cycloid HTTP API — Pipelines. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/organizations/{organization-canonical}/pipelines
+      name: organizations-organization-canonical-pipelines
+      description: REST surface for organizations-organization_canonical-pipelines.
+      operations:
+      - method: GET
+        name: listpipelines
+        description: List pipelines
+        call: cycloid-pipelines.listpipelines
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cycloid-pipelines-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Cycloid HTTP API — Pipelines. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-pipelines
+      description: List pipelines
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cycloid-pipelines.listpipelines
+      outputParameters:
+      - type: object
+        mapping: $.

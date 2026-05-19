@@ -1,0 +1,127 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Cycloid HTTP API — Projects
+  description: 'Cycloid HTTP API — Projects. 3 operations. Lead operation: List projects. Self-contained Naftiko capability
+    covering one Cycloid business surface.'
+  tags:
+  - Cycloid
+  - Projects
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    CYCLOID_API_KEY: CYCLOID_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cycloid-projects
+    baseUri: https://http-api.cycloid.io
+    description: Cycloid HTTP API — Projects business capability. Self-contained, no shared references.
+    resources:
+    - name: organizations-organization_canonical-projects
+      path: /organizations/{organization_canonical}/projects
+      operations:
+      - name: listprojects
+        method: GET
+        description: List projects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createproject
+        method: POST
+        description: Create project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: organizations-organization_canonical-projects-project_canonical-environments
+      path: /organizations/{organization_canonical}/projects/{project_canonical}/environments
+      operations:
+      - name: listenvironments
+        method: GET
+        description: List environments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.CYCLOID_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: cycloid-projects-rest
+    port: 8080
+    description: REST adapter for Cycloid HTTP API — Projects. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/organizations/{organization-canonical}/projects
+      name: organizations-organization-canonical-projects
+      description: REST surface for organizations-organization_canonical-projects.
+      operations:
+      - method: GET
+        name: listprojects
+        description: List projects
+        call: cycloid-projects.listprojects
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createproject
+        description: Create project
+        call: cycloid-projects.createproject
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{organization-canonical}/projects/{project-canonical}/environments
+      name: organizations-organization-canonical-projects-project-canonical-environments
+      description: REST surface for organizations-organization_canonical-projects-project_canonical-environments.
+      operations:
+      - method: GET
+        name: listenvironments
+        description: List environments
+        call: cycloid-projects.listenvironments
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cycloid-projects-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Cycloid HTTP API — Projects. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-projects
+      description: List projects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cycloid-projects.listprojects
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-project
+      description: Create project
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: cycloid-projects.createproject
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-environments
+      description: List environments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cycloid-projects.listenvironments
+      outputParameters:
+      - type: object
+        mapping: $.
