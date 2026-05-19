@@ -19,7 +19,7 @@ type: Index
 access: 3rd-Party
 position: Consumer
 created: '2026-03-27'
-modified: '2026-04-28'
+modified: '2026-05-19'
 specificationVersion: '0.20'
 tags:
   - Asset Inventory
@@ -109,6 +109,9 @@ common:
     url: capabilities/cycloid-api-capabilities.yml
   - type: Rules
     url: rules/cycloid-api-rules.yml
+  - name: MCP Server
+    url: https://github.com/cycloidio/cycloid-mcp-server
+    type: MCPServer
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
