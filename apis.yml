@@ -121,6 +121,8 @@ common:
 - name: MCP Server
   url: https://github.com/cycloidio/cycloid-mcp-server
   type: MCPServer
+- type: LLMsTxt
+  url: https://docs.cycloid.io/llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
