@@ -1,0 +1,361 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cycloid HTTP API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations"
+          },
+          "docs": "List organizations"
+        },
+        {
+          "info": {
+            "name": "Create organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://http-api.cycloid.io/organizations"
+          },
+          "docs": "Create organization"
+        },
+        {
+          "info": {
+            "name": "Get organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get organization"
+        },
+        {
+          "info": {
+            "name": "List members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/members",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List members"
+        },
+        {
+          "info": {
+            "name": "List teams",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/teams",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List teams"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/projects",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List projects"
+        },
+        {
+          "info": {
+            "name": "Create project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/projects",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Create project"
+        },
+        {
+          "info": {
+            "name": "List environments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/projects/:project_canonical/environments",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "project_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List environments"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Pipelines",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List pipelines",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/pipelines",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List pipelines"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "ServiceCatalogs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List service catalogs (Stacks)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/service_catalogs",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List service catalogs (Stacks)"
+        },
+        {
+          "info": {
+            "name": "Create service catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/service_catalogs",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Create service catalog"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Credentials",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List credentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/credentials",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List credentials"
+        },
+        {
+          "info": {
+            "name": "Create credential",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/credentials",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Create credential"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "ConfigRepositories",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List config repositories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/config_repositories",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List config repositories"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "CloudCost",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List cloud cost provider accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/cloud_cost_management/provider_accounts",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List cloud cost provider accounts"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Inventory",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List inventory resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/inventory",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List inventory resources"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
