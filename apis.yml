@@ -10,7 +10,7 @@ description: >-
   cost dashboards. Authentication is via API key or OAuth2 with token refresh; the canonical Swagger / Redoc reference
   is published at docs.cycloid.io.
 url: https://raw.githubusercontent.com/api-evangelist/cycloid/refs/heads/main/apis.yml
-image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 type: Index
 access: 3rd-Party
 position: Consumer
@@ -45,7 +45,7 @@ apis:
       organizations, members, teams, projects, environments, stacks (Service Catalog), pipelines, infrastructure
       resources, credentials, config repositories, cloud cost dashboards, and inventory. Authentication uses an API key
       or OAuth2 with token refresh.
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://docs.cycloid.io/
     baseURL: https://http-api.cycloid.io
     tags:
