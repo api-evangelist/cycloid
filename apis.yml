@@ -108,7 +108,7 @@ common:
   - name: MCP Server
     url: https://github.com/cycloidio/cycloid-mcp-server
     type: MCPServer
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://docs.cycloid.io/llms.txt
 maintainers:
   - FN: Kin Lane
