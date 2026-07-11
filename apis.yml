@@ -71,6 +71,8 @@ apis:
       - type: Rules
         url: rules/cycloid-api-rules.yml
 common:
+  - type: OAuthScopes
+    url: scopes/cycloid-scopes.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/cycloid
   - type: Website

@@ -1,0 +1,23 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/cycloid-api-openapi.yml
+schemes:
+- name: OAuth2
+  source: openapi/cycloid-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://console.cycloid.io/oauth/authorize
+    tokenUrl: https://http-api.cycloid.io/oauth/token
+scopes:
+- scope: organization:read
+  description: Read organization data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cycloid-api-openapi.yml
+- scope: organization:write
+  description: Modify organization data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/cycloid-api-openapi.yml
