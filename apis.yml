@@ -71,6 +71,12 @@ apis:
       - type: Rules
         url: rules/cycloid-api-rules.yml
 common:
+  - type: TrustCenter
+    url: security/cycloid-trust-center.yml
+  - type: DomainSecurity
+    url: security/cycloid-domain-security.yml
+  - type: Authentication
+    url: authentication/cycloid-authentication.yml
   - type: OAuthScopes
     url: scopes/cycloid-scopes.yml
   - type: LinkedIn
