@@ -10,7 +10,20 @@ description: >-
   cost dashboards. Authentication is via API key or OAuth2 with token refresh; the canonical Swagger / Redoc reference
   is published at docs.cycloid.io.
 url: https://raw.githubusercontent.com/api-evangelist/cycloid/refs/heads/main/apis.yml
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cycloid.png
 type: Index
 access: 3rd-Party
 position: Consumer
@@ -38,39 +51,153 @@ tags:
   - StackForms
   - Terraform
 apis:
-  - aid: cycloid:http-api
-    name: Cycloid HTTP API
-    description: >-
-      The Cycloid HTTP API is the programmatic surface of the Cycloid Internal Developer Portal & Platform. It manages
-      organizations, members, teams, projects, environments, stacks (Service Catalog), pipelines, infrastructure
-      resources, credentials, config repositories, cloud cost dashboards, and inventory. Authentication uses an API key
-      or OAuth2 with token refresh.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://docs.cycloid.io/
-    baseURL: https://http-api.cycloid.io
-    tags:
-      - API Key
-      - Cloud Cost
-      - Credentials
-      - Inventory
-      - OAuth2
-      - Organizations
-      - Pipelines
-      - Projects
-      - Service Catalog
-      - Stacks
-    properties:
-      - type: Documentation
-        url: https://docs.cycloid.io/
-      - type: GettingStarted
-        url: https://docs.cycloid.io/getting-started
-      - type: OpenAPI
-        url: openapi/cycloid-api-openapi.yml
-      - type: Capabilities
-        url: capabilities/cycloid-api-capabilities.yml
-      - type: Rules
-        url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-cloudcost-api
+  name: Cycloid CloudCost API
+  description: Cloud cost provider accounts, dashboards, and tag mappings.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - CloudCost
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-cloudcost-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Capabilities
+    url: capabilities/cycloid-api-capabilities.yml
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-configrepositories-api
+  name: Cycloid ConfigRepositories API
+  description: Git config repositories used by stacks and pipelines.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - ConfigRepositories
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-configrepositories-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Capabilities
+    url: capabilities/cycloid-api-capabilities.yml
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-credentials-api
+  name: Cycloid Credentials API
+  description: Credential storage and rotation.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Credentials
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-credentials-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Capabilities
+    url: capabilities/cycloid-api-capabilities.yml
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-inventory-api
+  name: Cycloid Inventory API
+  description: Inventory of cloud resources and state locking.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-inventory-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Capabilities
+    url: capabilities/cycloid-api-capabilities.yml
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organizations-api
+  name: Cycloid Organizations API
+  description: Manage organizations, members, teams, and events.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organizations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Capabilities
+    url: capabilities/cycloid-api-capabilities.yml
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-pipelines-api
+  name: Cycloid Pipelines API
+  description: CI/CD pipelines, components, and build tracking.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Pipelines
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-pipelines-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Capabilities
+    url: capabilities/cycloid-api-capabilities.yml
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-projects-api
+  name: Cycloid Projects API
+  description: Projects and environments inside an organization.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-projects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Capabilities
+    url: capabilities/cycloid-api-capabilities.yml
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-servicecatalogs-api
+  name: Cycloid ServiceCatalogs API
+  description: Stacks (Service Catalog) and StackForms.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - ServiceCatalogs
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-servicecatalogs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Capabilities
+    url: capabilities/cycloid-api-capabilities.yml
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
 common:
+  - type: PostmanWorkspace
+    url: https://www.postman.com/kinlaneapi/cycloid/overview
   - type: AgenticAccess
     url: agentic-access/cycloid-agentic-access.yml
   - type: TrustCenter
