@@ -1,0 +1,142 @@
+{
+  "info": {
+    "_postman_id": "a16457d9-6ab4-470b-bbf2-18df8e6f2519",
+    "name": "Cycloid HTTP CloudCost Inventory API",
+    "description": "The Cycloid HTTP API is the programmatic surface of the Cycloid Internal Developer Portal & Platform. It enables management of organizations, projects, environments, infrastructure resources, pipelines, service catalogs (Stacks and StackForms), credentials, config repositories, cloud cost dashboards, inventory and state, and audit events. Authentication uses an API key (passed via header or `api_key` query parameter) or OAuth2 with refresh tokens. The canonical Swagger / Redoc reference is published at docs.cycloid.io.\n\nContact Support:\n Name: Cycloid Support\n Email: contact@cycloid.io",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:29:09.000Z",
+    "updatedAt": "2026-07-28T01:29:09.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-a16457d9-6ab4-470b-bbf2-18df8e6f2519"
+  },
+  "item": [
+    {
+      "name": "organizations",
+      "item": [
+        {
+          "name": "{organization_canonical}",
+          "item": [
+            {
+              "name": "inventory",
+              "item": [
+                {
+                  "name": "List inventory resources",
+                  "id": "d4d0e9cb-69c3-499a-a14f-39e7ac8eaac9",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_canonical/inventory",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_canonical",
+                        "inventory"
+                      ],
+                      "variable": [
+                        {
+                          "id": "4327c6da-4c26-47de-9736-7f8899ef7f59",
+                          "key": "organization_canonical",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "8ae3f92a-04ef-42bc-8395-64328ac2ee5d",
+                      "name": "Inventory",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_canonical/inventory",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_canonical",
+                            "inventory"
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_canonical"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T01:29:10.000Z",
+                      "updatedAt": "2026-07-28T01:29:10.000Z",
+                      "uid": "35240-8ae3f92a-04ef-42bc-8395-64328ac2ee5d"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:29:10.000Z",
+                  "updatedAt": "2026-07-28T01:29:10.000Z",
+                  "uid": "35240-d4d0e9cb-69c3-499a-a14f-39e7ac8eaac9"
+                }
+              ],
+              "id": "cd411f14-8152-4cda-b79c-4225e8501832",
+              "createdAt": "2026-07-28T01:29:10.000Z",
+              "updatedAt": "2026-07-28T01:29:10.000Z",
+              "uid": "35240-cd411f14-8152-4cda-b79c-4225e8501832"
+            }
+          ],
+          "id": "08a75fc2-c8cc-42e9-b732-18ac8570f71f",
+          "createdAt": "2026-07-28T01:29:10.000Z",
+          "updatedAt": "2026-07-28T01:29:10.000Z",
+          "uid": "35240-08a75fc2-c8cc-42e9-b732-18ac8570f71f"
+        }
+      ],
+      "id": "ae81b519-0e61-48a9-8490-7504577af137",
+      "createdAt": "2026-07-28T01:29:10.000Z",
+      "updatedAt": "2026-07-28T01:29:10.000Z",
+      "uid": "35240-ae81b519-0e61-48a9-8490-7504577af137"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://http-api.cycloid.io"
+    }
+  ]
+}

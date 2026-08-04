@@ -1,0 +1,28 @@
+{
+  "provider": "cycloid",
+  "sources": [
+    "cycloid-cloudcost-api-openapi.yml",
+    "cycloid-configrepositories-api-openapi.yml",
+    "cycloid-credentials-api-openapi.yml",
+    "cycloid-inventory-api-openapi.yml",
+    "cycloid-organizations-api-openapi.yml",
+    "cycloid-pipelines-api-openapi.yml",
+    "cycloid-projects-api-openapi.yml",
+    "cycloid-servicecatalogs-api-openapi.yml"
+  ],
+  "outputs": [
+    "cycloid-cloudcost-api-openapi.yml",
+    "cycloid-configrepositories-api-openapi.yml",
+    "cycloid-credentials-api-openapi.yml",
+    "cycloid-inventory-api-openapi.yml",
+    "cycloid-organizations-api-openapi.yml",
+    "cycloid-pipelines-api-openapi.yml",
+    "cycloid-projects-api-openapi.yml",
+    "cycloid-servicecatalogs-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

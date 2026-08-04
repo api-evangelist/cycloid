@@ -1,0 +1,415 @@
+{
+  "info": {
+    "_postman_id": "089e6c98-ca27-4b1a-a949-337ecb34148f",
+    "name": "Cycloid HTTP CloudCost Organizations API",
+    "description": "The Cycloid HTTP API is the programmatic surface of the Cycloid Internal Developer Portal & Platform. It enables management of organizations, projects, environments, infrastructure resources, pipelines, service catalogs (Stacks and StackForms), credentials, config repositories, cloud cost dashboards, inventory and state, and audit events. Authentication uses an API key (passed via header or `api_key` query parameter) or OAuth2 with refresh tokens. The canonical Swagger / Redoc reference is published at docs.cycloid.io.\n\nContact Support:\n Name: Cycloid Support\n Email: contact@cycloid.io",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:29:10.000Z",
+    "updatedAt": "2026-07-28T01:29:10.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-089e6c98-ca27-4b1a-a949-337ecb34148f"
+  },
+  "item": [
+    {
+      "name": "organizations",
+      "item": [
+        {
+          "name": "{organization_canonical}",
+          "item": [
+            {
+              "name": "members",
+              "item": [
+                {
+                  "name": "List members",
+                  "id": "7d36ee8b-3981-468d-a8a0-8c4a7e05b769",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_canonical/members",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_canonical",
+                        "members"
+                      ],
+                      "variable": [
+                        {
+                          "id": "4bb4316a-e645-4c52-8adf-aafc9e521257",
+                          "key": "organization_canonical",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "2a568131-ce5a-411a-8167-c80989c9dabf",
+                      "name": "Members",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_canonical/members",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_canonical",
+                            "members"
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_canonical"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T01:29:10.000Z",
+                      "updatedAt": "2026-07-28T01:29:10.000Z",
+                      "uid": "35240-2a568131-ce5a-411a-8167-c80989c9dabf"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:29:10.000Z",
+                  "updatedAt": "2026-07-28T01:29:10.000Z",
+                  "uid": "35240-7d36ee8b-3981-468d-a8a0-8c4a7e05b769"
+                }
+              ],
+              "id": "6336fb18-ba08-42f9-9c88-d689175361a4",
+              "createdAt": "2026-07-28T01:29:10.000Z",
+              "updatedAt": "2026-07-28T01:29:10.000Z",
+              "uid": "35240-6336fb18-ba08-42f9-9c88-d689175361a4"
+            },
+            {
+              "name": "teams",
+              "item": [
+                {
+                  "name": "List teams",
+                  "id": "806c7f76-3f94-4515-b9bf-70d0976d94a0",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_canonical/teams",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_canonical",
+                        "teams"
+                      ],
+                      "variable": [
+                        {
+                          "id": "c2ad3d79-e6e3-41c1-9590-ce91576b95f6",
+                          "key": "organization_canonical",
+                          "value": "<string>",
+                          "description": "(Required) "
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "4b9abe1e-2093-4af2-9f52-389fc836153b",
+                      "name": "Teams",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_canonical/teams",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_canonical",
+                            "teams"
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_canonical"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T01:29:10.000Z",
+                      "updatedAt": "2026-07-28T01:29:10.000Z",
+                      "uid": "35240-4b9abe1e-2093-4af2-9f52-389fc836153b"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:29:10.000Z",
+                  "updatedAt": "2026-07-28T01:29:10.000Z",
+                  "uid": "35240-806c7f76-3f94-4515-b9bf-70d0976d94a0"
+                }
+              ],
+              "id": "b10b31b6-ff33-49fb-b6b6-bce9a03b6d53",
+              "createdAt": "2026-07-28T01:29:10.000Z",
+              "updatedAt": "2026-07-28T01:29:10.000Z",
+              "uid": "35240-b10b31b6-ff33-49fb-b6b6-bce9a03b6d53"
+            },
+            {
+              "name": "Get organization",
+              "id": "50b9a0fa-489d-4f8b-9689-02c380c0a059",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/organizations/:organization_canonical",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "organizations",
+                    ":organization_canonical"
+                  ],
+                  "variable": [
+                    {
+                      "id": "c6c67db7-de92-43d6-9bff-bc0abf3070fd",
+                      "key": "organization_canonical",
+                      "value": "<string>",
+                      "description": "(Required) "
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "9e412e38-cac0-4ca0-aa30-b1a773dd58a2",
+                  "name": "Organization detail",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_canonical",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_canonical"
+                      ],
+                      "variable": [
+                        {
+                          "key": "organization_canonical"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-07-28T01:29:10.000Z",
+                  "updatedAt": "2026-07-28T01:29:10.000Z",
+                  "uid": "35240-9e412e38-cac0-4ca0-aa30-b1a773dd58a2"
+                }
+              ],
+              "createdAt": "2026-07-28T01:29:10.000Z",
+              "updatedAt": "2026-07-28T01:29:10.000Z",
+              "uid": "35240-50b9a0fa-489d-4f8b-9689-02c380c0a059"
+            }
+          ],
+          "id": "722eb9fe-b8ce-4718-839b-ad240dc4b4b0",
+          "createdAt": "2026-07-28T01:29:10.000Z",
+          "updatedAt": "2026-07-28T01:29:10.000Z",
+          "uid": "35240-722eb9fe-b8ce-4718-839b-ad240dc4b4b0"
+        },
+        {
+          "name": "List organizations",
+          "id": "36bc0d34-f644-4c2b-9662-11578725bf13",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ab7b9940-833a-4e76-a519-2fe85f18c42c",
+              "name": "List of organizations",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/organizations",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "organizations"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-07-28T01:29:10.000Z",
+              "updatedAt": "2026-07-28T01:29:10.000Z",
+              "uid": "35240-ab7b9940-833a-4e76-a519-2fe85f18c42c"
+            }
+          ],
+          "createdAt": "2026-07-28T01:29:10.000Z",
+          "updatedAt": "2026-07-28T01:29:10.000Z",
+          "uid": "35240-36bc0d34-f644-4c2b-9662-11578725bf13"
+        },
+        {
+          "name": "Create organization",
+          "id": "fe2c7a00-5ff6-4eb0-a621-119bf7104df7",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "32fd6c16-680f-4872-b41b-7c33622f4644",
+              "name": "Organization created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/organizations",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "organizations"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-07-28T01:29:10.000Z",
+              "updatedAt": "2026-07-28T01:29:10.000Z",
+              "uid": "35240-32fd6c16-680f-4872-b41b-7c33622f4644"
+            }
+          ],
+          "createdAt": "2026-07-28T01:29:10.000Z",
+          "updatedAt": "2026-07-28T01:29:10.000Z",
+          "uid": "35240-fe2c7a00-5ff6-4eb0-a621-119bf7104df7"
+        }
+      ],
+      "id": "903ae2c6-3443-4a47-80a3-63989000974b",
+      "createdAt": "2026-07-28T01:29:10.000Z",
+      "updatedAt": "2026-07-28T01:29:10.000Z",
+      "uid": "35240-903ae2c6-3443-4a47-80a3-63989000974b"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://http-api.cycloid.io"
+    }
+  ]
+}
