@@ -1,0 +1,134 @@
+{
+  "item": [
+    {
+      "id": "d15d3b65-e668-4f7f-933b-4d293b938591",
+      "name": "ConfigRepositories",
+      "description": {
+        "content": "Git config repositories used by stacks and pipelines.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4469e77b-5c00-4acf-8b5a-2fd10044fa32",
+          "name": "List config repositories",
+          "request": {
+            "name": "List config repositories",
+            "description": {},
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_canonical",
+                "config_repositories"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_canonical",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d6406a17-ff01-482e-afd1-c69a5ce9aee1",
+              "name": "Config repositories",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_canonical",
+                    "config_repositories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_canonical",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://http-api.cycloid.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "709705d4-8861-441d-83f0-61cce918cb9c",
+    "name": "Cycloid HTTP CloudCost ConfigRepositories API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Cycloid HTTP API is the programmatic surface of the Cycloid Internal Developer Portal & Platform. It enables management of organizations, projects, environments, infrastructure resources, pipelines, service catalogs (Stacks and StackForms), credentials, config repositories, cloud cost dashboards, inventory and state, and audit events. Authentication uses an API key (passed via header or `api_key` query parameter) or OAuth2 with refresh tokens. The canonical Swagger / Redoc reference is published at docs.cycloid.io.\n\nContact Support:\n Name: Cycloid Support\n Email: contact@cycloid.io",
+      "type": "text/plain"
+    }
+  }
+}

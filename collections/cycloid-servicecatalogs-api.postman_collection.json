@@ -1,0 +1,219 @@
+{
+  "item": [
+    {
+      "id": "e2a4f592-53db-41fa-9d48-b70c3576b5fa",
+      "name": "ServiceCatalogs",
+      "description": {
+        "content": "Stacks (Service Catalog) and StackForms.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bb1096a3-726b-423a-b6a1-b7aa7896a221",
+          "name": "List service catalogs (Stacks)",
+          "request": {
+            "name": "List service catalogs (Stacks)",
+            "description": {},
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_canonical",
+                "service_catalogs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_canonical",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5a6bd716-bb9a-4732-9d5a-33b6b1895a0e",
+              "name": "Service catalogs",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_canonical",
+                    "service_catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_canonical",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8b5c4a7b-e44f-4394-8aff-f5a8f27fa710",
+          "name": "Create service catalog",
+          "request": {
+            "name": "Create service catalog",
+            "description": {},
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_canonical",
+                "service_catalogs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_canonical",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "187bd2c9-c113-4c76-8dfd-e6ceceeeb620",
+              "name": "Service catalog created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_canonical",
+                    "service_catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_canonical",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://http-api.cycloid.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cef84247-eb4f-4c11-9a01-8f5a8a2c2880",
+    "name": "Cycloid HTTP CloudCost ServiceCatalogs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Cycloid HTTP API is the programmatic surface of the Cycloid Internal Developer Portal & Platform. It enables management of organizations, projects, environments, infrastructure resources, pipelines, service catalogs (Stacks and StackForms), credentials, config repositories, cloud cost dashboards, inventory and state, and audit events. Authentication uses an API key (passed via header or `api_key` query parameter) or OAuth2 with refresh tokens. The canonical Swagger / Redoc reference is published at docs.cycloid.io.\n\nContact Support:\n Name: Cycloid Support\n Email: contact@cycloid.io",
+      "type": "text/plain"
+    }
+  }
+}

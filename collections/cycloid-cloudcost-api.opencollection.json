@@ -1,0 +1,44 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cycloid HTTP CloudCost API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "CloudCost",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List cloud cost provider accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/cloud_cost_management/provider_accounts",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List cloud cost provider accounts"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

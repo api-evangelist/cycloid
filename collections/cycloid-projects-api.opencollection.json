@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cycloid HTTP CloudCost Projects API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/projects",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List projects"
+        },
+        {
+          "info": {
+            "name": "Create project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/projects",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Create project"
+        },
+        {
+          "info": {
+            "name": "List environments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/projects/:project_canonical/environments",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "project_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List environments"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

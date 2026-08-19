@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cycloid HTTP CloudCost ServiceCatalogs API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ServiceCatalogs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List service catalogs (Stacks)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/service_catalogs",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List service catalogs (Stacks)"
+        },
+        {
+          "info": {
+            "name": "Create service catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://http-api.cycloid.io/organizations/:organization_canonical/service_catalogs",
+            "params": [
+              {
+                "name": "organization_canonical",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Create service catalog"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

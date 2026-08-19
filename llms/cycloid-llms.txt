@@ -1,0 +1,1624 @@
+# Cycloid Docs
+
+> This documentation section centralize all the technical documentation and specification of Cycloid platform. Use the index on the sidebar to the left to browse each feature or use the integrated search.
+
+- [Feature reference](/index.md)
+
+## tags
+
+- [Tags](/tags.md)
+
+### components
+
+- [One doc tagged with "components"](/tags/components.md)
+
+### feature-list
+
+- [One doc tagged with "feature list"](/tags/feature-list.md)
+
+### features
+
+- [One doc tagged with "features"](/tags/features.md)
+
+### projects
+
+- [One doc tagged with "projects"](/tags/projects.md)
+
+### reference
+
+- [3 docs tagged with "reference"](/tags/reference.md)
+
+### stackforms
+
+- [One doc tagged with "stackforms"](/tags/stackforms.md)
+
+### technologies
+
+- [One doc tagged with "technologies"](/tags/technologies.md)
+
+## cookbook
+
+This section contains all of our tutorials, step by step guides and examples by use case.
+
+- [Welcome to the Cycloid cookbook](/cookbook.md): This section contains all of our tutorials, step by step guides and examples by use case.
+
+### dedicated-platform
+
+Here, you can find comprehensive guides to set up the Cycloid platform and its dependencies. We offer two main methods for production deployment:
+
+- [Dedicated Platform](/cookbook/dedicated-platform.md): Here, you can find comprehensive guides to set up the Cycloid platform and its dependencies. We offer two main methods for production deployment:
+
+#### advanced-configurations
+
+- [Advanced configurations](/cookbook/dedicated-platform/advanced-configurations.md)
+
+##### infrastructure
+
+
+###### minio
+
+MinIO is a high-performance, S3 compatible object store. It is built for large scale AI/ML, data lake and database workloads.
+
+- [MinIO](/cookbook/dedicated-platform/advanced-configurations/infrastructure/minio.md): MinIO is a high-performance, S3 compatible object store. It is built for large scale AI/ML, data lake and database workloads.
+
+###### monitoring
+
+Services and Cycloid API Health metrics
+
+- [Monitoring](/cookbook/dedicated-platform/advanced-configurations/infrastructure/monitoring.md): Services and Cycloid API Health metrics
+
+###### plugins
+
+The Plugins system allows organizations to run custom plugin containers within Cycloid. It is composed of three components that work together:
+
+- [Plugins](/cookbook/dedicated-platform/advanced-configurations/infrastructure/plugins.md): The Plugins system allows organizations to run custom plugin containers within Cycloid. It is composed of three components that work together:
+
+###### private-container-registry
+
+When your environment does not have access to public container registries, you need to mirror all required images into your internal registry and override the image references.
+
+- [Private Container Registry](/cookbook/dedicated-platform/advanced-configurations/infrastructure/private-container-registry.md): When your environment does not have access to public container registries, you need to mirror all required images into your internal registry and override the image references.
+
+###### redis
+
+TLS with external Redis
+
+- [Redis](/cookbook/dedicated-platform/advanced-configurations/infrastructure/redis.md): TLS with external Redis
+
+###### vault
+
+MySQL storage backend
+
+- [Vault](/cookbook/dedicated-platform/advanced-configurations/infrastructure/vault.md): MySQL storage backend
+
+##### platform
+
+
+###### certificate-cycloid-console
+
+By default Cycloid generate self signed certificate to access the Console and API.
+
+- [Adding or Updating Your Own Certificate on the Cycloid Console](/cookbook/dedicated-platform/advanced-configurations/platform/certificate-cycloid-console.md): By default Cycloid generate self signed certificate to access the Console and API.
+
+###### enable-cloud-cost-management
+
+This Elasticsearch endpoint needs to respect the following requirements:
+
+- [Enable the Cloud Cost Management feature](/cookbook/dedicated-platform/advanced-configurations/platform/enable-cloud-cost-management.md): This Elasticsearch endpoint needs to respect the following requirements:
+
+###### enable-cost-estimation
+
+To enable cost-estimation, Cloud provider price need to be injested regularly.
+
+- [Enable the Cost Estimation feature](/cookbook/dedicated-platform/advanced-configurations/platform/enable-cost-estimation.md): To enable cost-estimation, Cloud provider price need to be injested regularly.
+
+###### organization-settings
+
+Restrict organization creation
+
+- [Organization Settings](/cookbook/dedicated-platform/advanced-configurations/platform/organization-settings.md): Restrict organization creation
+
+###### smtp-configuration
+
+Cycloid require a SMTP server to send email for invitation/notification.
+
+- [SMTP configuration](/cookbook/dedicated-platform/advanced-configurations/platform/smtp-configuration.md): Cycloid require a SMTP server to send email for invitation/notification.
+
+##### unreferenced
+
+unreferenced page
+
+- [Advanced Configurations Unreferenced](/cookbook/dedicated-platform/advanced-configurations/unreferenced.md): unreferenced page
+
+#### demo-poc
+
+This section describes Self-Hosted platforms for evaluation, training or test purposes ONLY.
+
+- [Demo - POC Self-Hosted platform](/cookbook/dedicated-platform/demo-poc.md): This section describes Self-Hosted platforms for evaluation, training or test purposes ONLY.
+
+##### instances
+
+Solution Description
+
+- [Deploy on instances](/cookbook/dedicated-platform/demo-poc/instances.md): Solution Description
+
+##### kubernetes
+
+Solution Description
+
+- [Deploy on Kubernetes](/cookbook/dedicated-platform/demo-poc/kubernetes.md): Solution Description
+
+#### setup-k8s
+
+The Cycloid on-premises setup on Kubernetes provide a way to setup the Cycloid platform and dependencies within your own Kubernetes cluster.
+
+- [Cycloid Self-Hosted Kubernetes](/cookbook/dedicated-platform/setup-k8s.md): The Cycloid on-premises setup on Kubernetes provide a way to setup the Cycloid platform and dependencies within your own Kubernetes cluster.
+
+#### setup-onprem
+
+The Cycloid on-premises setup allows you to deploy the Cycloid platform and its dependencies on one or several servers using Docker.
+
+- [Cycloid Self-Hosted Instances](/cookbook/dedicated-platform/setup-onprem.md): The Cycloid on-premises setup allows you to deploy the Cycloid platform and its dependencies on one or several servers using Docker.
+
+### getting-started
+
+Welcome to the Cycloid Sustainable Platform Engineering Getting Started Guide!
+
+- [Getting started with Cycloid](/cookbook/getting-started.md): Welcome to the Cycloid Sustainable Platform Engineering Getting Started Guide!
+
+#### devops-teams
+
+Audience
+
+- [Cycloid for DevOps teams](/cookbook/getting-started/devops-teams.md): Audience
+
+##### stack-creation
+
+As a DevOps team member, you may be interested to learn how to create and customize Cycloid Stacks. Let's first create a new Stack in your service catalog git repository.
+
+- [Ways to create a Stack](/cookbook/getting-started/devops-teams/stack-creation.md): As a DevOps team member, you may be interested to learn how to create and customize Cycloid Stacks. Let's first create a new Stack in your service catalog git repository.
+
+###### blueprint
+
+Create a stack from a blueprint
+
+- [From a stack blueprint](/cookbook/getting-started/devops-teams/stack-creation/blueprint.md): Create a stack from a blueprint
+
+###### community
+
+Create a stack from the Cycloid community catalog
+
+- [From community catalog](/cookbook/getting-started/devops-teams/stack-creation/community.md): Create a stack from the Cycloid community catalog
+
+###### import
+
+Create a stack from an existing infrastructure
+
+- [From existing infrastructure](/cookbook/getting-started/devops-teams/stack-creation/import.md): Create a stack from an existing infrastructure
+
+##### stack-customization
+
+After creating a Stack, you will want to adapt it to your specific use case. The process depends on which automation technologies you are using.
+
+- [Customize your Stacks](/cookbook/getting-started/devops-teams/stack-customization.md): After creating a Stack, you will want to adapt it to your specific use case. The process depends on which automation technologies you are using.
+
+###### ansible
+
+After creating a Stack from a blueprint using Ansible, we'll explore how to customize it, including changing the Ansible playbook to your use case and exposing the variables via StackForms.
+
+- [Using Ansible](/cookbook/getting-started/devops-teams/stack-customization/ansible.md): After creating a Stack from a blueprint using Ansible, we'll explore how to customize it, including changing the Ansible playbook to your use case and exposing the variables via StackForms.
+
+###### helm
+
+After creating a Stack from a blueprint using Helm, we'll explore how to customize it, including exposing the Helm charts values via StackForms. In this example, we will run the Helm chart using Terraform, so you can also add cloud infrastructure that may not be in a Kubernetes cluster, such as a managed database.
+
+- [Using Helm charts](/cookbook/getting-started/devops-teams/stack-customization/helm.md): After creating a Stack from a blueprint using Helm, we'll explore how to customize it, including exposing the Helm charts values via StackForms. In this example, we will run the Helm chart using Terraform, so you can also add cloud infrastructure that may not be in a Kubernetes cluster, such as a managed database.
+
+###### terraform
+
+After creating a Stack from a blueprint using Terraform, we'll explore how to customize it, including changing the Terraform modules to your use case and exposing the variables via StackForms.
+
+- [Using Terraform](/cookbook/getting-started/devops-teams/stack-customization/terraform.md): After creating a Stack from a blueprint using Terraform, we'll explore how to customize it, including changing the Terraform modules to your use case and exposing the variables via StackForms.
+
+##### stackforms
+
+After you create a Stack and you make customizations to support your use case, let's review more advanced StackForms use cases.
+
+- [StackForms](/cookbook/getting-started/devops-teams/stackforms.md): After you create a Stack and you make customizations to support your use case, let's review more advanced StackForms use cases.
+
+###### account
+
+This use case allows your end-users to select a cloud account and a region from available options. If your deployment requires several accounts and/or regions, you can duplicate the same setup as required.
+
+- [Selecting Account and Region](/cookbook/getting-started/devops-teams/stackforms/account.md): This use case allows your end-users to select a cloud account and a region from available options. If your deployment requires several accounts and/or regions, you can duplicate the same setup as required.
+
+###### network
+
+This use case allows your end-users to select an existing VPC and subnet, for example, to deploy new resources. The goal is to conveniently propose VPC and subnet options to the end-users.
+
+- [Selecting VPC and subnets](/cookbook/getting-started/devops-teams/stackforms/network.md): This use case allows your end-users to select an existing VPC and subnet, for example, to deploy new resources. The goal is to conveniently propose VPC and subnet options to the end-users.
+- [Dynamic data from an API endpoint](/cookbook/getting-started/devops-teams/stackforms/network/api_dynamic_values.md): This use case allows the end-user to select a VPC and one or several subnets among network resources retrieved from an external third-party API.
+- [Static data from an API endpoint](/cookbook/getting-started/devops-teams/stackforms/network/api_static_values.md): This use case allows the end-user to select a VPC and one or several subnets among network resources retrieved from an external third-party API where static data is stored, typically from a cloud storage bucket.
+- [From Cycloid Asset Inventory](/cookbook/getting-started/devops-teams/stackforms/network/asset_inventory.md): This use case allows the end-user to select a VPC and one or several subnets among network resources from the Cycloid Asset Inventory. It contains all resources deployed by Cycloid using Terraform within the same organization. This use case requires that a Cycloid stack using Terraform has been used to deploy the networking resources beforehand.
+
+#### end-users
+
+Audience
+
+- [Cycloid for End Users](/cookbook/getting-started/end-users.md): Audience
+
+##### deploy
+
+Overview of Cycloid Basic Concepts
+
+- [Create a project](/cookbook/getting-started/end-users/deploy.md): Overview of Cycloid Basic Concepts
+
+##### user-registration
+
+First thing first, you must have been invited by email to create your Cycloid account. If you haven't received such an email yet, please contact your Platform Team to be invited to join your Cycloid organization.
+
+- [Create my Account](/cookbook/getting-started/end-users/user-registration.md): First thing first, you must have been invited by email to create your Cycloid account. If you haven't received such an email yet, please contact your Platform Team to be invited to join your Cycloid organization.
+
+#### platform-teams
+
+Audience
+
+- [Cycloid for Platform teams](/cookbook/getting-started/platform-teams.md): Audience
+
+##### installation
+
+Objectives
+
+- [Install a Self-Hosted platform](/cookbook/getting-started/platform-teams/installation.md): Objectives
+
+##### organizations
+
+The following section will cover the first steps to finalize the setup of your own Cycloid platform. You will set up base features in a Cycloid organization for all users of the platform.
+
+- [Set Up an Organization](/cookbook/getting-started/platform-teams/organizations.md): The following section will cover the first steps to finalize the setup of your own Cycloid platform. You will set up base features in a Cycloid organization for all users of the platform.
+
+###### credentials
+
+Add your credentials to the Vault
+
+- [Connect your Cloud](/cookbook/getting-started/platform-teams/organizations/credentials.md): Add your credentials to the Vault
+
+###### environments-and-cloud-accounts
+
+This walkthrough takes you from a fresh organization to a setup where your
+
+- [Environments & Cloud Accounts](/cookbook/getting-started/platform-teams/organizations/environments-and-cloud-accounts.md): This walkthrough takes you from a fresh organization to a setup where your
+
+###### gitops
+
+Create your Git repository
+
+- [GitOps set up](/cookbook/getting-started/platform-teams/organizations/gitops.md): Create your Git repository
+
+###### organization
+
+The concept of Organization
+
+- [Organizations](/cookbook/getting-started/platform-teams/organizations/organization.md): The concept of Organization
+
+###### terraform-backend
+
+Set up a Terraform backend
+
+- [Terraform backend](/cookbook/getting-started/platform-teams/organizations/terraform-backend.md): Set up a Terraform backend
+
+### plugins
+
+
+#### install-hello-world
+
+End-to-end walkthrough — publish a hello-world plugin to your Cycloid organization using the CLI, then clean up.
+
+- [Install Your First Plugin](/cookbook/plugins/install-hello-world.md): End-to-end walkthrough — publish a hello-world plugin to your Cycloid organization using the CLI, then clean up.
+
+### stacks-v4-migration
+
+This guide is aimed toward stack maintainers. Cycloid released the Component layer feature that allows you and your users to instanciate
+
+- [Stack v4 migration guide](/cookbook/stacks-v4-migration.md): This guide is aimed toward stack maintainers. Cycloid released the Component layer feature that allows you and your users to instanciate
+
+## discover
+
+Cycloid is an Engineering platform.
+
+- [Welcome to Cycloid](/discover.md): Cycloid is an Engineering platform.
+
+### features
+
+
+#### asset-inventory
+
+<Button
+
+- [Asset Inventory](/discover/features/asset-inventory.md): <Button
+
+#### ci-cd-pipelines
+
+Cycloid CI/CD enables the creation of immutable pipelines, ensuring that each pipeline job build is based on a defined set of external resources and dependencies.
+
+- [CI/CD Pipelines](/discover/features/ci-cd-pipelines.md): Cycloid CI/CD enables the creation of immutable pipelines, ensuring that each pipeline job build is based on a defined set of external resources and dependencies.
+
+#### cloud-carbon-footprint
+
+Cycloid's Cloud Carbon Footprint tool is designed to measure and analyze the environmental impact of cloud infrastructure deployments.
+
+- [Cloud Carbon Footprint](/discover/features/cloud-carbon-footprint.md): Cycloid's Cloud Carbon Footprint tool is designed to measure and analyze the environmental impact of cloud infrastructure deployments.
+
+#### cloud-cost-management
+
+Cycloid's Cloud Cost Management tool empowers organizations to effectively monitor and visualize  costs associated with cloud infrastructure deployments.
+
+- [Cloud Cost Management](/discover/features/cloud-cost-management.md): Cycloid's Cloud Cost Management tool empowers organizations to effectively monitor and visualize  costs associated with cloud infrastructure deployments.
+
+#### connectivity-with-identity-providers
+
+Cycloid can be used with different user authentication methods.
+
+- [Connectivity with with identity providers](/discover/features/connectivity-with-identity-providers.md): Cycloid can be used with different user authentication methods.
+
+#### cost-estimation
+
+Cost Estimation provides a way for organisations to accurately forecast and predict their cloud infrastructure expenditures.
+
+- [Cost Estimation](/discover/features/cost-estimation.md): Cost Estimation provides a way for organisations to accurately forecast and predict their cloud infrastructure expenditures.
+
+#### credential-management
+
+Cycloid provides robust credential management, allowing users to securely manage and store various types of credentials.
+
+- [Credential Management](/discover/features/credential-management.md): Cycloid provides robust credential management, allowing users to securely manage and store various types of credentials.
+
+#### environment-governance
+
+Cycloid's Environment Governance feature gives platform teams a single
+
+- [Environment Governance](/discover/features/environment-governance.md): Cycloid's Environment Governance feature gives platform teams a single
+
+#### infraimport
+
+Infra Import is Cycloid's tool for automating infrastructure management through TerraCognita, our opensource tool.
+
+- [InfraImport](/discover/features/infraimport.md): Infra Import is Cycloid's tool for automating infrastructure management through TerraCognita, our opensource tool.
+
+#### infrapolices
+
+Infrastructure Policies (InfraPolicy) are an implementation of Policy as Code.
+
+- [Infrapolicies](/discover/features/infrapolices.md): Infrastructure Policies (InfraPolicy) are an implementation of Policy as Code.
+
+#### infraview
+
+<Button
+
+- [Infraview](/discover/features/infraview.md): <Button
+
+#### logs-and-events
+
+Cycloid's Events and Logs tools allow for a quick and simple way to understand what is happening across the cycloid projects.
+
+- [Logs and Events](/discover/features/logs-and-events.md): Cycloid's Events and Logs tools allow for a quick and simple way to understand what is happening across the cycloid projects.
+
+#### organizations
+
+An organization represents the highest entity level within cycloid.
+
+- [Organizations](/discover/features/organizations.md): An organization represents the highest entity level within cycloid.
+
+#### permissions-and-roles
+
+Cycloid's permissions system ensures secure access control within an organization.
+
+- [Permissions and Roles](/discover/features/permissions-and-roles.md): Cycloid's permissions system ensures secure access control within an organization.
+
+#### saas-vs-onpremises
+
+The choice between a SaaS or an On-premise approach to deploy cycloid, will always depend on your business requirements and your subcription.
+
+- [SaaS vs On-premise](/discover/features/saas-vs-onpremises.md): The choice between a SaaS or an On-premise approach to deploy cycloid, will always depend on your business requirements and your subcription.
+
+#### stackforms
+
+StackForms allows users to configure projects through a graphical interface.
+
+- [StackForms](/discover/features/stackforms.md): StackForms allows users to configure projects through a graphical interface.
+
+#### stacks
+
+<Button
+
+- [Stacks](/discover/features/stacks.md): <Button
+
+#### workers
+
+A key important component to understand of cycloid architecture are the cycloid workers, based on concourse workers.
+
+- [Workers](/discover/features/workers.md): A key important component to understand of cycloid architecture are the cycloid workers, based on concourse workers.
+
+### opensource
+
+
+#### cycloid-cli
+
+The Cycloid CLI is a command-line interface tool designed for streamlined interaction with Cycloid's platform services.
+
+- [Cycloid CLI](/discover/opensource/cycloid-cli.md): The Cycloid CLI is a command-line interface tool designed for streamlined interaction with Cycloid's platform services.
+
+#### inframap
+
+InfraMap makes manual diagrams a thing of the past by automatically building a graphical representation of your infrastructure without any input from you.
+
+- [InfraMap](/discover/opensource/inframap.md): InfraMap makes manual diagrams a thing of the past by automatically building a graphical representation of your infrastructure without any input from you.
+
+#### terracognita
+
+TerraCognita is our open-source “reverse” Terraform.
+
+- [Terracognita](/discover/opensource/terracognita.md): TerraCognita is our open-source “reverse” Terraform.
+
+#### terracost
+
+TerraCost automatically gives you insight into the total cost of your deployments - before you actually deploy them.
+
+- [Terracost](/discover/opensource/terracost.md): TerraCost automatically gives you insight into the total cost of your deployments - before you actually deploy them.
+
+## reference
+
+This is the feature reference of Cycloid.
+
+
+- [Feature reference](/reference.md): This is the feature reference of Cycloid.
+
+
+### api
+
+Introduction
+
+- [API](/reference/api.md): Introduction
+
+#### LHS-filters
+
+Syntax
+
+- [LHS filters](/reference/api/LHS-filters.md): Syntax
+
+### ci-cd-pipelines
+
+Introduction
+
+- [CI/CD pipelines](/reference/ci-cd-pipelines.md): Introduction
+
+#### concepts
+
+
+##### cycloid-toolkit
+
+Overview
+
+- [Cycloid toolkit](/reference/ci-cd-pipelines/concepts/cycloid-toolkit.md): Overview
+
+##### interface
+
+Pipeline
+
+- [Interface](/reference/ci-cd-pipelines/concepts/interface.md): Pipeline
+
+##### pipeline
+
+In this section, we will go through basic pipeline components and formats before moving on to more advanced tips.
+
+- [Pipeline](/reference/ci-cd-pipelines/concepts/pipeline.md): In this section, we will go through basic pipeline components and formats before moving on to more advanced tips.
+
+##### pipelines-overview
+
+Overview
+
+- [Pipelines Overview](/reference/ci-cd-pipelines/concepts/pipelines-overview.md): Overview
+
+##### tools-integration
+
+This section provides comprehensive information and examples on integrating various common technologies into pipelines.
+
+- [Tools integration](/reference/ci-cd-pipelines/concepts/tools-integration.md): This section provides comprehensive information and examples on integrating various common technologies into pipelines.
+
+###### ansible
+
+Integrating Ansible into a Cycloid pipeline is facilitated by the ansible-runner script available in the cycloid/cycloid-toolkit Docker image.
+
+- [Ansible](/reference/ci-cd-pipelines/concepts/tools-integration/ansible.md): Integrating Ansible into a Cycloid pipeline is facilitated by the ansible-runner script available in the cycloid/cycloid-toolkit Docker image.
+
+###### terraform
+
+To run Terraform within a pipeline, we typically recommend following the stack concept and leveraging the community Concourse Terraform resource.
+
+- [Terraform](/reference/ci-cd-pipelines/concepts/tools-integration/terraform.md): To run Terraform within a pipeline, we typically recommend following the stack concept and leveraging the community Concourse Terraform resource.
+
+##### workers
+
+A Cycloid worker is an essential component that executes the tasks defined in a pipelines.
+
+- [Workers](/reference/ci-cd-pipelines/concepts/workers.md): A Cycloid worker is an essential component that executes the tasks defined in a pipelines.
+
+###### aws
+
+The CloudFormation deployment is based on a template located under our stack-external-worker git repository.
+
+- [On Amazon Web Services with CloudFormation](/reference/ci-cd-pipelines/concepts/workers/aws.md): The CloudFormation deployment is based on a template located under our stack-external-worker git repository.
+
+###### azure
+
+The Azure Resource Manager template is located under our stack-external-worker git repository.
+
+- [On Microsoft Azure with Resource Manager Template](/reference/ci-cd-pipelines/concepts/workers/azure.md): The Azure Resource Manager template is located under our stack-external-worker git repository.
+
+###### baremetal
+
+To run a Cycloid worker on a bare metal or on-premises server, it is currently required to provide a debian-based operating system.
+
+- [Deploy a baremetal Cycloid worker](/reference/ci-cd-pipelines/concepts/workers/baremetal.md): To run a Cycloid worker on a bare metal or on-premises server, it is currently required to provide a debian-based operating system.
+
+###### docker
+
+This solution is for DEVELOPMENT PURPOSES ONLY. For production worker, we advice you to use the dedicated setup for each cloud providers.
+
+- [Deploy a local Cycloid worker using Docker](/reference/ci-cd-pipelines/concepts/workers/docker.md): This solution is for DEVELOPMENT PURPOSES ONLY. For production worker, we advice you to use the dedicated setup for each cloud providers.
+
+###### flexible-engine
+
+Download our Flexible engine Resource Template flexible-engine.zip S3 bucket.
+
+- [On Flexible engine with Resource Template Service (RTS)](/reference/ci-cd-pipelines/concepts/workers/flexible-engine.md): Download our Flexible engine Resource Template flexible-engine.zip S3 bucket.
+
+###### gcp
+
+The Deployment manager is based on a template located under our stack-external-worker git repository.
+
+- [On Google Cloud Platform with Deployment manager](/reference/ci-cd-pipelines/concepts/workers/gcp.md): The Deployment manager is based on a template located under our stack-external-worker git repository.
+
+###### known-errors
+
+Related to this bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=998716 on some Cloud provider Debian 12 image is not fully working.
+
+- [Cycloid workers known errors](/reference/ci-cd-pipelines/concepts/workers/known-errors.md): Related to this bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=998716 on some Cloud provider Debian 12 image is not fully working.
+
+###### troubleshooting
+
+Basics
+
+- [Troubleshooting](/reference/ci-cd-pipelines/concepts/workers/troubleshooting.md): Basics
+
+#### examples
+
+
+##### snippets
+
+How to keep a pipeline paused between changes
+
+- [Snippets](/reference/ci-cd-pipelines/examples/snippets.md): How to keep a pipeline paused between changes
+
+#### references
+
+
+##### common-errors-troubleshooting
+
+Common pipeline errors
+
+- [Common errors / troubleshooting](/reference/ci-cd-pipelines/references/common-errors-troubleshooting.md): Common pipeline errors
+
+##### pipeline-style-guide
+
+Reduce log outputs
+
+- [Pipeline style guide](/reference/ci-cd-pipelines/references/pipeline-style-guide.md): Reduce log outputs
+
+### cli
+
+Introduction
+
+- [Cycloid CLI](/reference/cli.md): Introduction
+
+#### concepts
+
+
+##### cycloid_uri_references
+
+The Cycloid CLI can resolve Cycloid URI references to either fetch or
+
+- [Cycloid URI References](/reference/cli/concepts/cycloid_uri_references.md): The Cycloid CLI can resolve Cycloid URI references to either fetch or
+
+##### environment-governance
+
+The CLI exposes the three org-scoped surfaces of
+
+- [Environment Governance](/reference/cli/concepts/environment-governance.md): The CLI exposes the three org-scoped surfaces of
+
+#### examples
+
+Create an component using stackforms
+
+- [Examples](/reference/cli/examples.md): Create an component using stackforms
+
+### cloud-carbon-footprint
+
+- [Cloud carbon footprint](/reference/cloud-carbon-footprint.md)
+
+### cloud-cost-management
+
+Introduction
+
+- [Cloud Cost Management](/reference/cloud-cost-management.md): Introduction
+
+#### concepts
+
+
+##### ccm-accounts
+
+Cloud Cost Management no longer uses a separate "CCM Accounts" concept.
+
+- [Accounts](/reference/cloud-cost-management/concepts/ccm-accounts.md): Cloud Cost Management no longer uses a separate "CCM Accounts" concept.
+
+##### ccm-dashboard
+
+The Cloud Cost Manager dashboard is the core of this feature. It's where you're able to see the agregated data of all your accounts and by using a set of different views have a more detailed look into it as you may require.
+
+- [Dashboard](/reference/cloud-cost-management/concepts/ccm-dashboard.md): The Cloud Cost Manager dashboard is the core of this feature. It's where you're able to see the agregated data of all your accounts and by using a set of different views have a more detailed look into it as you may require.
+
+##### tag-mapping
+
+You can check the CCM accounts by clicking on the Accounts tab on the top bar of the feature.
+
+- [Tag mapping](/reference/cloud-cost-management/concepts/tag-mapping.md): You can check the CCM accounts by clicking on the Accounts tab on the top bar of the feature.
+
+#### reference
+
+
+##### permissions
+
+Role-based permissions that gate access to Cloud Cost Management and its panels.
+
+- [Permissions](/reference/cloud-cost-management/reference/permissions.md): Role-based permissions that gate access to Cloud Cost Management and its panels.
+
+### config-and-catalog-repository
+
+Introduction
+
+- [Config and catalog repositories](/reference/config-and-catalog-repository.md): Introduction
+
+### core-concepts
+
+Layers
+
+- [Core concepts](/reference/core-concepts.md): Layers
+
+### cost-estimation
+
+Introduction
+
+- [Cost estimation](/reference/cost-estimation.md): Introduction
+
+### credentials
+
+See for yourself on the next section.
+
+- [Credentials](/reference/credentials.md): See for yourself on the next section.
+
+#### concepts
+
+For cloud-provider authentication (AWS, GCP, Azure), prefer creating a
+
+- [Concepts](/reference/credentials/concepts.md): For cloud-provider authentication (AWS, GCP, Azure), prefer creating a
+
+#### examples
+
+
+##### using-the-api
+
+Create a credential
+
+- [Manipulate credentials using the API](/reference/credentials/examples/using-the-api.md): Create a credential
+
+##### using-the-cli
+
+Create a credential
+
+- [Manipulate credentials using the CLI](/reference/credentials/examples/using-the-cli.md): Create a credential
+
+#### quickstart
+
+Interface
+
+- [Quickstart](/reference/credentials/quickstart.md): Interface
+
+### dedicated-platform
+
+Introduction
+
+- [Dedicated Platform](/reference/dedicated-platform.md): Introduction
+
+#### troubleshooting
+
+Cycloid API
+
+- [Troubleshooting](/reference/dedicated-platform/troubleshooting.md): Cycloid API
+
+### events
+
+Introduction
+
+- [Events](/reference/events.md): Introduction
+
+#### concepts
+
+Interface
+
+- [Concepts](/reference/events/concepts.md): Interface
+
+#### examples
+
+
+##### cli
+
+Right now, the CLI can only create events, this is a limitation that will be addressed in future updates.
+
+- [Using the CLI](/reference/events/examples/cli.md): Right now, the CLI can only create events, this is a limitation that will be addressed in future updates.
+
+##### concourse-resource
+
+Links:
+
+- [Using the Cycloid concourse resource](/reference/events/examples/concourse-resource.md): Links:
+
+##### event-api
+
+Those are examples for practical uses.
+
+- [Using the API](/reference/events/examples/event-api.md): Those are examples for practical uses.
+
+### infra-import
+
+Introduction
+
+- [Infra Import](/reference/infra-import.md): Introduction
+
+#### quickstart
+
+Infra Import needs some upfront configuration to be able to fetch the right resources for you, see the previous prerequisites section if not already done.
+
+- [Quickstart](/reference/infra-import/quickstart.md): Infra Import needs some upfront configuration to be able to fetch the right resources for you, see the previous prerequisites section if not already done.
+
+### infrapolicies-policy-as-code
+
+Introduction
+
+- [Infrapolicies - policy as code](/reference/infrapolicies-policy-as-code.md): Introduction
+
+#### concepts
+
+- [Concepts](/reference/infrapolicies-policy-as-code/concepts.md)
+
+#### reference
+
+- [Reference](/reference/infrapolicies-policy-as-code/reference.md)
+
+### infraview
+
+Introduction
+
+- [InfraView](/reference/infraview.md): Introduction
+
+#### concepts
+
+Interface
+
+- [Concepts](/reference/infraview/concepts.md): Interface
+
+### inventory
+
+Introduction
+
+- [Asset Inventory](/reference/inventory.md): Introduction
+
+#### concepts
+
+Dashboard
+
+- [Concepts](/reference/inventory/concepts.md): Dashboard
+
+#### reference
+
+Use Cycloid Terraform HTTP backend in a pipeline
+
+- [Reference](/reference/inventory/reference.md): Use Cycloid Terraform HTTP backend in a pipeline
+
+### legacy-doc
+
+This section contains legacy docs we saved and are going to migrate
+
+- [legacy docs](/reference/legacy-doc.md): This section contains legacy docs we saved and are going to migrate
+
+#### create-my-first-stack
+
+
+##### intro
+
+<!--
+
+- [Create my first Stack](/reference/legacy-doc/create-my-first-stack/intro.md): <!--
+
+##### prepare-cycloid-credentials
+
+Let's create Cycloid credentials that we will use in our pipeline. Click on Credentials under Security in the left menu.
+
+- [Prepare Cycloid credentials](/reference/legacy-doc/create-my-first-stack/prepare-cycloid-credentials.md): Let's create Cycloid credentials that we will use in our pipeline. Click on Credentials under Security in the left menu.
+
+##### requirements
+
+To simplify the step by step guide, we assume that you provide the following elements:
+
+- [Requirements](/reference/legacy-doc/create-my-first-stack/requirements.md): To simplify the step by step guide, we assume that you provide the following elements:
+
+##### step1
+
+In this guide, we will deploy an HTML website on a cloud instance.
+
+- [Application source code](/reference/legacy-doc/create-my-first-stack/step1.md): In this guide, we will deploy an HTML website on a cloud instance.
+
+##### step2-part1
+
+* Check out the git diff of this step here.
+
+- [Initiate a stacks branch with a basic pipeline](/reference/legacy-doc/create-my-first-stack/step2-part1.md): * Check out the git diff of this step here.
+
+##### step2-part2
+
+Create a config branch in your git repository
+
+- [Step 2 part 2 - Use a stack](/reference/legacy-doc/create-my-first-stack/step2-part2.md): Create a config branch in your git repository
+
+##### step3
+
+* Check out the git diff of this step here.
+
+- [Configure the pipeline to run Terraform plan](/reference/legacy-doc/create-my-first-stack/step3.md): * Check out the git diff of this step here.
+
+##### step4
+
+* Check out the git diff of this step here.
+
+- [Create a Terraform module and add Terraform apply job in the pipeline](/reference/legacy-doc/create-my-first-stack/step4.md): * Check out the git diff of this step here.
+
+##### step5
+
+This section introduce Cycloid stacks concept to improve the reusability of your stack.
+
+- [Move module call to config branch and specify Terraform sample into .cycloid.yml](/reference/legacy-doc/create-my-first-stack/step5.md): This section introduce Cycloid stacks concept to improve the reusability of your stack.
+
+##### step6
+
+* Check out the git diff of this step here.
+
+- [Add functional tests using Terraform outputs to get instance IP address](/reference/legacy-doc/create-my-first-stack/step6.md): * Check out the git diff of this step here.
+
+##### step7
+
+* Check out the git diff of this step here.
+
+- [Generate notifications, using Cycloid events as example](/reference/legacy-doc/create-my-first-stack/step7.md): * Check out the git diff of this step here.
+
+##### step8
+
+* Check out the git diff of this step here.
+
+- [Using StackForms to simplify the configuration](/reference/legacy-doc/create-my-first-stack/step8.md): * Check out the git diff of this step here.
+
+##### step9
+
+* Check out the git diff of this step here.
+
+- [Add cleanup job to remove everything that have been created on your cloud provider by Terraform](/reference/legacy-doc/create-my-first-stack/step9.md): * Check out the git diff of this step here.
+
+#### get-started
+
+Let's have a tour together around all Cycloid features. Starting from account creation, stack deployment for you to master our ecosystem in no time.
+
+- [Overview](/reference/legacy-doc/get-started.md): Let's have a tour together around all Cycloid features. Starting from account creation, stack deployment for you to master our ecosystem in no time.
+
+##### account-creation
+
+Get 1 week's access to our sandbox environment
+
+- [Account creation (SaaS only)](/reference/legacy-doc/get-started/account-creation.md): Get 1 week's access to our sandbox environment
+
+##### configuration
+
+At Cycloid, we strive to use Git as much as possible to store infrastructure as code, automation, and configuration.
+
+- [Configuration](/reference/legacy-doc/get-started/configuration.md): At Cycloid, we strive to use Git as much as possible to store infrastructure as code, automation, and configuration.
+
+##### deploy
+
+Today there are 2 ways to start a new project in Cycloid:
+
+- [Deploy](/reference/legacy-doc/get-started/deploy.md): Today there are 2 ways to start a new project in Cycloid:
+
+##### manage
+
+After creating a project environment, the corresponding pipeline will be displayed. The purpose of this pipeline is to manage the entire workflow, from testing and building the source code to deploying it in production, as well as notifications, creating the target infrastructure, and any other step you can imagine.
+
+- [Manage](/reference/legacy-doc/get-started/manage.md): After creating a project environment, the corresponding pipeline will be displayed. The purpose of this pipeline is to manage the entire workflow, from testing and building the source code to deploying it in production, as well as notifications, creating the target infrastructure, and any other step you can imagine.
+
+#### pipeline-training
+
+*  ] [Stack concept
+
+- [Pipeline training support](/reference/legacy-doc/pipeline-training.md): *  ] [Stack concept
+
+#### terraform-training
+
+[[toc]]
+
+- [Terraform training support](/reference/legacy-doc/terraform-training.md): [[toc]]
+
+### notifications
+
+Notifications provide timely updates on Cycloid activity, allowing users to stay informed about changes or events.
+
+- [Notifications](/reference/notifications.md): Notifications provide timely updates on Cycloid activity, allowing users to stay informed about changes or events.
+
+### organizations
+
+Introduction
+
+- [Organizations](/reference/organizations.md): Introduction
+
+#### concepts
+
+
+##### authentication
+
+Overview
+
+- [Authentication](/reference/organizations/concepts/authentication.md): Overview
+
+##### child_organizations
+
+Organizations can have child organizations. This can be useful to manage project and permissions
+
+- [Child organizations](/reference/organizations/concepts/child_organizations.md): Organizations can have child organizations. This can be useful to manage project and permissions
+
+##### cloud-accounts
+
+A Cloud Account is your organization's record of a cloud-provider account
+
+- [Cloud Accounts](/reference/organizations/concepts/cloud-accounts.md): A Cloud Account is your organization's record of a cloud-provider account
+
+##### environment-types
+
+Environment Types are a small catalog at the organization level that
+
+- [Environment Types](/reference/organizations/concepts/environment-types.md): Environment Types are a small catalog at the organization level that
+
+##### environment-variables
+
+Environment Variables are key-value pairs defined on an environment.
+
+- [Environment Variables](/reference/organizations/concepts/environment-variables.md): Environment Variables are key-value pairs defined on an environment.
+
+##### environments
+
+Environments are now defined once at the organization level and assigned
+
+- [Environments](/reference/organizations/concepts/environments.md): Environments are now defined once at the organization level and assigned
+
+##### finops-greenops
+
+FinOps & GreenOps is the optional third step of the Cloud Account
+
+- [FinOps & GreenOps](/reference/organizations/concepts/finops-greenops.md): FinOps & GreenOps is the optional third step of the Cloud Account
+
+##### iac-state-management
+
+IaC State Management is per-environment configuration of a Terraform
+
+- [IaC State Management](/reference/organizations/concepts/iac-state-management.md): IaC State Management is per-environment configuration of a Terraform
+
+##### interface
+
+You current organization is displayed on the top right corner of the interface:
+
+- [Interface](/reference/organizations/concepts/interface.md): You current organization is displayed on the top right corner of the interface:
+
+##### licencing
+
+Overview
+
+- [Licensing](/reference/organizations/concepts/licencing.md): Overview
+
+##### permissions
+
+Cycloid platform include a fine tune policy based permission management. Each permission
+
+- [Permissions](/reference/organizations/concepts/permissions.md): Cycloid platform include a fine tune policy based permission management. Each permission
+
+##### sidebar-ordering
+
+Organization admins can reorder the entries in the left sidebar to match
+
+- [Sidebar Ordering](/reference/organizations/concepts/sidebar-ordering.md): Organization admins can reorder the entries in the left sidebar to match
+
+##### workers
+
+CI/CD workers for pipelines in cycloid are scoped by organization.
+
+- [Workers](/reference/organizations/concepts/workers.md): CI/CD workers for pipelines in cycloid are scoped by organization.
+
+### oss
+
+Cycloid is built upon Open Source software. It is in our DNA and we contribute as much as we can to the OSS ecosystem.
+
+- [Open Source Software](/reference/oss.md): Cycloid is built upon Open Source software. It is in our DNA and we contribute as much as we can to the OSS ecosystem.
+
+#### inframap
+
+- Github Repository & Readme
+
+- [InfraMap](/reference/oss/inframap.md): - Github Repository & Readme
+
+#### mcp-server
+
+The Cycloid Model Context Protocol (MCP) Server is a powerful tool that acts as a bridge, enabling Large Language Models (LLMs)—like those powering Claude, Cursor, or GitHub Copilot—to interact directly with your Cycloid instance. This allows you to leverage natural language to query your infrastructure, manage resources, and streamline your development workflows, all from your preferred interfaces.
+
+- [Cycloid MCP Server](/reference/oss/mcp-server.md): The Cycloid Model Context Protocol (MCP) Server is a powerful tool that acts as a bridge, enabling Large Language Models (LLMs)—like those powering Claude, Cursor, or GitHub Copilot—to interact directly with your Cycloid instance. This allows you to leverage natural language to query your infrastructure, manage resources, and streamline your development workflows, all from your preferred interfaces.
+
+#### terracognita
+
+- Github Repository & Readme
+
+- [TerraCognita](/reference/oss/terracognita.md): - Github Repository & Readme
+
+#### terracost
+
+- GitHub Repository
+
+- [TerraCost](/reference/oss/terracost.md): - GitHub Repository
+
+### plugins
+
+Connect any external tool and surface its data directly inside your components and projects.
+
+- [Plugins](/reference/plugins.md): Connect any external tool and surface its data directly inside your components and projects.
+
+#### concepts
+
+
+##### managing-plugins
+
+How to create, install, configure, and manage plugins end-to-end in your organization.
+
+- [Managing Plugins](/reference/plugins/concepts/managing-plugins.md): How to create, install, configure, and manage plugins end-to-end in your organization.
+
+##### plugin-manager
+
+Understand how the Plugin Manager runs your integrations and how to get your organization connected.
+
+- [Plugin Manager](/reference/plugins/concepts/plugin-manager.md): Understand how the Plugin Manager runs your integrations and how to get your organization connected.
+
+##### plugin-registry
+
+Understand how the Plugin Registry works and how to connect one to your organization.
+
+- [Plugin Registry](/reference/plugins/concepts/plugin-registry.md): Understand how the Plugin Registry works and how to connect one to your organization.
+
+##### sharing-plugins
+
+Share an installed plugin across organizations, control who sees it, and manage widget views per organization.
+
+- [Sharing Plugins](/reference/plugins/concepts/sharing-plugins.md): Share an installed plugin across organizations, control who sees it, and manage widget views per organization.
+
+##### writing-a-plugin
+
+Everything you need to build your own plugin and integrate any external tool into Cycloid.
+
+- [Writing a Plugin](/reference/plugins/concepts/writing-a-plugin.md): Everything you need to build your own plugin and integrate any external tool into Cycloid.
+
+#### reference
+
+
+##### cli
+
+cy plugin command reference for the full plugin lifecycle.
+
+- [CLI Reference](/reference/plugins/reference/cli.md): cy plugin command reference for the full plugin lifecycle.
+
+##### http-api
+
+Technical contract for plugin containers — endpoints, startup requirements, and how to talk to the Cycloid backend.
+
+- [HTTP API](/reference/plugins/reference/http-api.md): Technical contract for plugin containers — endpoints, startup requirements, and how to talk to the Cycloid backend.
+
+##### manifest
+
+All fields available in manifest.yaml and how they control the plugin install form.
+
+- [manifest.yaml](/reference/plugins/reference/manifest.md): All fields available in manifest.yaml and how they control the plugin install form.
+
+##### permissions
+
+Role-based permissions required for each plugin operation.
+
+- [Permissions](/reference/plugins/reference/permissions.md): Role-based permissions required for each plugin operation.
+
+##### terraform
+
+Manage the Cycloid plugin lifecycle as infrastructure-as-code with the Cycloid Terraform provider.
+
+- [Terraform Reference](/reference/plugins/reference/terraform.md): Manage the Cycloid plugin lifecycle as infrastructure-as-code with the Cycloid Terraform provider.
+
+##### widgets
+
+All widget types, placement options, and validation rules for widgets.yaml.
+
+- [widgets.yaml](/reference/plugins/reference/widgets.md): All widget types, placement options, and validation rules for widgets.yaml.
+
+### projects
+
+Projects are the main entity that allows you to use Cycloid.
+
+- [Projects](/reference/projects.md): Projects are the main entity that allows you to use Cycloid.
+
+#### concepts
+
+
+##### component-overview
+
+The simplified end-user interface of a component — the workflow graph, Actions, and Activity — and how stack maintainers shape it.
+
+- [Component Overview](/reference/projects/concepts/component-overview.md): The simplified end-user interface of a component — the workflow graph, Actions, and Activity — and how stack maintainers shape it.
+
+##### components
+
+Creating a component
+
+- [Components](/reference/projects/concepts/components.md): Creating a component
+
+##### environments
+
+Cycloid moved environment management to Org Settings → Foundations →
+
+- [Environments](/reference/projects/concepts/environments.md): Cycloid moved environment management to Org Settings → Foundations →
+
+##### interface
+
+Global
+
+- [Interface](/reference/projects/concepts/interface.md): Global
+
+##### logs
+
+Applications and infrastructure logs stored in a compatible backend can be displayed in Cycloid, offering a convenient and centralized way to monitor your application after deployment.
+
+- [Logs](/reference/projects/concepts/logs.md): Applications and infrastructure logs stored in a compatible backend can be displayed in Cycloid, offering a convenient and centralized way to monitor your application after deployment.
+
+##### metrics
+
+In the Metrics tab, you can view and configure Key Performance Indicators (KPIs) to gain insights into your pipelines, jobs, deployments, code coverage, and more.
+
+- [Metrics](/reference/projects/concepts/metrics.md): In the Metrics tab, you can view and configure Key Performance Indicators (KPIs) to gain insights into your pipelines, jobs, deployments, code coverage, and more.
+
+##### scheduling
+
+The scheduling feature allows you to optimize costs by automatically starting and stopping cloud resources for specific components.
+
+- [Scheduling](/reference/projects/concepts/scheduling.md): The scheduling feature allows you to optimize costs by automatically starting and stopping cloud resources for specific components.
+
+#### cookbook
+
+
+##### migrate_component
+
+In Cycloid, it's possible to move a component from one project to another. In most cases, it's easier and cleaner to simply delete and recreate the component. However, in specific scenarios, you may need to force the migration of an existing component.
+
+- [Migrating a Component from One Project to Another](/reference/projects/cookbook/migrate_component.md): In Cycloid, it's possible to move a component from one project to another. In most cases, it's easier and cleaner to simply delete and recreate the component. However, in specific scenarios, you may need to force the migration of an existing component.
+
+##### migrate_project
+
+This doc is based before component layer feature. Main workflow could be applied with components. But few things need to be adapted.
+
+- [Migrating an Environment from One Project to Another](/reference/projects/cookbook/migrate_project.md): This doc is based before component layer feature. Main workflow could be applied with components. But few things need to be adapted.
+
+### stack-blueprint
+
+Quickstart
+
+- [Stack Blueprints](/reference/stack-blueprint.md): Quickstart
+
+#### concepts
+
+Writing your own blueprints
+
+- [Concepts](/reference/stack-blueprint/concepts.md): Writing your own blueprints
+
+#### reference
+
+Variables
+
+- [Reference](/reference/stack-blueprint/reference.md): Variables
+
+### stackforms
+
+- [Stackforms](/reference/stackforms.md)
+
+#### concepts
+
+
+##### common-use-case
+
+As described in the file format page, if you are working with a stack containing several use cases, each use case has to be defined in StackForms.
+
+- [Common use case](/reference/stackforms/concepts/common-use-case.md): As described in the file format page, if you are working with a stack containing several use cases, each use case has to be defined in StackForms.
+
+##### conditions
+
+Group-condition
+
+- [Conditions](/reference/stackforms/concepts/conditions.md): Group-condition
+
+##### configuration-sync-status
+
+When you save a component's configuration from a Stackforms form, Cycloid saves your
+
+- [Configuration synchronization](/reference/stackforms/concepts/configuration-sync-status.md): When you save a component's configuration from a Stackforms form, Cycloid saves your
+
+##### forms-file
+
+The Stackform definition is contained in a file called .forms.yml, located at the same location as your .cycloid.yml file.
+
+- [.forms file](/reference/stackforms/concepts/forms-file.md): The Stackform definition is contained in a file called .forms.yml, located at the same location as your .cycloid.yml file.
+
+##### remote-values
+
+This section cover how to create forms filled with remote values using the values_ref attribute.
+
+- [Remote values](/reference/stackforms/concepts/remote-values.md): This section cover how to create forms filled with remote values using the values_ref attribute.
+
+##### technologies
+
+As described, StackForms creates a link between Infrastructure as Code (IaC) variables and HTML forms.
+
+- [Technologies](/reference/stackforms/concepts/technologies.md): As described, StackForms creates a link between Infrastructure as Code (IaC) variables and HTML forms.
+
+##### transform
+
+The transform attribute reshapes an entity's resolved values before they are
+
+- [Transform](/reference/stackforms/concepts/transform.md): The transform attribute reshapes an entity's resolved values before they are
+
+##### value-mapping
+
+Sometimes, when using a form, you may prefer to display text instead of specific values, especially if the values are not very clear to users. For instance, you might want to simplify cloud provider instance types by displaying L instead of m5.large.
+
+- [Map value mapping](/reference/stackforms/concepts/value-mapping.md): Sometimes, when using a form, you may prefer to display text instead of specific values, especially if the values are not very clear to users. For instance, you might want to simplify cloud provider instance types by displaying L instead of m5.large.
+
+##### value-validations
+
+This attribute provides comprehensive validation options, including regular expression (RegExp) patterns for the simpletext widget, and specific key and element validations for the textarea widget.
+
+- [Validation](/reference/stackforms/concepts/value-validations.md): This attribute provides comprehensive validation options, including regular expression (RegExp) patterns for the simpletext widget, and specific key and element validations for the textarea widget.
+
+##### variables
+
+In Stackforms, a variable defines the mapping between a specific variable in an Infrastructure as Code technology (e.g., Pipeline, Ansible, Terraform, etc.) and an HTML widget displayed to a user.
+
+- [Variables](/reference/stackforms/concepts/variables.md): In Stackforms, a variable defines the mapping between a specific variable in an Infrastructure as Code technology (e.g., Pipeline, Ansible, Terraform, etc.) and an HTML widget displayed to a user.
+
+##### widgets
+
+Available Widgets
+
+- [Widgets](/reference/stackforms/concepts/widgets.md): Available Widgets
+
+##### yaml-anchor-and-aliases
+
+If the common use case feature (cycloid-common use case) isn't sufficient for your needs, you can still leverage YAML's native features to tailor your configurations.
+
+- [YAML Anchors and Aliases](/reference/stackforms/concepts/yaml-anchor-and-aliases.md): If the common use case feature (cycloid-common use case) isn't sufficient for your needs, you can still leverage YAML's native features to tailor your configurations.
+
+#### examples
+
+
+##### file-reference
+
+- [File reference example](/reference/stackforms/examples/file-reference.md)
+
+##### using-the-cli
+
+Starting at Cycloid CLI version >= 5.0.49 you can now manipulate environments in projects
+
+- [Manipulate Stackforms environments using the CLI](/reference/stackforms/examples/using-the-cli.md): Starting at Cycloid CLI version >= 5.0.49 you can now manipulate environments in projects
+
+#### introduction
+
+The .forms.yml file allows for the creation (or update) of a project via a nice interface, enabling easier and more controlled configuration of stacks. This includes restrictions on provided values, exposed variables, range, etc.
+
+- [Introduction](/reference/stackforms/introduction.md): The .forms.yml file allows for the creation (or update) of a project via a nice interface, enabling easier and more controlled configuration of stacks. This includes restrictions on provided values, exposed variables, range, etc.
+
+#### quickstart
+
+This quick start section provides a "Hello World" example by adding Stackforms to an existing private stack.
+
+- [Quickstart](/reference/stackforms/quickstart.md): This quick start section provides a "Hello World" example by adding Stackforms to an existing private stack.
+
+#### reference
+
+
+##### editor
+
+Writing a StackForms file can be a lengthy and sometimes tedious process, involving back-and-forth between your Git repository and creating a project with such a file.
+
+- [Editor](/reference/stackforms/reference/editor.md): Writing a StackForms file can be a lengthy and sometimes tedious process, involving back-and-forth between your Git repository and creating a project with such a file.
+
+##### values-format
+
+
+###### conditional-values-format
+
+Condition on values allow you to specify different selectable values (and a default value) based on a condition.
+
+- [Conditional values format](/reference/stackforms/reference/values-format/conditional-values-format.md): Condition on values allow you to specify different selectable values (and a default value) based on a condition.
+
+###### remote-values-format
+
+Remote values are always returned as a JSON object. Therefore, an empty response is considered invalid (use [] instead).
+
+- [Remote values format](/reference/stackforms/reference/values-format/remote-values-format.md): Remote values are always returned as a JSON object. Therefore, an empty response is considered invalid (use [] instead).
+
+##### widgets
+
+Define pipeline variables
+
+- [Widgets](/reference/stackforms/reference/widgets.md): Define pipeline variables
+
+###### auto_complete
+
+The autocomplete widget is similar to a dropdown but allows users to provide their own values in addition to selecting from predefined options.
+
+- [auto_complete](/reference/stackforms/reference/widgets/auto_complete.md): The autocomplete widget is similar to a dropdown but allows users to provide their own values in addition to selecting from predefined options.
+
+###### cy_branch
+
+This widget must be used with either cyscs or cycrs. Its purpose is to expose available Git branches in Catalog or Config Git repositories.
+
+- [cy_branch](/reference/stackforms/reference/widgets/cy_branch.md): This widget must be used with either cyscs or cycrs. Its purpose is to expose available Git branches in Catalog or Config Git repositories.
+
+###### cy_cred
+
+The credential widget assists users in selecting Cycloid credentials. This widget outputs a credential path, which combines the canonical name with a specific field.
+
+- [cy_cred](/reference/stackforms/reference/widgets/cy_cred.md): The credential widget assists users in selecting Cycloid credentials. This widget outputs a credential path, which combines the canonical name with a specific field.
+
+###### cy_crs
+
+Similar to the cysrs widget, cycrs exposes available Cycloid config repositories. When selected, it returns the Git URL of the config repository.
+
+- [cy_crs](/reference/stackforms/reference/widgets/cy_crs.md): Similar to the cysrs widget, cycrs exposes available Cycloid config repositories. When selected, it returns the Git URL of the config repository.
+
+###### cy_inventory_output
+
+The outputs inventory widget integrates with Cycloid's [Terraform outputs
+
+- [cy_inventory_output](/reference/stackforms/reference/widgets/cy_inventory_output.md): The outputs inventory widget integrates with Cycloid's [Terraform outputs
+
+###### cy_inventory_resource
+
+The inventory widget integrates with Cycloid's Asset inventory feature. It enables users to create a resource selector within a form, automatically populating resources from their Inventory based on predefined filtering criteria in the form's YAML syntax. This streamlines the form submission process by simplifying resource selection.
+
+- [cy_inventory_resource](/reference/stackforms/reference/widgets/cy_inventory_resource.md): The inventory widget integrates with Cycloid's Asset inventory feature. It enables users to create a resource selector within a form, automatically populating resources from their Inventory based on predefined filtering criteria in the form's YAML syntax. This streamlines the form submission process by simplifying resource selection.
+
+###### cy_scs
+
+Expose Cycloid catalog repositories available. When selected, it will return the Git URL of the catalog repository.
+
+- [cy_scs](/reference/stackforms/reference/widgets/cy_scs.md): Expose Cycloid catalog repositories available. When selected, it will return the Git URL of the catalog repository.
+
+###### date_time
+
+The date_time widget lets users select a date and time value. By default, it expects an ISO 8601 UTC date-time string.
+
+- [date_time](/reference/stackforms/reference/widgets/date_time.md): The date_time widget lets users select a date and time value. By default, it expects an ISO 8601 UTC date-time string.
+
+###### dropdown
+
+The dropdown widget provides users with the option to choose from predefined values.
+
+- [dropdown](/reference/stackforms/reference/widgets/dropdown.md): The dropdown widget provides users with the option to choose from predefined values.
+
+###### hidden
+
+The hidden widget allows defining a value that will be used by the stack or pipeline without being displayed to the user in the StackForms UI. It is mainly intended for passing technical, computed, or enforced values without user interaction.
+
+- [hidden](/reference/stackforms/reference/widgets/hidden.md): The hidden widget allows defining a value that will be used by the stack or pipeline without being displayed to the user in the StackForms UI. It is mainly intended for passing technical, computed, or enforced values without user interaction.
+
+###### info
+
+The info widget displays static or Markdown-computed explanatory content —
+
+- [info](/reference/stackforms/reference/widgets/info.md): The info widget displays static or Markdown-computed explanatory content —
+
+###### number
+
+widget
+
+- [number](/reference/stackforms/reference/widgets/number.md): widget
+
+###### radios
+
+widget
+
+- [radios](/reference/stackforms/reference/widgets/radios.md): widget
+
+###### repeatable
+
+The repeatable widget lets users add or remove several groups of related
+
+- [repeatable](/reference/stackforms/reference/widgets/repeatable.md): The repeatable widget lets users add or remove several groups of related
+
+###### simple_text
+
+widget
+
+- [simple_text](/reference/stackforms/reference/widgets/simple_text.md): widget
+
+###### slider_list
+
+widget
+
+- [slider_list](/reference/stackforms/reference/widgets/slider_list.md): widget
+
+###### slider_range
+
+widget
+
+- [slider_range](/reference/stackforms/reference/widgets/slider_range.md): widget
+
+###### switch
+
+widget
+
+- [switch](/reference/stackforms/reference/widgets/switch.md): widget
+
+###### text_area
+
+The text area widget allows users to input various types of data, such as maps, arrays, or multiline text. It provides a large space for free-form text, and can also be used to allow users to provide samples or scripts, such as userdata for cloud init.
+
+- [text_area](/reference/stackforms/reference/widgets/text_area.md): The text area widget allows users to input various types of data, such as maps, arrays, or multiline text. It provides a large space for free-form text, and can also be used to allow users to provide samples or scripts, such as userdata for cloud init.
+
+### stacks
+
+Introduction
+
+- [Stacks](/reference/stacks.md): Introduction
+
+#### concepts
+
+
+##### design-stack
+
+After grasping the concept of stacks composed of the stack and config parts,
+
+- [Design a stack](/reference/stacks/concepts/design-stack.md): After grasping the concept of stacks composed of the stack and config parts,
+
+##### iac-and-gitops
+
+Cycloid stacks follow 2 main concepts, GitOps and Infrastructure as code (IaC). Before going more in details about stack it's important to understand those both approach.
+
+- [Infrastructure as code and GitOps](/reference/stacks/concepts/iac-and-gitops.md): Cycloid stacks follow 2 main concepts, GitOps and Infrastructure as code (IaC). Before going more in details about stack it's important to understand those both approach.
+
+##### stack-concept
+
+On top of the technical aspects of a stack described in the previous sections,
+
+- [Stack concept](/reference/stacks/concepts/stack-concept.md): On top of the technical aspects of a stack described in the previous sections,
+
+##### stack-definition
+
+As previously defined, a Stack in Cycloid is a crucial component that follows the infrastructure as code approach,
+
+- [Stack definition](/reference/stacks/concepts/stack-definition.md): As previously defined, a Stack in Cycloid is a crucial component that follows the infrastructure as code approach,
+
+##### stack-versioning
+
+Cycloid allows you to manage stack versions, ensuring that stack maintainers can use a standard development workflow when working on their stacks, with development branches and tag based releases.
+
+- [Stack versioning](/reference/stacks/concepts/stack-versioning.md): Cycloid allows you to manage stack versions, ensuring that stack maintainers can use a standard development workflow when working on their stacks, with development branches and tag based releases.
+
+##### templating
+
+Cycloid special vars to use with a templating language.
+
+Usable in .forms.yml, .cycloid.yml, pipelines, terraform and ansible sample files.
+
+
+- [Templating](/reference/stacks/concepts/templating.md): Cycloid special vars to use with a templating language.
+
+Usable in .forms.yml, .cycloid.yml, pipelines, terraform and ansible sample files.
+
+
+##### use-cases
+
+What is a stack use case?
+
+- [Use-cases](/reference/stacks/concepts/use-cases.md): What is a stack use case?
+
+#### examples
+
+
+##### stack-examples
+
+This section cover several example on how we solved various usecases using stacks and pipelines. It will provide design approach and idea on doing things
+
+- [Stack Examples](/reference/stacks/examples/stack-examples.md): This section cover several example on how we solved various usecases using stacks and pipelines. It will provide design approach and idea on doing things
+
+##### templating-examples
+
+This section cover several example on how we use templating in our Stacks.
+
+- [Stack Templating Examples](/reference/stacks/examples/templating-examples.md): This section cover several example on how we use templating in our Stacks.
+
+#### reference
+
+
+##### cycloid-file
+
+The .cycloid.yml is the main item of the Stack definition.
+
+- [.cycloid file](/reference/stacks/reference/cycloid-file.md): The .cycloid.yml is the main item of the Stack definition.
+
+##### dev-env-stacks
+
+This section is comming soon. Right now in few lines to write a new stack we would advice to use stack blueprint feature.
+
+- [Setup dev env for stacks](/reference/stacks/reference/dev-env-stacks.md): This section is comming soon. Right now in few lines to write a new stack we would advice to use stack blueprint feature.
+
+##### link-stacks-with-terraform
+
+Sometimes it's useful to establish connections or "links" between different stacks.
+
+- [Linking Stacks with Terraform](/reference/stacks/reference/link-stacks-with-terraform.md): Sometimes it's useful to establish connections or "links" between different stacks.
+
+##### manually-run-terraform
+
+Sometimes, it could be useful to run Terraform commands manually from a stack's source code, for tasks such as syntax validation. For example:
+
+- [Manual Run of Terraform Code](/reference/stacks/reference/manually-run-terraform.md): Sometimes, it could be useful to run Terraform commands manually from a stack's source code, for tasks such as syntax validation. For example:
+
+##### override-stack-with-config
+
+If you're using a Cycloid stack or one based on a Cycloid template, it should adhere to the Concept of a Stack.
+
+- [Override a Stack with Config at Merge](/reference/stacks/reference/override-stack-with-config.md): If you're using a Cycloid stack or one based on a Cycloid template, it should adhere to the Concept of a Stack.
+
+##### pipeline-hooks
+
+Use pipeline hooks to implement custom actions ran on certain component events, e.g. to send a notification or pause a pipeline after a component creation.
+
+- [Pipeline hooks](/reference/stacks/reference/pipeline-hooks.md): Use pipeline hooks to implement custom actions ran on certain component events, e.g. to send a notification or pause a pipeline after a component creation.
+
+##### public-and-community-stacks
+
+If you are looking for additional stacks, Cycloid provides a few divided into two categories: Public and Community Stacks.
+
+- [Public and Community Stacks](/reference/stacks/reference/public-and-community-stacks.md): If you are looking for additional stacks, Cycloid provides a few divided into two categories: Public and Community Stacks.
+
+##### special-variables
+
+- [Special variables](/reference/stacks/reference/special-variables.md)
+
+##### terraform-upgrade
+
+This tutorial gives you some tips on how to upgrade the Terraform used in cycloid's stacks, to the latest version (at the moment of writing terraform v1).
+
+- [Upgrade Terraform code](/reference/stacks/reference/terraform-upgrade.md): This tutorial gives you some tips on how to upgrade the Terraform used in cycloid's stacks, to the latest version (at the moment of writing terraform v1).
