@@ -57,6 +57,8 @@ apis:
   humanURL: https://docs.cycloid.io/
   baseURL: https://http-api.cycloid.io
   tags:
+  - Cloud Cost
+  tags_raw:
   - CloudCost
   properties:
   - type: OpenAPI
@@ -121,6 +123,8 @@ apis:
   humanURL: https://docs.cycloid.io/
   baseURL: https://http-api.cycloid.io
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -153,6 +157,8 @@ apis:
   humanURL: https://docs.cycloid.io/
   baseURL: https://http-api.cycloid.io
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
