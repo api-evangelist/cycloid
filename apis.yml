@@ -69,7 +69,7 @@ apis:
   humanURL: https://docs.cycloid.io/
   baseURL: https://http-api.cycloid.io
   tags:
-  - CloudCost
+  - Cloud Cost
   tags_raw:
   - CloudCost
   properties:
