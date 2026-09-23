@@ -1,14 +1,7 @@
 {
   "provider": "cycloid",
   "sources": [
-    "cycloid-cloudcost-api-openapi.yml",
-    "cycloid-configrepositories-api-openapi.yml",
-    "cycloid-credentials-api-openapi.yml",
-    "cycloid-inventory-api-openapi.yml",
-    "cycloid-organizations-api-openapi.yml",
-    "cycloid-pipelines-api-openapi.yml",
-    "cycloid-projects-api-openapi.yml",
-    "cycloid-servicecatalogs-api-openapi.yml"
+    "_original/cycloid-api-openapi.yml"
   ],
   "outputs": [
     "cycloid-cloudcost-api-openapi.yml",
@@ -23,6 +16,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "cycloid-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "cycloid-cloudcost-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cycloid-configrepositories-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cycloid-credentials-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cycloid-inventory-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cycloid-organizations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cycloid-pipelines-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cycloid-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cycloid-servicecatalogs-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

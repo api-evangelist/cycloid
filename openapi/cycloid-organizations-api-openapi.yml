@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Cycloid HTTP CloudCost Organizations API
-  description: The Cycloid HTTP API is the programmatic surface of the Cycloid Internal Developer Portal & Platform. It enables management of organizations, projects, environments, infrastructure resources, pipelines, service catalogs (Stacks and StackForms), credentials, config repositories, cloud cost dashboards, inventory and state, and audit events. Authentication uses an API key (passed via header or `api_key` query parameter) or OAuth2 with refresh tokens. The canonical Swagger / Redoc reference is published at docs.cycloid.io.
+  title: Cycloid HTTP Organizations API
+  description: The Cycloid HTTP API is the programmatic surface of the Cycloid Internal Developer Portal & Platform.
   version: '1.0'
   contact:
     name: Cycloid Support
