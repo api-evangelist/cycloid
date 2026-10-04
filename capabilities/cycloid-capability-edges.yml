@@ -1,0 +1,25 @@
+slug: cycloid
+provider: Cycloid
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Pipelines
+  spec_file: cycloid-pipelines-api-openapi.yml
+  capability_id: BC-4210.10
+  capability_id_l1: BC-4210
+  capability_name: Continuous Integration Management
+  confidence: 0.7
+  evidence: GET /organizations/{organization_canonical}/pipelines  listPipelines  List pipelines
+  reason: Vendor states the product provides 'CI/CD pipeline centralization'; the tag exposes the build/delivery
+    pipelines themselves, which is continuous integration pipeline management rather than any business
+    pipeline (sales) notion.

@@ -202,6 +202,9 @@ apis:
   - type: Rules
     url: rules/cycloid-api-rules.yml
 common:
+  - type: CapabilityMap
+    url: capabilities/cycloid-capability-edges.yml
+    name: Cycloid Business Capability Map
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/cycloid/overview
   - type: AgenticAccess
