@@ -2,6 +2,10 @@
   "repo": "cycloid",
   "feeds": [
     {
+      "source": "https://www.cycloid.io/blog",
+      "error": "HTTPError"
+    },
+    {
       "source": "https://github.com/cycloidio",
       "feed_url": "https://github.com/cycloidio",
       "title": "",
@@ -9,7 +13,7 @@
       "method": "none"
     }
   ],
-  "fetched": "2026-10-03T12:30:02Z",
+  "fetched": "2026-10-10T13:15:00Z",
   "post_count": 0,
   "agent_pulled": "2026-06-27"
 }
