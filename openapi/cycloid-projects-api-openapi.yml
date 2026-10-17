@@ -55,14 +55,14 @@ paths:
           description: Environments
 components:
   parameters:
-    ProjectCanonical:
-      name: project_canonical
+    OrganizationCanonical:
+      name: organization_canonical
       in: path
       required: true
       schema:
         type: string
-    OrganizationCanonical:
-      name: organization_canonical
+    ProjectCanonical:
+      name: project_canonical
       in: path
       required: true
       schema:
