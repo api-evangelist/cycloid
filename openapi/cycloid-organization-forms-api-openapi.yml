@@ -1,0 +1,1120 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Forms API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Forms
+paths:
+  /organizations/{organization_canonical}/forms/validate:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Validate a forms file definition
+      tags:
+      - Organization Forms
+      operationId: validateFormsFile
+      responses:
+        '200':
+          description: The result of validating the provided configuration
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/FormsValidationResult'
+              example:
+                data:
+                  errors:
+                  - 'The Forms File has an invalid format: use case "use-caseX" invalid definition for variable "key-one" (key) in section "ansible" of "database": The Forms Widget has an invalid format'
+                  - 'The Forms File has an invalid format: use case "use-caseX" invalid definition for variable "key-two" (key) in section "ansible" of "database": The Forms Widget has an invalid format'
+                  - 'The Forms File has an invalid format: use case "use-caseX" invalid definition for variable "key-four" (key) in section "ansible" of "database": The Forms Widget has an invalid format'
+                  - 'The Forms File has an invalid format: use case "use-caseX" invalid definition for variable "key-five" (key) in section "ansible" of "database": The Forms Widget has an invalid format'
+                  - 'The Forms File has an invalid format: use case "default" invalid definition for variable "key-two" (key) in section "ansible" of "database": The Forms Widget has an invalid format'
+                  - 'The Forms File has an invalid format: use case "default" - key "key-one" has been found twice'
+                  - 'The Forms File has an invalid format: use case "default" - key "key-two" has been found twice'
+                  - 'The Forms File has an invalid format: Forms Technology "INVALID-TECH" is unknown'
+                  - 'The Forms File has an invalid format: use case "default" invalid definition for variable "key-two" (key) in section "ansible" of "groupX": The Forms File Branch Source has an invalid format'
+                  forms:
+                    use_cases:
+                    - name: prod
+                      sections:
+                      - groups:
+                        - name: database
+                          technologies:
+                          - ansible
+                          vars:
+                          - default:
+                              foo: bar
+                            description: ''
+                            key: key-one
+                            name: map variable
+                            type: map
+                            unit: ($, GHz, GB)
+                            values:
+                            - foo: bar
+                            - bar: foo
+                            widget: radios
+                          - default: true
+                            description: ''
+                            key: key-oneb
+                            name: checkbox variable
+                            type: boolean
+                            widget: checkbox
+                          - default:
+                            - bar
+                            - foo
+                            description: something k2
+                            key: key-two
+                            name: array variable
+                            required: false
+                            type: array
+                            unit: ($, GHz, GB)
+                            values:
+                            - - foo
+                              - bar
+                            - - bar
+                              - foo
+                            widget: dropdown
+                          - description: something k3
+                            key: key-three
+                            name: required variable without default
+                            required: true
+                            type: integer
+                            unit: something
+                            widget: number
+                          - description: something k3b
+                            key: key-threeb
+                            name: some float
+                            required: false
+                            type: float
+                            widget: number
+                          - default: 20
+                            description: something k5
+                            key: key-five
+                            name: dropdown one value
+                            required: false
+                            type: integer
+                            unit: ($, GHz, GB)
+                            values:
+                            - 20
+                            widget: dropdown
+                          - description: something k6
+                            key: key-six
+                            name: radios one value
+                            required: false
+                            type: integer
+                            unit: ($, GHz, GB)
+                            values:
+                            - 20
+                            widget: radios
+                          - description: something k7
+                            key: key-seven
+                            name: slider list one value
+                            required: false
+                            type: integer
+                            unit: ($, GHz, GB)
+                            values:
+                            - 20
+                            widget: slider_list
+                        name: ansible
+                      - groups:
+                        - name: database
+                          technologies:
+                          - terraform
+                          vars:
+                          - default: 2
+                            description: something k1
+                            key: key-eight
+                            name: integer variable
+                            required: false
+                            type: integer
+                            unit: ($, GHz, GB)
+                            values:
+                            - 1
+                            - 10
+                            widget: slider_range
+                          - default: 20
+                            description: something k2
+                            key: key-nine
+                            name: required with default
+                            required: true
+                            type: integer
+                            unit: ($, GHz, GB)
+                            values:
+                            - 10
+                            - 20
+                            - 30
+                            widget: dropdown
+                          - description: something k3
+                            key: key-ten
+                            name: not required no default
+                            required: false
+                            type: integer
+                            unit: ($, GHz, GB)
+                            values:
+                            - 1
+                            - 5
+                            widget: slider_list
+                        name: terraform
+                      - groups:
+                        - name: database
+                          technologies:
+                          - pipeline
+                          vars:
+                          - default: t2.micro
+                            description: something
+                            key: key-eleven
+                            name: string with values and default
+                            type: string
+                            unit: ($, GHz, GB)
+                            values:
+                            - t2.micro
+                            - t2.medium
+                            - t2.large
+                            widget: auto_complete
+                          - description: something k5
+                            key: key-twelve
+                            name: not required no default, but values
+                            required: false
+                            type: integer
+                            unit: ($, GHz, GB)
+                            values:
+                            - 100
+                            - 200
+                            widget: dropdown
+                          - description: something k6
+                            key: key-thirteen
+                            name: not required no default, but values
+                            required: false
+                            type: integer
+                            unit: ($, GHz, GB)
+                            values:
+                            - 10
+                            - 40
+                            - 80
+                            widget: dropdown
+                        name: pipeline
+                    - name: dev
+                      sections:
+                      - groups:
+                        - name: database
+                          technologies:
+                          - ansible
+                          vars:
+                          - default:
+                              foo: bar
+                            description: something k1
+                            key: key-one
+                            name: map variable
+                            type: map
+                            unit: ($, GHz, GB)
+                            values:
+                            - foo: bar
+                            - bar: foo
+                            widget: dropdown
+                        name: ansible
+                    - name: extra-one
+                      sections:
+                      - groups:
+                        - name: database
+                          technologies:
+                          - ansible
+                          vars:
+                          - description: ''
+                            key: key-two
+                            name: switch variable
+                            type: boolean
+                            widget: switch
+                          - default:
+                              foo: bar
+                            description: something k1
+                            key: key-one
+                            name: map variable
+                            type: map
+                            unit: ($, GHz, GB)
+                            values:
+                            - foo: bar
+                            - bar: foo
+                            widget: dropdown
+                        name: ansible
+                    version: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/FormsValidation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FormsValidation'
+        description: The content of the forms file to be validated.
+        required: true
+      summary: Validate forms file
+      x-summary-source: derived
+  /organizations/{organization_canonical}/forms/values_ref:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Returns the values from the ref
+      tags:
+      - Organization Forms
+      operationId: valuesRefForms
+      responses:
+        '200':
+          description: The result pulling the values from the url
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: object
+              example:
+                data:
+                  bar: foo
+                  foo: bar
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/FormsValuesRef'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FormsValuesRef'
+        description: The URL to fetch the values from
+        required: true
+      summary: Values ref forms
+      x-summary-source: derived
+  /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/forms/config:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    post:
+      description: Generate a set of configs based on the forms input but without creating anything
+      tags:
+      - Organization Forms
+      operationId: interpolateFormsConfig
+      responses:
+        '200':
+          description: Configuration generated based on the forms input
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/ServiceCatalogConfig'
+              example:
+                data:
+                  prod:
+                    ansible:
+                      magento:
+                        content: '# In this file you could override any variables present in default_front.yaml file
+
+
+                          # Usually you might want to override those variables :
+
+                          # magento_backend_frontname: admin
+
+                          # magento_admin_firstname: admin
+
+                          # magento_admin_lastname: admin
+
+                          # magento_admin_email: root@localhost.local
+
+                          # magento_admin_user: admin
+
+
+                          # magento_admin_password: 4Bigs3cr3t
+
+
+                          # In case you want to use vault to encrypt this password use the following command to generate the ansible vault var :
+
+                          # echo -n "4Bigs3cr3t" | ansible-vault encrypt_string --stdin-name=magento_admin_password
+
+                          #>> magento_admin_password: !vault |
+
+                          #>>           $ANSIBLE_VAULT;1.1;AES256
+
+                          #>>           37363232383334316164366337366430316535636130376134323366313565356365363662653539
+
+                          #>>           3161303331303565643831383839626263653362636466660a316530613935393464366536383839
+
+                          #>>           30303836326138306339623431356234333239343435623333343333623938633761636132303662
+
+                          #>>           3135343861383531660a393934316237363961663865393939313966373838653339326565353263
+
+                          #>>           6238
+
+                          '
+                        destination: ansible/environments/prod-front.yml
+                        path: ansible/environments/front.yml.sample
+                    pipeline:
+                      pipeline:
+                        content: "groups:\n\n- name: magento-((env))\n  jobs:\n  - magento-((env))-build\n  - full-deploy-front-magento-((env))\n  - app-deploy-front-magento-((env))\n  - terraform-plan-magento-((env))\n  - terraform-apply-magento-((env))\n  - magento-((env))-unittests\n  - magento-((env))-functional-tests\n\nresource_types:\n\n- name: terraform\n  type: docker-image\n  source:\n    repository: ljfranklin/terraform-resource\n\nresources:\n\n- name: terraform-magento-((env))\n  type: terraform\n  source:\n    storage:\n      bucket: ((terraform_storage_bucket_name))\n      bucket_path: ((terraform_storage_bucket_path))\n      region_name: ((aws_default_region))\n      access_key_id: \"((terraform_storage_access_key))\"\n      secret_access_key: \"((terraform_storage_secret_key))\"\n    vars:\n      access_key: ((aws_access_key))\n      secret_key: ((aws_secret_key))\n    env:\n      AWS_ACCESS_KEY_ID: ((aws_access_key))\n      AWS_DEFAULT_REGION: ((aws_default_region))\n      AWS_SECRET_ACCESS_KEY: ((aws_secret_key))\n"
+                        path: pipeline/magento.yml
+                      variables:
+                        content: "env: prod\nmagento_deploy_bucket_name: magento-deploy\nmagento_deploy_bucket_object_path: /catalog-magento/prod/magento.tar.gz\nmagento_deploy_bucket_region: eu-west-1\nmagento_deploy_bucket_access_key: ...\nmagento_deploy_bucket_secret_access_key: ...\nterraform_storage_access_key: ...\nterraform_storage_secret_key: ...\nterraform_storage_bucket_name: magento-terraform-remote-state\nterraform_storage_bucket_path: magento/prod\naws_access_key: ...\naws_secret_key: ...\naws_default_region: eu-west-1\n\nansible_vault_password: ...\nbastion_url: admin@bastion.server.com\nbastion_private_key_pair: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n\ncatalog_magento_git_private_key: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n\nmagento_git_repository: git@github.com:myuser/code-magento.git\nmagento_git_branch: master\nmagento_git_private_key: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n\n\nmagento_config_git_repository: git@github.com:myuser/config-magento.git\nmagento_config_git_branch: master\nmagento_config_git_private_key: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n"
+                        destination: pipeline/prod-variables.yml
+                        path: pipeline/variables.sample.yml
+                    terraform:
+                      magento:
+                        content: "variable \"rds_password\" {\n    default = \"ChangeMePls\"\n}\n\nmodule \"magento\" {\n  source = \"module-magento\"\n\n  env                      = \"prod\"\n  vpc_id                   = \"<vpc-id>\"\n  private_subnets_ids      = [\"private-subnets\"]\n  magento_ssl_cert         = \"<ssl-cert-arn>\"\n  bastion_sg_allow         = \"<bastion-sg>\"\n  public_subnets_ids       = [\"<public-subnets>\"]\n\n  rds_password             = \"${var.rds_password}\"\n\n  # project = \"magento\"\n\n  # FIXME optimized false : should be changes with the instance type ?\n\n  # rds_database         = \"magento\"\n  # rds_disk_size        = 10\n  # rds_multiaz          = false\n  # rds_storage_type     = \"gp2\"\n  # rds_subnet           = \"<rds-subnet-id>\"\n  # rds_type             = \"db.t2.small\"\n  # rds_username         = \"magento\"\n  # rds_engine           = \"\"mysql\"\n  # rds_engine_version   = \"5.7.16\"\n  # rds_backup_retention = 7\n  # rds_parameters       = \"\"\n\n  # cache_subnet                     = \"cache-subnet-id\"\n  # elasticache_type                 = \"cache.t2.micro\"\n  # elasticache_nodes                = \"1\n  # elasticache_parameter_group_name = \"default.redis3.2\"\n  # elasticache_engine               = \"redis\"\n  # elasticache_port                 = \"6379\"\n  # front_count           = \"1\"\n  # front_disk_size       = \"60\"\n  # front_disk_type       = \"gp2\"\n  # front_type            = \"t2.small\"\n\n}\n"
+                        destination: terraform/magento/prod/magento.tf
+                        path: terraform/magento.tf.sample
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              type: object
+              required:
+              - service_catalog_ref
+              - use_case
+              - component_canonical
+              - vars
+              properties:
+                component-name:
+                  type: string
+                component_canonical:
+                  type: string
+                  maxLength: 100
+                  minLength: 1
+                  pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+                service_catalog_ref:
+                  description: It's the ref of the Stack, like 'cycloidio:stack-magento'
+                  type: string
+                service_catalog_source_version_id:
+                  description: Is the ID of the new SCS Version used
+                  type: integer
+                  format: uint32
+                  minimum: 1
+                use_case:
+                  type: string
+                  maxLength: 100
+                  minLength: 1
+                  pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+                vars:
+                  type: object
+                  $ref: '#/components/schemas/FormVariables'
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - service_catalog_ref
+              - use_case
+              - component_canonical
+              - vars
+              properties:
+                component-name:
+                  type: string
+                component_canonical:
+                  type: string
+                  maxLength: 100
+                  minLength: 1
+                  pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+                service_catalog_ref:
+                  description: It's the ref of the Stack, like 'cycloidio:stack-magento'
+                  type: string
+                service_catalog_source_version_id:
+                  description: Is the ID of the new SCS Version used
+                  type: integer
+                  format: uint32
+                  minimum: 1
+                use_case:
+                  type: string
+                  maxLength: 100
+                  minLength: 1
+                  pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+                vars:
+                  type: object
+                  $ref: '#/components/schemas/FormVariables'
+        description: 'The information of the filled forms for a new project environment.
+
+          Warning: this endpoint isn''t creating anything, it''s just returning the configuration that would be created.
+
+          '
+        required: true
+      summary: Interpolate forms config
+      x-summary-source: derived
+components:
+  schemas:
+    FormsTransformMath:
+      description: A numeric operation applied to each value
+      type: object
+      title: Forms transform math
+      properties:
+        by:
+          description: The operand applied to each value
+          type: number
+          format: double
+        op:
+          description: The arithmetic operation to apply
+          type: string
+          enum:
+          - multiply
+          - divide
+          - add
+          - subtract
+    FormsValuesRefTLS:
+      description: TLS verification for a values_ref HTTPS call, for remotes whose certificate the platform cannot verify out of the box.
+      type: object
+      title: Forms values ref TLS
+      properties:
+        ca_cert:
+          description: PEM certificate of a CA to trust in addition to the system roots, either the PEM itself or a ${cred:canonical.field} reference resolved server-side. Cannot be combined with insecure_skip_verify.
+          type: string
+        insecure_skip_verify:
+          description: Accept any certificate the remote presents. Leaves the call open to interception, so ca_cert is always preferred.
+          type: boolean
+        server_name:
+          description: Name verified against the certificate and sent as SNI, for remotes addressed by IP or by a name their certificate does not carry.
+          type: string
+    FormSection:
+      type: object
+      title: Forms File Section
+      required:
+      - name
+      - groups
+      properties:
+        description:
+          description: An optional description to display for this section
+          type: string
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormGroup'
+        name:
+          type: string
+    FormsValuesRefConfig:
+      description: 'Optional configuration for a values_ref HTTP call: the request method and body, authentication, extra request headers, a timeout and TLS verification.'
+      type: object
+      title: Forms values ref config
+      properties:
+        auth:
+          $ref: '#/components/schemas/FormsValuesRefAuth'
+        body:
+          description: Request payload, sent as application/json. An object or array is serialized to JSON; a string is sent verbatim, so a payload written as raw JSON keeps its shape. Every string it holds may embed a ${cred:canonical.field} reference resolved server-side.
+        headers:
+          description: Additional request headers. Values may be static or a ${cred:canonical.field} reference resolved server-side.
+          type: object
+          additionalProperties:
+            type: string
+        method:
+          description: HTTP method of the request. Defaults to GET, the only method that cannot carry a body.
+          type: string
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+        timeout:
+          description: Request timeout as a Go duration string (e.g. "30s", "1m"). Defaults to 10s, capped at 60s.
+          type: string
+        tls:
+          $ref: '#/components/schemas/FormsValuesRefTLS'
+    FormsValuesRefAuth:
+      description: Authentication for a values_ref HTTP call. Each credential field holds either a static value or a ${cred:canonical.field} reference resolved server-side from the organization's Vault.
+      type: object
+      title: Forms values ref auth
+      required:
+      - type
+      properties:
+        header:
+          description: Name of the header carrying the key (type api_key)
+          type: string
+        key:
+          description: API key value (type api_key)
+          type: string
+        password:
+          description: Password (type basic)
+          type: string
+        token:
+          description: Bearer token (type bearer)
+          type: string
+        type:
+          description: The authentication scheme
+          type: string
+          enum:
+          - bearer
+          - basic
+          - api_key
+        username:
+          description: Username (type basic)
+          type: string
+    FormVariables:
+      description: "Forms variables filled, the format to respect is as follows\n{\n  \"sectionX\": {\n    \"group1\": {\n      \"key1\": \"value1\",\n      \"key2\": \"value2\",\n      \"key3\": \"value3\"\n    },\n  },\n  \"sectionY\": {\n    \"group2\": {\n      \"key1\": \"value1\",\n      \"key2\": \"value2\",\n      \"key3\": \"value3\"\n    },\n  },\n  \"sectionZ\": {\n    \"group3\": {\n      \"key1\": \"value2\"\n    },\n  }\n}\nKeys being the variable name that you want to see substituted/defined,\nwhile the section and group are the one from the form's file.\n"
+      type: object
+      additionalProperties:
+        type: object
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    FormUseCase:
+      type: object
+      title: Forms File Use case
+      required:
+      - name
+      - sections
+      properties:
+        cost_estimation:
+          description: 'False hides the cost estimation panel of the form. Set by `cost_estimation: false` on the use case in the .forms.yml; the component stack configuration endpoint also returns false when the root organization has disable_cost_estimation enabled. Omitted means enabled.'
+          type:
+          - boolean
+          - 'null'
+        name:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormSection'
+    FormsValidation:
+      description: Validates a given Form's file
+      type: object
+      title: Forms validation
+      required:
+      - form_file
+      properties:
+        form_file:
+          description: A form's file to any given version
+          type: object
+    FormGroup:
+      type: object
+      title: Forms File Group
+      required:
+      - name
+      - technologies
+      - vars
+      properties:
+        condition:
+          description: Condition required to be respected to be able to configure that group.
+          type: string
+        description:
+          description: An optional description to display for this group
+          type: string
+        folded:
+          description: Whether or not the group should be displayed to the user. Variables within this group must be usable as such (not required, or with a default if required)
+          type: boolean
+        name:
+          type: string
+        read_only:
+          description: Whether or not the variables of the group are displayed to the user but cannot be modified. Useful for showing computed or immutable values.
+          type: boolean
+        read_only_on_update:
+          description: Whether or not the variables of the group can be set at creation but are locked on every subsequent update. Once a value has been stored it cannot be modified anymore.
+          type: boolean
+        technologies:
+          type: array
+          items:
+            type: string
+        vars:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormEntity'
+    FormsValidationResult:
+      description: The result of the validation, if errors is empty means that is correct
+      title: FormsValidationResult
+      required:
+      - forms
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+        forms:
+          type: object
+          $ref: '#/components/schemas/FormsFileV3'
+    SCConfigPathDestConfig:
+      description: Represents a Configuration which holds Path, Destination and Content
+      title: Path and Destination Configuration
+      required:
+      - path
+      - destination
+      - content
+      properties:
+        content:
+          type: string
+        destination:
+          type: string
+        path:
+          type: string
+    FormsValuesRef:
+      description: It has the information to get the values of an entity of the Form
+      type: object
+      title: Forms values ref
+      required:
+      - url
+      properties:
+        config:
+          $ref: '#/components/schemas/FormsValuesRefConfig'
+        transform:
+          description: Ordered pipeline of steps to apply to the fetched values
+          type: array
+          items:
+            $ref: '#/components/schemas/FormsTransformStep'
+        url:
+          description: The url to which fetch the results
+          type: string
+    FormEntity:
+      description: This describes all the attributes possible to configure a form's variable
+      type: object
+      title: Forms file's Entity
+      required:
+      - name
+      - widget
+      properties:
+        condition:
+          description: Optional condition expression that gates whether this widget is displayed. Same V2 syntax as Group.condition (e.g. "$other_field == 'aws'"). Variables prefixed with "ctx_" are runtime-injected and bypass the entity-existence validation.
+          type: string
+        current:
+          description: The current value that was previously configured for this variable upon creation or update. In case of shared variables having different values, it will be empty, and 'mismatch_values' will be filled instead.
+          type: object
+        current_invalid:
+          description: True when 'current' is non-empty but could not be resolved to any of the widget's available options, e.g. the option was removed from the form. 'current' still holds the raw stored value in this case. Never true for an empty 'current' -- that's an unfilled optional field, not a removed option.
+          type: boolean
+        default:
+          description: "Default can take 2 kinds of definition.\nThe first one is simply the variable to assign if nothing is given by the user and that the variable is required.\nThe second one is dynamic default, meaning default that can vary based on conditions. The format is as follows:\n  options:\n    - name: \"Name of set (can be omitted)\"\n      condition: \"$env == 'dev'\"\n      default: t2.micro\n    - condition: \"$env == 'prod'\"\n      default: t2.large"
+          type: object
+        depends_on:
+          description: List of keys that are required to use this entity
+          type: array
+          items:
+            type: string
+        description:
+          description: The description helping users understand the interest/impact of such variable/change
+          type: string
+        folded:
+          description: Whether or not the entity should be displayed to the user. This entity must be usable as such (not required, or with a default if required)
+          type: boolean
+        hidden:
+          description: 'Whether or not the entity should be hidden from the user. When true the widget is not displayed regardless of its widget type. This is an independent attribute; set it on any widget type. The legacy widget: hidden form is still supported for backward compatibility.'
+          type: boolean
+        items:
+          description: Sub-entity definitions for the repeatable widget. Each item defines a field that users can fill N times. Only valid when widget is 'repeatable'.
+          type: array
+          items:
+            $ref: '#/components/schemas/FormEntity'
+        key:
+          description: 'The key is the name of variables for the ansible/pipeline/terraform technologies. If this is a first level variable then: keyX. If you have multiple terraform modules then use: module.Y.keyX to help identify the unique variable. Required for every widget except ''info'': an info block carries no value, so it needs no addressing key, and any key given is ignored.'
+          type: string
+        mismatch_values:
+          description: This is filled only when a shared variable does not have the same values anymore. e.g. a variable 'foo' was shared between 'ansible' and 'pipeline', was set to 'bar', but now the value found for 'ansible' is 'bus', while it's still 'bar' for the pipeline. In such situation, the Forms don't know anymore which is the correct data and will return both, while unsetting the 'Current' field.
+          type: array
+          items:
+            type: object
+        name:
+          description: The name of the variable displayed to the user
+          type: string
+        read_only:
+          description: Whether or not the entity is displayed to the user but cannot be modified. Useful for showing computed or immutable values.
+          type: boolean
+        read_only_on_update:
+          description: Whether or not the entity can be set at creation but is locked on every subsequent update. Once a value has been stored it cannot be modified anymore.
+          type: boolean
+        required:
+          description: Whether or not the field is required - that helps distinguish "optional" variables and allows to set default if necessary and present
+          type: boolean
+        resolve_values:
+          description: Enables ${variable_name} interpolation inside the values and default fields. When true, ${key} tokens matching sibling entity keys in the same use_case are resolved at render time using the referenced field's current value. Supports concatenation and escape syntax ($${key} produces literal ${key}).
+          type: boolean
+        source:
+          description: 'The source is only used for the branch widget to reference the key of the SCS or CR that the branches have to be read from. Because a branch in itself cannot exist, the user has to indicate from which SCS or CR he wants to retrieve branches. The source has to reference the key of an entity of a widget: ''CyCRS'' or ''CySCS'''
+          type: string
+        transform:
+          description: Ordered pipeline of steps applied to the resolved values (from static values, values_ref or dynamic options) before they are validated, mapped and rendered. Steps apply in the declared order.
+          type: array
+          items:
+            $ref: '#/components/schemas/FormsTransformStep'
+        type:
+          description: The type of data handled - used to manipulate/validate the input, and also validate default/values. Required for every widget except 'info' - it carries no value, so its type is not applicable and ignored if set.
+          type: string
+          enum:
+          - integer
+          - float
+          - string
+          - array
+          - boolean
+          - map
+        unit:
+          description: 'The unit to be displayed for the variable, helping to know what''s being manipulated: amount of servers, Go, users, etc.'
+          type: string
+        validations:
+          description: "An array of validations and relative errors for this entitiy. For example:\n  validations:\n    - regexp: \"^proj_.*$\"\n      error_message: \"the value must have 'proj_' as prefix\"\n    - regexp: \"^.*_awesome$\"\n      error_message: \"the value must have '_awesome' as suffix\"\nAt the moment only regexp validations are implemented but we can expect objects with a 'type', and 'error_message' field. The type field can hold the constraint, as in the case of regexp or hipotetically a moe complex object."
+          type: array
+          items:
+            type: object
+        values:
+          description: "Values can take 2 kinds of definition.\nFirst one is a list of object, such as list of integer, maps, etc. Values allowed, e.g. [1, 10, 20, 50]. Note: In case of SliderRange only 2 values should be provided: [min, max], in case of providing them the other way around some validation test will fail.\nSecond one is dynamic values, meaning values that can vary based on conditions. The format is as follows:\n  options:\n    - name: \"Name of set (can be omitted)\"\n      condition: \"$env == 'dev'\"\n      values: [dev-ami1, dev-ami2, dev-ami3]\n    - condition: \"$env == 'prod'\"\n      values: [prod-ami1, prod-ami2, prod-ami3]"
+          type: object
+        values_ref:
+          description: It's a URL in which the values have to be fetched from
+          type: string
+        values_ref_config:
+          $ref: '#/components/schemas/FormsValuesRefConfig'
+        widget:
+          description: The widget used to display the data in the most suitable way
+          type: string
+          enum:
+          - auto_complete
+          - dropdown
+          - radios
+          - slider_list
+          - slider_range
+          - number
+          - simple_text
+          - switch
+          - text_area
+          - cy_cred
+          - cy_scs
+          - cy_crs
+          - cy_branch
+          - cy_inventory_resource
+          - cy_inventory_output
+          - date_time
+          - hidden
+          - repeatable
+          - info
+        widget_config:
+          description: "Some specific configuration that could be applied to that widget. Currently only a few widgets can be configured:\n  * cy_cred\n    * 'cred_types' (list): reduce the types of credentials retrieved to that list. See supported types of credentials\n    * 'display_keys' (bool): to specify if the path + key have to be written or only the path\n    * 'format' (enum): credential format, one of: 'path' | 'uri'. Defaults to path. Only credentials in URI format can be shared between technologies.\n    * 'uri_parameters' (map): optional query parameters that should be encoded and added to the resulting credential URI by the client. For example, they may be used to specify the output format (e.g., JSON). Applies only if format='uri'.\n    * 'cred_name' (string): pin the widget to a single credential canonical, so the end user only provides the secret value. The value is slugified by the API and must be consumed as returned. Mutually exclusive with 'cred_name_prefix'.\n    * 'cred_name_prefix' (string): pin the beginning of the credential canonical, the end user provides only the suffix. Slugified by the API, a trailing '-' or '_' separator is preserved. Mutually exclusive with 'cred_name'.\n    * 'cred_key' (string): the key inside the credential that holds the value, used when the credential is created inline.\n  * radio\n    * 'orientation' (string): whether you want to display it in an 'horizontal' or 'vertical' way\n  * cy_inventory_resource\n    * 'attribute' (string): REQUIRED The path to the attribute to actually use as value\n    * 'filters': (object): The filters to apply, selected from the list below:\n      * 'provider' (string): The provider like '\"provider[\\\"registry.terraform.io/hashicorp/aws\\\"]\"'\n      * 'type'  (string): The type of the resource like 'aws_vpc'\n      * 'name' (string): The name of the resource like 'front'\n      * 'module' (string): The module name like 'module.lemp'\n      * 'label' (string): The label of the resource, this only applies for resources created directly from the API/FE\n      * 'attributes' (string): The query string to filter the attributes like 'ingress[0].protocol[eq]=tcp'\n      * 'custom_attributes' (string): The query string to filter the custom_attributes like 'ingress[0].protocol[eq]=tcp'\n      * 'project' (string): Linked project canonical\n      * 'environment' (string): Linked environment canonical\n      * 'component' (string): Linked component canonical\n  * date_time\n    * 'format' (string): the date/time format string for storage, display and typing, using date-fns tokens (e.g. \"yyyy-MM-dd\", \"yyyy-MM-dd HH:mm\", \"yyyy-MM-dd'T'HH:mm:ss'Z'\"). Defaults to \"yyyy-MM-dd'T'HH:mm:ss'Z'\" (RFC 3339 UTC) if not specified. A value with a time of day is stored in UTC whatever the format; the user picks, types and sees local time. Formats without an hour token and date_only values are stored as picked; formats with an offset token (X, x, O, z) store the local time with its offset.\n    * 'block_weekends' (bool): prevents selection of Saturday and Sunday dates (local calendar day). Defaults to false.\n    * 'date_only' (bool): restricts picker to date selection only (no time inputs). When true, format defaults to \"yyyy-MM-dd\". Defaults to false.\n    * 'min_future_distance' (string): minimum selectable future offset from today (e.g. '1d'). A future window also rules out every past day.\n    * 'max_future_distance' (string): maximum selectable future offset from today (e.g. '30d'). A future window also rules out every past day.\n    * 'min_past_distance' (string): minimum selectable past offset from today (e.g. '0d'). A past window also rules out every future day.\n    * 'max_past_distance' (string): maximum selectable past offset from today (e.g. '90d'). A past window also rules out every future day.\n    * 'allowed_time_start' (string): earliest selectable time of day in UTC (local time for formats with an offset token), as HH:mm (e.g. '09:00'); shown to the user in local time. Also the default time of a freshly picked day.\n    * 'allowed_time_end' (string): latest selectable time of day in UTC (local time for formats with an offset token), as HH:mm (e.g. '18:00'); shown to the user in local time. A start later than the end is a window that wraps past midnight.\n    * 'block_past_dates' (bool): prevents selection of dates in the past.\n    * 'max_date' (string): latest selectable date as YYYY-MM-DD (e.g. '2030-01-01').\n  * cy_inventory_output\n    * 'attribute' (string): Path to the output's attribute, which value will be used\n    * 'filters': (object): The filters to apply, selected from the list below:\n      * 'attributes' (string): The query string to filter the attributes like 'ingress[0].protocol[eq]=tcp'\n      * 'keys' (list(string)): List of output keys to select from\n      * 'project' (string): Linked project canonical\n      * 'environment' (string): Linked environment canonical\n      * 'component' (string): Linked component canonical\n      * 'service_catalogs' (list(string)): Linked service catalog (stack) canonicals\n  * repeatable\n    * 'min_items' (int): minimum number of repeatable instances (0 = no minimum)\n    * 'max_items' (int): maximum number of repeatable instances (0 = no maximum)\n    * 'item_label' (string): label template for each instance\n  * simple_text\n    * 'sensitive' (bool): render the input masked, with a show/hide toggle, instead of plain text. Display only -- the value is stored and submitted exactly as any other value. See the widget documentation for the \"not a secrets store\" warning."
+          type: object
+    FormsFileV3:
+      type: object
+      title: Forms File V3
+      required:
+      - use_cases
+      - version
+      properties:
+        use_cases:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormUseCase'
+        version:
+          type: string
+    ServiceCatalogConfig:
+      description: Represents the Service Catalog Configuration for a given Use Case
+      title: Use Case Configuration
+      required:
+      - name
+      - description
+      - cloud_provider
+      - pipeline
+      properties:
+        ansible:
+          $ref: '#/components/schemas/SCConfigTechConfig'
+        cloud_provider:
+          type: string
+        custom:
+          $ref: '#/components/schemas/SCConfigCustomConfig'
+        description:
+          type: string
+        forms:
+          $ref: '#/components/schemas/FormUseCase'
+        name:
+          type: string
+        pipeline:
+          $ref: '#/components/schemas/SCConfigPipelineConfig'
+        terraform:
+          $ref: '#/components/schemas/SCConfigTechConfig'
+    SCConfigPathConfig:
+      description: Represents a Configuration which holds Path and Content
+      title: Path Configuration
+      required:
+      - path
+      - content
+      properties:
+        content:
+          type: string
+        path:
+          type: string
+    SCTemplateConfig:
+      description: Represents a Configuration of a single template (defined by a Custom technology)
+      title: A configuration of a single template
+      required:
+      - paths
+      - destination
+      properties:
+        config:
+          $ref: '#/components/schemas/SCOptionalTemplateConfig'
+        content:
+          description: 'Holds the content of input files found in the Paths.
+
+            The key is an input file and the value is the content of the file.'
+          type: object
+          additionalProperties:
+            description: File content
+            type: string
+        destination:
+          description: 'Destination path. By default, it''s a directory, where the input files will be recreated maintaining the original file tree.
+
+            This behavior can be changed by setting `destination_is_file` in optional configs to `true`.
+
+            By doing that, the destination path will be treated as a file, not a directory.
+
+            '
+          type: string
+        helpers:
+          description: Paths where common template helpers (parts) are located
+          type: array
+          items:
+            type: string
+        helpers_content:
+          description: 'Holds the content of the helpers found in Helpers paths.
+
+            The key is a helper file path and the value is the content of the file.'
+          type: object
+          additionalProperties:
+            description: File content
+            type: string
+        paths:
+          description: Input Paths where the teplate files will be found
+          type: array
+          items:
+            type: string
+    SCConfigCustomConfig:
+      description: Represents the Service Catalog Configuration for Custom Tech for a given Use Case
+      title: Custom Tech Configuration
+      required:
+      - var_path
+      - templates
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/SCTemplateConfig'
+        var_path:
+          description: A path to a file holding selected values of variables (JSON format)
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    FormsTransformStep:
+      description: A single step of a widget's transform pipeline. Exactly one of extract, map, cast or math must be set; steps apply in the declared order to the resolved values.
+      type: object
+      title: Forms transform step
+      properties:
+        cast:
+          description: The type to cast each value to
+          type: string
+          enum:
+          - integer
+          - number
+          - string
+          - bool
+        extract:
+          description: jq-compatible expression selecting or flattening the values
+          type: string
+        map:
+          description: Projects each element into a label/value pair using a jq-compatible expression per key
+          type: object
+          additionalProperties:
+            type: string
+        math:
+          $ref: '#/components/schemas/FormsTransformMath'
+    SCConfigTechConfig:
+      description: Represents the Service Catalog Configuration for a Technology of a given Use Case
+      type: object
+      title: Tech Configuration
+      additionalProperties:
+        $ref: '#/components/schemas/SCConfigPathDestConfig'
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    SCConfigPipelineConfig:
+      description: Represents the Service Catalog Configuration for a Pipeline of a given Use Case
+      title: Pipeline Configuration
+      required:
+      - pipeline
+      - variables
+      properties:
+        pipeline:
+          $ref: '#/components/schemas/SCConfigPathConfig'
+        variables:
+          $ref: '#/components/schemas/SCConfigPathDestConfig'
+    SCOptionalTemplateConfig:
+      description: Represents an optional configuration of a single template (defined by a Custom technology)
+      type: object
+      title: An optional configuration of a single template
+      properties:
+        destination_is_file:
+          description: 'Informs whether the destination path is a file. If set to true, the input templates will be contatenated after the template execution and saved in the destination as a single file.
+
+            It''s false by default.'
+          type: boolean
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  parameters:
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

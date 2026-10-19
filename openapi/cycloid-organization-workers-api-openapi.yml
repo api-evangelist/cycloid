@@ -1,0 +1,272 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization workers API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization workers
+paths:
+  /organizations/{organization_canonical}/workers:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the workers that the authenticated user has access to.
+      tags:
+      - Organization workers
+      operationId: getWorkers
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: List of the workers which authenticated user has access to.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Worker'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - active_containers: 256
+                  active_volumes: 0
+                  ephemeral: false
+                  name: worker1
+                  platform: linux
+                  start_time: 1552997739
+                  state: running
+                  team: org1
+                  version: '2.1'
+                - active_containers: 256
+                  active_volumes: 10
+                  ephemeral: true
+                  name: worker2
+                  platform: linux
+                  start_time: 1552997639
+                  state: running
+                  tags:
+                  - fastcpu
+                  team: org2
+                  version: '2.1'
+                - active_containers: 300
+                  active_volumes: 20
+                  ephemeral: true
+                  name: worker3
+                  platform: linux
+                  start_time: 1552997839
+                  state: running
+                  tags:
+                  - ssd
+                  team: org3
+                  version: '2.1'
+                pagination:
+                  index: 1
+                  size: 5
+                  total: 3
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get workers
+      x-summary-source: derived
+components:
+  parameters:
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  schemas:
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    Worker:
+      description: The entity which represents a worker in the application.
+      type: object
+      title: Worker
+      required:
+      - name
+      - state
+      - version
+      - platform
+      - ephemeral
+      - active_containers
+      - active_volumes
+      - start_time
+      properties:
+        active_containers:
+          type: integer
+          format: uint64
+        active_volumes:
+          type: integer
+          format: uint64
+        ephemeral:
+          type: boolean
+        name:
+          type: string
+        platform:
+          type: string
+        start_time:
+          type: integer
+          format: uint64
+        state:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        team:
+          type: string
+        version:
+          type: string
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

@@ -1,0 +1,241 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization licence API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization licence
+paths:
+  /organizations/{organization_canonical}/licence:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      security: []
+      description: Get currently active licence.
+      tags:
+      - Organization licence
+      operationId: getLicence
+      responses:
+        '200':
+          description: Currently active licence entity.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Licence'
+              example:
+                data:
+                  company_name: Cycloid
+                  created_at: 1503225026
+                  email_address: email@cycloid.io
+                  expires_at: 1503226026
+                  key: eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X25hbWUiOiJjeWNsb2lkIiwiZW1haWxfYWRkcmVzcyI6ImN5Y2xvaWRAb2ZmaWNlLmlvIiwibWVtYmVyc19jb3VudCI6NSwiZXhwaXJlc19hdCI6IjIwMjItMTItMTNUMDA6MDA6MDBaIiwidmVyc2lvbiI6IjEiLCJhdWQiOiJjeWNsb2lkIiwianRpIjoiNGE1ZTQzMDYtNmUwMy00MjFmLTllM2ItY2VlZmJhZjMyNDk0IiwiaWF0IjoxNjExMzE2NjUwLCJpc3MiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJuYmYiOjE2MTEzMTY2NTAsInN1YiI6Imh0dHBzOi8vY3ljbG9pZC5pbyJ9.Z_DvpqprGU0uW26vkpzdTYvyC4imiw0AY1FJMmpeEyVkfYlRI2Q1MWcFZPxMaTafi1TAjwwJOxdY1fxnghMfKng4-4dEtPhcsJQy3nC_ODyACtxDpZMRRaIb8pzBN7AqFvBWWPVKAdqfYXI7IZMX5jjIfaFHtzzs5OnXwQ9USl4
+                  members_count: 5
+                  updated_at: 1503225026
+                  version: '1'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get licence
+      x-summary-source: derived
+    post:
+      security: []
+      description: Activate Cycloid's licence. If another licence already exists, it will be overwritten
+      tags:
+      - Organization licence
+      operationId: activateLicence
+      responses:
+        '204':
+          description: The product has been activated
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewLicence'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewLicence'
+        description: The licence key
+        required: true
+      summary: Activate licence
+      x-summary-source: derived
+components:
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  schemas:
+    Licence:
+      description: Object containing licence parameters
+      title: Licence
+      required:
+      - key
+      - created_at
+      - updated_at
+      - company_name
+      - email_address
+      - members_count
+      - expires_at
+      - version
+      - on_prem
+      - current_members
+      properties:
+        company_name:
+          type: string
+        created_at:
+          type: integer
+          format: uint64
+        current_members:
+          type: integer
+          format: uint64
+        email_address:
+          type: string
+        expires_at:
+          type: integer
+          format: uint64
+        key:
+          description: Licence's key in the JWT format
+          type: string
+        members_count:
+          type: integer
+          format: uint64
+        on_prem:
+          type: boolean
+        updated_at:
+          type: integer
+          format: uint64
+        version:
+          type: string
+    NewLicence:
+      description: Object containing licence parameters
+      title: Licence
+      required:
+      - key
+      properties:
+        key:
+          description: Licence's key in the JWT format
+          type: string
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  parameters:
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

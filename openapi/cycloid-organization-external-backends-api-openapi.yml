@@ -1,0 +1,696 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization External Backends API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization External Backends
+paths:
+  /organizations/{organization_canonical}/external_backends:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical_query'
+    - $ref: '#/components/parameters/environment_canonical_query'
+    - $ref: '#/components/parameters/component_canonical_query'
+    - $ref: '#/components/parameters/external_backend_default_query'
+    get:
+      description: Get the list of organization external backends
+      tags:
+      - Organization External Backends
+      operationId: getExternalBackends
+      responses:
+        '200':
+          description: The list of the external backends
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExternalBackend'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - configuration:
+                    engine: AWSCloudWatchLogs
+                    region: eu-west1
+                  created_at: 1503225026
+                  credential_id: 1
+                  id: 1
+                  project_canonical: project1
+                  purpose: logs
+                  updated_at: 1503335026
+                - configuration:
+                    engine: AWSCloudWatchLogs
+                    region: eu-west1
+                  created_at: 1503225026
+                  credential_id: 2
+                  id: 2
+                  project_canonical: project2
+                  purpose: logs
+                  updated_at: 1503335026
+                - configuration:
+                    bucket: mybucket
+                    engine: AWSStorage
+                    key: /my/key
+                    region: eu-west1
+                  created_at: 1503225026
+                  credential: 3
+                  environment_canonical: envA
+                  id: 3
+                  project_canonical: project1
+                  purpose: remote_tfstate
+                  updated_at: 1503335026
+                - configuration:
+                    blob: /my/blob
+                    container: mycontainer
+                    engine: AWSStorage
+                  created_at: 1503225026
+                  credential: 4
+                  environment_canonical: envA
+                  id: 4
+                  project_canonical: project2
+                  purpose: logs
+                  updated_at: 1503335026
+                - configuration:
+                    bucket: mybucket
+                    engine: GCPStorage
+                    object: /my/object
+                  created_at: 1503225026
+                  credential_id: 5
+                  environment_canonical: envB
+                  id: 5
+                  project_canonical: project2
+                  purpose: remote_tfstate
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get external backends
+      x-summary-source: derived
+    post:
+      description: Save information about the external backend
+      tags:
+      - Organization External Backends
+      operationId: createExternalBackend
+      responses:
+        '200':
+          description: external backend has been registered
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ExternalBackend'
+              example:
+                data:
+                  configuration:
+                    engine: AWSCloudWatchLogs
+                    region: eu-west1
+                  created_at: 1503225026
+                  credential_id: 1
+                  id: 1
+                  project_canonical: project1
+                  purpose: logs
+                  updated_at: 1503335026
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewExternalBackend'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewExternalBackend'
+        description: The information of the external backend
+        required: true
+      summary: Create external backend
+      x-summary-source: derived
+  /organizations/{organization_canonical}/external_backends/test_connection:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Test the connection to an external backend without creating it. The provided credential is used directly and is not stored.
+      tags:
+      - Organization External Backends
+      operationId: testExternalBackendConnection
+      responses:
+        '204':
+          description: Connection is valid
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/TestExternalBackendConnectionInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TestExternalBackendConnectionInput'
+        description: The external backend configuration to test
+        required: true
+      summary: Test external backend connection
+      x-summary-source: derived
+  /organizations/{organization_canonical}/external_backends/{external_backend_id}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/external_backend_id'
+    get:
+      description: Get the external backend
+      tags:
+      - Organization External Backends
+      operationId: getExternalBackend
+      responses:
+        '200':
+          description: The external backend
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ExternalBackend'
+              example:
+                data:
+                  configuration:
+                    engine: AWSCloudWatchLogs
+                  created_at: 1503225026
+                  credential_id: 1
+                  id: 1
+                  project_canonical: project1
+                  purpose: logs
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get external backend
+      x-summary-source: derived
+    put:
+      description: Update an External Backend
+      tags:
+      - Organization External Backends
+      operationId: updateExternalBackend
+      responses:
+        '200':
+          description: Success update
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ExternalBackend'
+              example:
+                data:
+                  configuration:
+                    engine: AWSCloudWatchLogs
+                    region: eu-west1
+                  created_at: 1503225026
+                  credential_id: 1
+                  id: 1
+                  project_canonical: project1
+                  purpose: logs
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateExternalBackend'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateExternalBackend'
+        description: The information of the external backend new data
+        required: true
+      summary: Update external backend
+      x-summary-source: derived
+    delete:
+      description: delete an External Backend
+      tags:
+      - Organization External Backends
+      operationId: deleteExternalBackend
+      parameters:
+      - $ref: '#/components/parameters/delete_tfstate'
+      responses:
+        '204':
+          description: Organization Service Catalog Sources has been deleted
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete external backend
+      x-summary-source: derived
+components:
+  schemas:
+    UpdateExternalBackend:
+      description: An external backend contains the configuration needed in order to be plugged into the Cycloid system. A backend is a general purpose concept, but Cycloid specifies which ones are supported and the list of those which are supported for every concrete feature.
+      title: Update External backend
+      required:
+      - purpose
+      properties:
+        component_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        configuration:
+          $ref: '#/components/schemas/ExternalBackendConfiguration'
+        credential_canonical:
+          description: 'The type of the credential must be one of: ["aws", "azure_storage", "elasticsearch", "gcp", "swift", "vmware"]
+
+            '
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        default:
+          description: Will mark this EB as default for the specific purpose
+          type: boolean
+        environment_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        project_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        purpose:
+          type: string
+          enum:
+          - events
+          - logs
+          - remote_tfstate
+          - cost_explorer
+    ExternalBackend:
+      description: An external backend contains the configuration needed in order to be plugged into the Cycloid system. A backend is a general purpose concept, but Cycloid specifies which ones are supported and the list of those which are supported for every concrete feature.
+      title: External backend
+      required:
+      - purpose
+      - default
+      properties:
+        component_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        configuration:
+          $ref: '#/components/schemas/ExternalBackendConfiguration'
+        created_at:
+          type: integer
+          format: uint64
+        credential_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        default:
+          description: Will mark this EB as default for the specific purpose
+          type: boolean
+        environment_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        jwt:
+          description: JWT is a credential identifying this EB for a public interaction right now it's only filled when the Purpose == RemoteTFState as we'll use it for the Inventory.
+          type: string
+        project_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        purpose:
+          type: string
+        updated_at:
+          type: integer
+          format: uint64
+    NewExternalBackend:
+      description: An external backend contains the configuration needed in order to be plugged into the Cycloid system. A backend is a general purpose concept, but Cycloid specifies which ones are supported and the list of those which are supported for every concrete feature.
+      title: New External backend
+      required:
+      - purpose
+      properties:
+        component_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        configuration:
+          $ref: '#/components/schemas/ExternalBackendConfiguration'
+        credential_canonical:
+          description: 'The type of the credential must be one of: ["aws", "azure_storage", "elasticsearch", "gcp", "swift", "vmware"]
+
+            '
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        default:
+          description: Will mark this EB as default for the specific purpose
+          type: boolean
+        environment_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        project_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        purpose:
+          type: string
+          enum:
+          - events
+          - logs
+          - remote_tfstate
+          - cost_explorer
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    TestExternalBackendConnectionInput:
+      description: Configuration to test an external backend connection without creating it.
+      title: Test External Backend Connection Input
+      required:
+      - purpose
+      - credential
+      properties:
+        configuration:
+          $ref: '#/components/schemas/ExternalBackendConfiguration'
+        credential:
+          $ref: '#/components/schemas/TestConnectionCredential'
+        purpose:
+          type: string
+          enum:
+          - logs
+          - remote_tfstate
+          - cost_explorer
+    ExternalBackendConfiguration:
+      type: object
+      required:
+      - engine
+      properties:
+        engine:
+          type: string
+      discriminator:
+        propertyName: engine
+    TestConnectionCredential:
+      description: Inline credential data for testing an external backend connection. The credential is not stored.
+      title: Test Connection Credential
+      required:
+      - type
+      - raw
+      properties:
+        raw:
+          $ref: '#/components/schemas/CredentialRaw'
+        type:
+          type: string
+          enum:
+          - aws
+          - azure
+          - azure_storage
+          - gcp
+          - basic_auth
+          - elasticsearch
+          - swift
+          - vmware
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    CredentialRaw:
+      description: All the possible fields inside it
+      title: Credential Raw
+      properties:
+        access_key:
+          type: string
+        account_name:
+          type: string
+        auth_url:
+          type: string
+        ca_cert:
+          type: string
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        domain_id:
+          type: string
+        environment:
+          type: string
+          enum:
+          - public
+          - usgovernment
+          - china
+          - german
+        json_key:
+          type: string
+        password:
+          type: string
+        raw:
+          type: object
+        secret_key:
+          type: string
+        ssh_key:
+          type: string
+        subscription_id:
+          type: string
+        tenant_id:
+          type: string
+        username:
+          type: string
+  parameters:
+    delete_tfstate:
+      description: Defines if the Terraform states stored on the External Backend are deleted along with it. Only applies to External Backends with the remote_tfstate purpose. If a state can not be deleted the External Backend is kept, so the operation can be retried
+      name: delete_tfstate
+      in: query
+      schema:
+        type: boolean
+        default: false
+    external_backend_id:
+      description: External Backend ID
+      name: external_backend_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    external_backend_default_query:
+      description: Filter for default Terraform External Backend
+      name: external_backend_default
+      in: query
+      schema:
+        type: boolean
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    project_canonical_query:
+      description: A list of projects' canonical to filter from
+      name: project_canonical
+      in: query
+      schema:
+        type: string
+        pattern: ^[\da-z]+(?:(?:[\da-z\-._]+)?[\da-z])?$
+    environment_canonical_query:
+      description: A list of environments' canonical to filter from
+      name: environment_canonical
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    component_canonical_query:
+      description: A canonical of a component.
+      name: component_canonical
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

@@ -1,0 +1,531 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization OIDC Group Mappings API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations for OIDC group mappings of an organization.
+  name: Organization OIDC Group Mappings
+paths:
+  /organizations/{organization_canonical}/oidc-group-mappings:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of OIDC group mappings configured for the organization. Group mapping requires the IdP to include group claims in the OIDC token; configure the claim name via oidc_groups_claim_name on the OIDC authentication integration.
+      tags:
+      - Organization OIDC Group Mappings
+      operationId: listOIDCGroupMappings
+      responses:
+        '200':
+          description: List of OIDC group mappings for the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OIDCGroupMapping'
+              example:
+                data:
+                - created_at: 1503225026
+                  group_name: FOO_OPERATOR
+                  id: 1
+                  team:
+                    canonical: operator
+                    id: 5
+                    name: Operator
+                    roles:
+                    - canonical: project-manager
+                      default: true
+                      description: Can manage projects
+                      id: 18
+                      name: Project Manager
+                      rules: null
+                  updated_at: 1503225026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List OIDC group mappings
+      x-summary-source: derived
+    post:
+      description: Create a new OIDC group mapping for the organization.
+      tags:
+      - Organization OIDC Group Mappings
+      operationId: createOIDCGroupMapping
+      responses:
+        '200':
+          description: OIDC group mapping created.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/OIDCGroupMapping'
+              example:
+                data:
+                  created_at: 1503225026
+                  group_name: FOO_OPERATOR
+                  id: 1
+                  team:
+                    canonical: operator
+                    id: 5
+                    name: Operator
+                    roles:
+                    - canonical: project-manager
+                      default: true
+                      description: Can manage projects
+                      id: 18
+                      name: Project Manager
+                      rules: null
+                  updated_at: 1503225026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewOIDCGroupMapping'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewOIDCGroupMapping'
+        description: The OIDC group mapping to create.
+        required: true
+      summary: Create OIDC group mapping
+      x-summary-source: derived
+  /organizations/{organization_canonical}/oidc-group-mappings/{oidc_group_mapping_id}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/oidc_group_mapping_id'
+    delete:
+      description: Delete an OIDC group mapping from the organization.
+      tags:
+      - Organization OIDC Group Mappings
+      operationId: deleteOIDCGroupMapping
+      responses:
+        '204':
+          description: OIDC group mapping has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete OIDC group mapping
+      x-summary-source: derived
+  /organizations/{organization_canonical}/oidc-organization-settings:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the OIDC settings configured for the organization.
+      tags:
+      - Organization OIDC Group Mappings
+      operationId: getOIDCOrganizationSettings
+      responses:
+        '200':
+          description: The OIDC settings of the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/OIDCOrganizationSettings'
+              example:
+                data:
+                  default_role_canonical: member
+                  oidc_configured_in_hierarchy: true
+                  oidc_managed: true
+                  oidc_no_match_policy: keep_membership
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get OIDC organization settings
+      x-summary-source: derived
+    put:
+      description: Create or update the OIDC settings of the organization. Rejects oidc_no_match_policy='eject' when oidc_managed is false with HTTP 422.
+      tags:
+      - Organization OIDC Group Mappings
+      operationId: updateOIDCOrganizationSettings
+      responses:
+        '200':
+          description: The updated OIDC settings of the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/OIDCOrganizationSettings'
+              example:
+                data:
+                  default_role_canonical: member
+                  oidc_configured_in_hierarchy: true
+                  oidc_managed: true
+                  oidc_no_match_policy: eject
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateOIDCOrganizationSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateOIDCOrganizationSettings'
+        description: The OIDC settings to apply to the organization.
+        required: true
+      summary: Update OIDC organization settings
+      x-summary-source: derived
+components:
+  schemas:
+    Role:
+      description: Role represents the authorization level that an user has to access to a specific entity of the system. A role contains a list of rules to define the access control. Note not all the entities supports roles access control; see the API endpoints to know which entities support them.
+      title: Role access control
+      required:
+      - id
+      - name
+      - canonical
+      - description
+      - rules
+      - default
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        default:
+          type: boolean
+        description:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 100
+          minLength: 2
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        updated_at:
+          type: integer
+          format: uint64
+    OIDCOrganizationSettings:
+      description: The per-organization OIDC reconciliation settings.
+      type: object
+      title: OIDCOrganizationSettings
+      required:
+      - oidc_managed
+      - oidc_no_match_policy
+      properties:
+        default_role_canonical:
+          description: The canonical of the org-level role granted on OIDC provisioning. Empty when no default role is configured.
+          type: string
+        oidc_configured_in_hierarchy:
+          description: Whether an enabled OIDC integration exists anywhere in the organization's hierarchy (self or ancestors). Read-only.
+          type: boolean
+          readOnly: true
+        oidc_managed:
+          description: When true, local member/team/invite edits are disabled (strict mode).
+          type: boolean
+        oidc_no_match_policy:
+          description: The policy applied when no group mapping matches on login.
+          type: string
+          enum:
+          - keep_membership
+          - eject
+    OIDCGroupMapping:
+      description: Maps an OIDC group claim to a team within an organization. The org-level role is driven by the per-organization OIDC settings (default_role), not by the mapping. Requires the IdP to include group claims in the issued token — enterprise IdPs (Keycloak, Okta, Azure AD/Entra ID, Auth0, EU Login/ECAS) support this; consumer providers such as Google Workspace and GitHub do not.
+      type: object
+      title: OIDCGroupMapping
+      required:
+      - id
+      - group_name
+      - team
+      properties:
+        created_at:
+          type: integer
+          format: uint64
+        group_name:
+          description: The OIDC group claim value to match.
+          type: string
+        id:
+          type: integer
+          format: uint32
+        team:
+          description: The team the user is added to when this mapping matches.
+          $ref: '#/components/schemas/OIDCGroupMappingTeam'
+        updated_at:
+          type: integer
+          format: uint64
+    OIDCGroupMappingTeam:
+      description: A summary of a team used within an OIDC group mapping, including its associated roles.
+      type: object
+      title: OIDCGroupMappingTeam
+      required:
+      - id
+      - canonical
+      - name
+      - roles
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 2
+        roles:
+          description: The roles granted to members of this team.
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+    UpdateOIDCOrganizationSettings:
+      description: The per-organization OIDC settings to create or update. 'eject' requires oidc_managed=true.
+      type: object
+      title: UpdateOIDCOrganizationSettings
+      required:
+      - oidc_managed
+      - oidc_no_match_policy
+      properties:
+        default_role_canonical:
+          description: The canonical of the org-level role granted on OIDC provisioning. Empty clears it.
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        oidc_managed:
+          description: When true, local member/team/invite edits are disabled (strict mode).
+          type: boolean
+        oidc_no_match_policy:
+          description: The policy applied when no group mapping matches on login. 'eject' requires oidc_managed=true.
+          type: string
+          enum:
+          - keep_membership
+          - eject
+    NewOIDCGroupMapping:
+      description: The information required to create an OIDC group mapping (organization, group, team). Multiple teams are expressed via multiple mappings.
+      type: object
+      title: NewOIDCGroupMapping
+      required:
+      - group_name
+      - team_canonical
+      properties:
+        group_name:
+          description: The OIDC group claim value to match.
+          type: string
+          maxLength: 255
+          minLength: 1
+        team_canonical:
+          description: The canonical of the team to assign the user to.
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    Rule:
+      description: Rules define the specific access to the platform
+      title: Rule
+      required:
+      - id
+      - effect
+      - action
+      properties:
+        action:
+          description: It can be the normal Policy.Code or contain globs like `*` or `**`
+          type: string
+        effect:
+          type: string
+          enum:
+          - allow
+        id:
+          description: This is the id of the row from the database, but for blocking organizations we generate rules that are not in the database. When this happens the id is allowed to be 0.
+          type: integer
+          format: uint32
+        resources:
+          description: It is the list of resources in which this Rule applies to, the format of it is the one on the Policy.Code but with the `canonical` of the entities like `organization:org-can:team:team-can` for an action of `organization:team:read`
+          type: array
+          items:
+            type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  parameters:
+    oidc_group_mapping_id:
+      description: An OIDC group mapping ID
+      name: oidc_group_mapping_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

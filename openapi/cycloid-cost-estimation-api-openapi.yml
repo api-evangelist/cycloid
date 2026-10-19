@@ -1,0 +1,528 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Cost Estimation API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations related to estimating cost of infrastructure.
+  name: Cost Estimation
+paths:
+  /organizations/{organization_canonical}/cost_estimation/tfplan:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Estimate costs of a Terraform plan in JSON format.
+      tags:
+      - Cost Estimation
+      operationId: costEstimateTfPlan
+      responses:
+        '200':
+          description: The result of estimating the costs of a Terraform plan.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CostEstimationResult'
+              example:
+                data:
+                  name: my-infrastructure-plan
+                  planned_cost: '54.31'
+                  planned_hourly_cost: '0.0744'
+                  prior_cost: '0'
+                  prior_hourly_cost: '0'
+                  resource_estimates:
+                  - address: aws_instance.web_server
+                    components:
+                    - label: Instance usage (Linux/UNIX, on-demand, t3.medium)
+                      rate: '0.0416'
+                      unit: hour
+                      usage: false
+                    - label: CPU credits
+                      rate: '0.05'
+                      unit: vCPU-hour
+                      usage: true
+                    image: /static/images/aws/ec2.svg
+                    planned_cost: '30.37'
+                    planned_hourly_cost: '0.0416'
+                    prior_cost: '0'
+                    prior_hourly_cost: '0'
+                    provider: aws
+                    type: aws_instance
+                  - address: aws_db_instance.database
+                    components:
+                    - label: Database instance (on-demand, db.t3.micro)
+                      rate: '0.017'
+                      unit: hour
+                      usage: false
+                    - label: Storage (general purpose SSD, gp2)
+                      rate: '0.115'
+                      unit: GB-month
+                      usage: false
+                    image: /static/images/aws/rds.svg
+                    planned_cost: '23.94'
+                    planned_hourly_cost: '0.0328'
+                    prior_cost: '0'
+                    prior_hourly_cost: '0'
+                    provider: aws
+                    type: aws_db_instance
+                  skipped_resource_addresses:
+                  - random_id.server
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/TerraformPlanInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TerraformPlanInput'
+        required: true
+      summary: Cost estimate tf plan
+      x-summary-source: derived
+  /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/forms/estimate:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    post:
+      description: Estimates the Cost from the Form Input
+      tags:
+      - Cost Estimation
+      operationId: costEstimateForm
+      responses:
+        '200':
+          description: The result of estimating the costs of a environment.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CostEstimationResult'
+              example:
+                data:
+                - info: some potential info here
+                  name: some name
+                  planned_cost: '30.252'
+                  planned_hourly_cost: '0.04144'
+                  prior_cost: '10.544'
+                  prior_hourly_cost: '0.01444'
+                  resource_estimates:
+                  - address: aws_instance.example
+                    components:
+                    - label: Compute
+                      planned:
+                        cost: '5.00'
+                        hourly_cost: '0.00685'
+                        quantity: 1
+                      prior:
+                        cost: '5.00'
+                        hourly_cost: '0.00685'
+                        quantity: 1
+                    - label: Storage
+                      planned:
+                        cost: '25.252'
+                        hourly_cost: '0.03459'
+                        quantity: 150
+                      prior:
+                        cost: '5.544'
+                        hourly_cost: '0.00759'
+                        quantity: 30
+                    planned_cost: '30.252'
+                    planned_hourly_cost: '0.04144'
+                    prior_cost: '10.544'
+                    prior_hourly_cost: '0.01444'
+                    provider: aws
+                    type: aws_instance
+                - info: some potential info here
+                  name: some 2
+                  planned_cost: '30.252'
+                  planned_hourly_cost: '0.04144'
+                  prior_cost: '10.544'
+                  prior_hourly_cost: '0.01444'
+                  resource_estimates:
+                  - address: aws_instance.example
+                    components:
+                    - label: Compute
+                      planned:
+                        cost: '5.00'
+                        hourly_cost: '0.00685'
+                        quantity: 1
+                      prior:
+                        cost: '5.00'
+                        hourly_cost: '0.00685'
+                        quantity: 1
+                    - label: Storage
+                      planned:
+                        cost: '25.252'
+                        hourly_cost: '0.03459'
+                        quantity: 150
+                      prior:
+                        cost: '5.544'
+                        hourly_cost: '0.00759'
+                        quantity: 30
+                    planned_cost: '30.252'
+                    planned_hourly_cost: '0.04144'
+                    prior_cost: '10.544'
+                    prior_hourly_cost: '0.01444'
+                    provider: aws
+                    type: aws_instance
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              type: object
+              required:
+              - service_catalog_ref
+              - use_case
+              - component_canonical
+              - vars
+              properties:
+                component_canonical:
+                  type: string
+                  maxLength: 100
+                  minLength: 1
+                  pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+                service_catalog_ref:
+                  description: It's the ref of the Stack, like 'cycloidio:stack-magento'
+                  type: string
+                service_catalog_source_version_id:
+                  description: Is the ID of the new SCS Version used
+                  type: integer
+                  format: uint32
+                  minimum: 1
+                use_case:
+                  type: string
+                  maxLength: 100
+                  minLength: 1
+                  pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+                vars:
+                  $ref: '#/components/schemas/FormVariables'
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - service_catalog_ref
+              - use_case
+              - component_canonical
+              - vars
+              properties:
+                component_canonical:
+                  type: string
+                  maxLength: 100
+                  minLength: 1
+                  pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+                service_catalog_ref:
+                  description: It's the ref of the Stack, like 'cycloidio:stack-magento'
+                  type: string
+                service_catalog_source_version_id:
+                  description: Is the ID of the new SCS Version used
+                  type: integer
+                  format: uint32
+                  minimum: 1
+                use_case:
+                  type: string
+                  maxLength: 100
+                  minLength: 1
+                  pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+                vars:
+                  $ref: '#/components/schemas/FormVariables'
+        description: The information of the filled form for a new project environment.
+        required: true
+      summary: Cost estimate form
+      x-summary-source: derived
+components:
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  schemas:
+    CostEstimationComponentState:
+      description: Either a Prior or Planned cost component state.
+      title: CostEstimationComponentState
+      required:
+      - quantity
+      - details
+      - cost
+      - hourly_cost
+      properties:
+        cost:
+          description: Monthly cost of the component state in decimal form.
+          type: string
+        details:
+          description: List of items on which the cost is dependent.
+          type: array
+          items:
+            type: string
+        hourly_cost:
+          description: Hourly cost of the component state in decimal form.
+          type: string
+        quantity:
+          description: Quantity of units.
+          type: integer
+          format: uint32
+    CostEstimationResult:
+      description: The result of cost estimation.
+      title: CostEstimationResult
+      required:
+      - resource_estimates
+      properties:
+        info:
+          description: Extra details regarding estimation - usually related to no known resources, unknown providers, etc.
+          type: string
+        name:
+          description: Name of the current estimation
+          type: string
+        planned_cost:
+          description: Planned monthly cost of the plan in decimal form.
+          type: string
+        planned_hourly_cost:
+          description: Planned hourly cost of the plan in decimal form.
+          type: string
+        prior_cost:
+          description: Prior monthly cost of the plan in decimal form.
+          type: string
+        prior_hourly_cost:
+          description: Prior hourly cost of the plan in decimal form.
+          type: string
+        resource_estimates:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostEstimationResourceEstimate'
+        skipped_resource_addresses:
+          description: 'A list of addresses of resources that were skipped from the estimation process. A resource might be skipped
+
+            due to being invalid or unsupported by Terracost.
+
+            '
+          type: array
+          items:
+            type: string
+    TerraformPlanInput:
+      description: Input for endpoints that require a Terraform plan.
+      title: TerraformPlanInput
+      required:
+      - tfplan
+      properties:
+        tfplan:
+          description: 'Terraform plan file in escaped JSON format. See more: https://www.terraform.io/internals/json-format'
+          type: string
+    CostEstimationComponent:
+      description: Cost component of a cloud resource estimate.
+      title: CostEstimationComponent
+      required:
+      - label
+      - rate
+      properties:
+        label:
+          description: Human-readable label of the component.
+          type: string
+        planned:
+          $ref: '#/components/schemas/CostEstimationComponentState'
+        prior:
+          $ref: '#/components/schemas/CostEstimationComponentState'
+        rate:
+          description: Monthly rate per unit.
+          type: string
+        unit:
+          description: Unit of estimation.
+          type: string
+        usage:
+          description: If the price is from usage or configuration
+          type: boolean
+    FormVariables:
+      description: "Forms variables filled, the format to respect is as follows\n{\n  \"sectionX\": {\n    \"group1\": {\n      \"key1\": \"value1\",\n      \"key2\": \"value2\",\n      \"key3\": \"value3\"\n    },\n  },\n  \"sectionY\": {\n    \"group2\": {\n      \"key1\": \"value1\",\n      \"key2\": \"value2\",\n      \"key3\": \"value3\"\n    },\n  },\n  \"sectionZ\": {\n    \"group3\": {\n      \"key1\": \"value2\"\n    },\n  }\n}\nKeys being the variable name that you want to see substituted/defined,\nwhile the section and group are the one from the form's file.\n"
+      type: object
+      additionalProperties:
+        type: object
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    CostEstimationResourceEstimate:
+      description: Estimate for a single cloud resource.
+      title: CostEstimationResourceEstimate
+      required:
+      - provider
+      - type
+      - address
+      - components
+      properties:
+        address:
+          description: Unique identifier of the resource.
+          type: string
+        components:
+          description: List of resource cost components.
+          type: array
+          items:
+            $ref: '#/components/schemas/CostEstimationComponent'
+        image:
+          description: Path to the image of the resource
+          type: string
+          format: uri
+        planned_cost:
+          description: Planned monthly cost of the resource estimate in decimal form.
+          type: string
+        planned_hourly_cost:
+          description: Planned hourly cost of the resource estimate in decimal form.
+          type: string
+        prior_cost:
+          description: Prior monthly cost of the resource estimate in decimal form.
+          type: string
+        prior_hourly_cost:
+          description: Prior hourly cost of the resource estimate in decimal form.
+          type: string
+        provider:
+          description: The resource's cloud provider.
+          type: string
+        type:
+          description: Type of the resource.
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  parameters:
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

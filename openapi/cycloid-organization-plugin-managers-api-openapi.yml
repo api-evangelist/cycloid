@@ -1,0 +1,423 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Plugin Managers API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Plugin Managers
+paths:
+  /organizations/{organization_canonical}/plugin_managers:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: List Plugin Manager registrations
+      tags:
+      - Organization Plugin Managers
+      operationId: listPluginManagers
+      responses:
+        '200':
+          description: Plugin Manager registration data.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PluginManager'
+              example:
+                data:
+                - created_at: 1503225026
+                  id: 1
+                  name: PM1
+                  status: pending
+                  updated_at: 1503335026
+                - created_at: 1503225026
+                  id: 2
+                  name: PM2
+                  status: accepted
+                  updated_at: 1503335026
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List plugin managers
+      x-summary-source: derived
+    post:
+      security: []
+      description: Create a new Plugin Manager instance registration
+      tags:
+      - Organization Plugin Managers
+      operationId: createPluginManager
+      responses:
+        '200':
+          description: Plugin Manager registration created.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginManager'
+              example:
+                data:
+                  created_at: 1503225026
+                  id: 1
+                  name: PMO1
+                  updated_at: 1503335026
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewPluginManager'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewPluginManager'
+        description: 'The data of the Plugin Manager to create.
+
+          '
+        required: true
+      summary: Create plugin manager
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugin_managers/{plugin_manager_id}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_manager_id'
+    get:
+      description: Get the data of Plugin Manager registration
+      tags:
+      - Organization Plugin Managers
+      operationId: getPluginManager
+      responses:
+        '200':
+          description: Plugin Manager Organization data.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginManager'
+              example:
+                data:
+                - created_at: 1503225026
+                  id: 1
+                  name: PMO1
+                  updated_at: 1503335026
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get plugin manager
+      x-summary-source: derived
+    put:
+      description: Update an Organization Plugin Manager
+      tags:
+      - Organization Plugin Managers
+      operationId: updatePluginManager
+      responses:
+        '200':
+          description: The updated Organization Plugin Manager data
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginManager'
+              example:
+                data:
+                  created_at: 1503225026
+                  id: 1
+                  organization_canonical: OrgCan
+                  status: accepted
+                  updated_at: 1503335026
+        '204':
+          description: Organization Plugin Manager deleted
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdatePluginManager'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdatePluginManager'
+        description: Data needed to update an Organization Plugin Manager entity
+        required: true
+      summary: Update plugin manager
+      x-summary-source: derived
+    delete:
+      description: Delete a Plugin Manager instance registration
+      tags:
+      - Organization Plugin Managers
+      operationId: deletePluginManager
+      responses:
+        '204':
+          description: Plugin Manager registration deleted
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete plugin manager
+      x-summary-source: derived
+components:
+  schemas:
+    NewPluginManager:
+      description: The Plugin Manager Invite data needed to create it
+      type: object
+      title: New Plugin Manager Invite
+      required:
+      - name
+      - url
+      properties:
+        auto_register:
+          description: When true, performs full registration (requires authentication)
+          type: boolean
+        name:
+          description: Name assigned to the Plugin Manager Instance
+          type: string
+        url:
+          description: URL of the Plugin Version
+          type: string
+          format: uri
+    PluginManager:
+      description: The Plugin Manager instance
+      type: object
+      title: Plugin Manager
+      required:
+      - id
+      - url
+      - name
+      - invite_status
+      - status
+      - created_at
+      - updated_at
+      properties:
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        invite_status:
+          description: 'Status of the Plugin Manager invitation. Created as "invite_pending", then transitions to "invite_accepted" via the update endpoint, which takes "accepted" or "rejected". Cannot be set back to pending.
+
+            '
+          type: string
+          enum:
+          - invite_pending
+          - invite_accepted
+        name:
+          description: Name assigned to the Plugin Manager Instance
+          type: string
+        status:
+          description: Status of the Plugin Manager connection
+          type: string
+          enum:
+          - offline
+          - connected
+        updated_at:
+          type: integer
+          format: uint64
+        url:
+          description: URL of the Plugin Version
+          type: string
+          format: uri
+    UpdatePluginManager:
+      description: The Plugin Manager instance data needed to update it
+      type: object
+      title: Update Plugin Manager instance
+      required:
+      - invite_status
+      properties:
+        invite_status:
+          description: Invite status to be set by the Plugin Manager update
+          type: string
+          enum:
+          - accepted
+          - rejected
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  parameters:
+    plugin_manager_id:
+      description: A plugin manager id
+      name: plugin_manager_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

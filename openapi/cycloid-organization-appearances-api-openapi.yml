@@ -1,0 +1,543 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Appearances API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Appearances
+paths:
+  /organizations/{organization_canonical}/appearances:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: List of appearances available in the organization.
+      tags:
+      - Organization Appearances
+      operationId: listAppearances
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: List of appearances which are available in the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Appearance'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: default
+                  color:
+                    b: 151
+                    g: 151
+                    r: 28
+                  created_at: 1503225026
+                  display_name: Cycloid
+                  favicon: https://console.cycloid.io/static/favicons/favicon.ico
+                  footer: ''
+                  is_active: false
+                  logo: https://console.cycloid.io/static/images/app-logo-square.svg
+                  name: Default
+                  tab_title: Cycloid
+                  updated_at: 1503335026
+                - canonical: custom
+                  color:
+                    b: 151
+                    g: 151
+                    r: 28
+                  created_at: 1503225026
+                  display_name: Brand Name
+                  favicon: https://console.cycloid.io/static/favicons/favicon.ico
+                  footer: ''
+                  is_active: true
+                  logo: https://console.cycloid.io/static/images/app-logo-square.svg
+                  name: Custom
+                  tab_title: Brand Name
+                  updated_at: 1503335026
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List appearances
+      x-summary-source: derived
+    post:
+      description: Create a new appearance for the organization.
+      tags:
+      - Organization Appearances
+      operationId: createAppearance
+      responses:
+        '200':
+          description: New appearance created in the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Appearance'
+              example:
+                data:
+                  color:
+                    b: 0
+                    g: 0
+                    r: 0
+                  display_name: Brand Name
+                  favicon: https://console.cycloid.io/static/favicons/favicon.ico
+                  footer: ''
+                  is_active: false
+                  logo: https://console.cycloid.io/static/images/app-logo-square.svg
+                  tab_title: Brand Name
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewAppearance'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewAppearance'
+        description: The information of the organization's appearance to create.
+        required: true
+      summary: Create appearance
+      x-summary-source: derived
+  /organizations/{organization_canonical}/appearances/{appearance_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/appearance_canonical'
+    get:
+      description: Get the appearance available in the organization with a canonical
+      tags:
+      - Organization Appearances
+      operationId: getAppearance
+      responses:
+        '200':
+          description: Appearance available in the organization with such canonical.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Appearance'
+              example:
+                data:
+                  canonical: custom
+                  color:
+                    b: 151
+                    g: 151
+                    r: 28
+                  created_at: 1503225026
+                  display_name: Cycloid
+                  favicon: https://console.cycloid.io/static/favicons/favicon.ico
+                  footer: ''
+                  is_active: false
+                  logo: https://console.cycloid.io/static/images/app-logo-square.svg
+                  name: Default
+                  tab_title: Cycloid
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get appearance
+      x-summary-source: derived
+    put:
+      description: Update an existing appearance in the organization.
+      tags:
+      - Organization Appearances
+      operationId: updateAppearance
+      responses:
+        '200':
+          description: Updated appearance belonging to the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Appearance'
+              example:
+                data:
+                  canonical: custom
+                  color:
+                    b: 0
+                    g: 0
+                    r: 0
+                  created_at: 1503225026
+                  display_name: Brand Name
+                  favicon: https://console.cycloid.io/static/favicons/favicon.ico
+                  footer: ''
+                  is_active: true
+                  logo: https://console.cycloid.io/static/images/app-logo-square.svg
+                  name: Custom
+                  tab_title: Brand Name
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/Appearance'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Appearance'
+        description: The information of the organization's appearance to update.
+        required: true
+      summary: Update appearance
+      x-summary-source: derived
+    delete:
+      description: Delete an existing appearance in the organization.
+      tags:
+      - Organization Appearances
+      operationId: deleteAppearance
+      responses:
+        '204':
+          description: Organization appearance has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete appearance
+      x-summary-source: derived
+components:
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+  parameters:
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    appearance_canonical:
+      description: A canonical of an appearance.
+      name: appearance_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  schemas:
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    Appearance:
+      description: An Appearance holds the values of the branding configuration, which are rendered across an organization
+      title: Appearance
+      required:
+      - canonical
+      - name
+      - display_name
+      - tab_title
+      - color
+      - logo
+      - favicon
+      - footer
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        color:
+          type: object
+          required:
+          - r
+          - g
+          - b
+          properties:
+            b:
+              description: Blue color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+            g:
+              description: Green color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+            r:
+              description: Red color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+        created_at:
+          type: integer
+          format: uint64
+        display_name:
+          type: string
+          maxLength: 50
+          minLength: 1
+        favicon:
+          type: string
+          format: uri
+        footer:
+          type: string
+          maxLength: 1000
+        is_active:
+          type: boolean
+        logo:
+          type: string
+          format: uri
+        name:
+          type: string
+          maxLength: 50
+          minLength: 1
+        tab_title:
+          type: string
+          maxLength: 50
+          minLength: 1
+        updated_at:
+          type: integer
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    NewAppearance:
+      description: An Appearance holds the values of the branding configuration, which are rendered across an organization
+      title: Appearance
+      required:
+      - name
+      - display_name
+      - tab_title
+      - color
+      - logo
+      - favicon
+      - footer
+      properties:
+        color:
+          type: object
+          required:
+          - r
+          - g
+          - b
+          properties:
+            b:
+              description: Blue color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+            g:
+              description: Green color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+            r:
+              description: Red color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+        display_name:
+          type: string
+          maxLength: 50
+          minLength: 1
+        favicon:
+          type: string
+          format: uri
+        footer:
+          type: string
+          maxLength: 1000
+        logo:
+          type: string
+          format: uri
+        name:
+          type: string
+          maxLength: 50
+          minLength: 1
+        tab_title:
+          type: string
+          maxLength: 50
+          minLength: 1
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

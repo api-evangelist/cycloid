@@ -1,0 +1,310 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Admin API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Instance administration, available on the root organization to its admins only.
+  name: Admin
+paths:
+  /organizations/{organization_canonical}/admin/users:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: List the users of the whole instance, including users without an organization. Only available on the root organization, to its admins. They can be filtered with the LHS filters user_canonical, user_full_name, user_email (the primary one), user_created_at, user_mfa_enabled and user_has_organization, e.g. user_has_organization[eq]=false.
+      tags:
+      - Admin
+      operationId: listUsers
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: The users of the instance.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AdminUser'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List users
+      x-summary-source: derived
+  /organizations/{organization_canonical}/admin/users/{user_email}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - description: The email of the user.
+      name: user_email
+      in: path
+      required: true
+      schema:
+        type: string
+        format: email
+    delete:
+      description: Delete any user of the instance, including users without an organization. Only available on the root organization, to its admins. The user's memberships and the API keys they own are deleted with them. The deletion is refused when the user is the last admin of an organization; the error names those organizations.
+      tags:
+      - Admin
+      operationId: deleteUser
+      responses:
+        '204':
+          description: The user has been deleted.
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete user
+      x-summary-source: derived
+components:
+  schemas:
+    AdminUserOrganization:
+      type: object
+      title: Organization of a user of the instance
+      required:
+      - canonical
+      - role
+      properties:
+        canonical:
+          description: The canonical of the organization.
+          type: string
+        role:
+          description: The canonical of the role the user holds in the organization.
+          type: string
+    AdminUser:
+      description: A user of the whole instance, as the root organization admins list them. Users without an organization included.
+      type: object
+      title: User of the instance
+      required:
+      - username
+      - email
+      - email_verified
+      - created_at
+      - organizations
+      properties:
+        created_at:
+          description: When the user signed up.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        email_verified:
+          description: Whether the primary email has been verified.
+          type: boolean
+        last_login_at:
+          description: When the user logged in last time. It is the sign up time until the first login, so a user who never logged in has it equal to created_at.
+          type: integer
+          format: uint64
+        organizations:
+          description: The organizations the user belongs to, empty when none.
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminUserOrganization'
+        username:
+          description: The canonical of the user.
+          type: string
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  parameters:
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    unauthenticated:
+      description: The user cannot be authenticated with the credentials which she/he has used.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthenticated
+              message: invalid credentials
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

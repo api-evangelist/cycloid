@@ -1,0 +1,1013 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization teams API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations for teams which belong to an organization.
+  name: Organization teams
+paths:
+  /organizations/{organization_canonical}/teams:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get list of teams of the organization.
+      tags:
+      - Organization teams
+      operationId: getTeams
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/team_name_query'
+      - $ref: '#/components/parameters/team_created_at_query'
+      - $ref: '#/components/parameters/team_description_query'
+      - $ref: '#/components/parameters/owner_query'
+      - $ref: '#/components/parameters/order_by_query'
+      responses:
+        '200':
+          description: List of the teams which the organization has.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Team'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: team1
+                  created_at: 1503225026
+                  id: 1
+                  member_count: 12
+                  members_preview:
+                  - created_at: 678123
+                    email: coder@company.com
+                    full_name: Cody Coder
+                    id: 42
+                    username: coder
+                  - created_at: 678123
+                    email: tester@company.com
+                    full_name: Tony Tester
+                    id: 43
+                    username: tester
+                  name: Team 1
+                  owner:
+                    created_at: 1503225026
+                    email: superuser@company.com
+                    full_name: Owen Smith
+                    id: 99
+                    role:
+                      canonical: role-can
+                      description: Organization existing role
+                      id: 17
+                      name: existing
+                      rules:
+                      - action: organization:delete
+                        effect: allow
+                        id: 1
+                        resources:
+                        - organization:org-can
+                        - organization:org-can2
+                      - action: organization:team:create
+                        effect: allow
+                        id: 20
+                        resources: null
+                      - action: organization:team:read
+                        effect: allow
+                        id: 21
+                        resources:
+                        - organization:org-can:team:team-can
+                    username: superuser
+                  roles:
+                  - canonical: role-can
+                    description: Organization existing role
+                    id: 17
+                    name: existing
+                    rules:
+                    - action: organization:delete
+                      effect: allow
+                      id: 1
+                      resources:
+                      - organization:org-can
+                      - organization:org-can2
+                    - action: organization:team:create
+                      effect: allow
+                      id: 20
+                      resources: null
+                    - action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  updated_at: 1503335026
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 1
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get teams
+      x-summary-source: derived
+    post:
+      description: Create a new team in the organization.
+      tags:
+      - Organization teams
+      operationId: createTeam
+      responses:
+        '200':
+          description: Team created. The body contains the information of the new team of the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Team'
+              example:
+                data:
+                  canonical: team1
+                  created_at: 1503225026
+                  id: 1
+                  member_count: 12
+                  members_preview:
+                  - created_at: 678123
+                    email: coder@company.com
+                    full_name: Cody Coder
+                    id: 42
+                    username: coder
+                  - created_at: 678123
+                    email: tester@company.com
+                    full_name: Tony Tester
+                    id: 43
+                    username: tester
+                  name: Team 1
+                  owner:
+                    created_at: 1503225026
+                    email: superuser@company.com
+                    full_name: Owen Smith
+                    id: 99
+                    role:
+                      canonical: role-can
+                      description: Organization existing role
+                      id: 17
+                      name: existing
+                      rules:
+                      - action: organization:delete
+                        effect: allow
+                        id: 1
+                        resources:
+                        - organization:org-can
+                        - organization:org-can2
+                      - action: organization:team:create
+                        effect: allow
+                        id: 20
+                        resources: null
+                      - action: organization:team:read
+                        effect: allow
+                        id: 21
+                        resources:
+                        - organization:org-can:team:team-can
+                    username: superuser
+                  roles:
+                  - canonical: role-can
+                    description: Organization existing role
+                    id: 17
+                    name: existing
+                    rules:
+                    - action: organization:delete
+                      effect: allow
+                      id: 1
+                      resources:
+                      - organization:org-can
+                      - organization:org-can2
+                    - action: organization:team:create
+                      effect: allow
+                      id: 20
+                      resources: null
+                    - action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  - canonical: role-can
+                    description: Organization existing role
+                    id: 10
+                    name: existing
+                    rules:
+                    - action: organization:delete
+                      effect: allow
+                      id: 1
+                      resources:
+                      - organization:org-can
+                      - organization:org-can2
+                    - action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  updated_at: 1503335026
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewTeam'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewTeam'
+        description: The information of the team to create.
+        required: true
+      summary: Create team
+      x-summary-source: derived
+  /organizations/{organization_canonical}/teams/{team_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/team_canonical'
+    get:
+      description: Get the information of a team of the organization.
+      tags:
+      - Organization teams
+      operationId: getTeam
+      responses:
+        '200':
+          description: The information of the team of the organization which has the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Team'
+              example:
+                data:
+                  canonical: team-2
+                  created_at: 1503225026
+                  id: 1
+                  member_count: 12
+                  members_preview:
+                  - created_at: 678123
+                    email: cooluser@company.com
+                    full_name: Jordi Capdevila
+                    id: 42
+                    username: cooluser
+                  name: Team 2
+                  owner:
+                    created_at: 1503225026
+                    email: superuser@company.com
+                    full_name: Owen Smith
+                    id: 99
+                    role:
+                      canonical: role-can
+                      description: Organization existing role
+                      id: 17
+                      name: existing
+                      rules:
+                      - action: organization:delete
+                        effect: allow
+                        id: 1
+                        resources:
+                        - organization:org-can
+                        - organization:org-can2
+                      - action: organization:team:create
+                        effect: allow
+                        id: 20
+                        resources: null
+                      - action: organization:team:read
+                        effect: allow
+                        id: 21
+                        resources:
+                        - organization:org-can:team:team-can
+                    username: superuser
+                  roles:
+                  - canonical: role-can
+                    description: Organization existing role
+                    id: 17
+                    name: existing
+                    rules:
+                    - action: organization:delete
+                      effect: allow
+                      id: 1
+                      resources:
+                      - organization:org-can
+                      - organization:org-can2
+                    - action: organization:team:create
+                      effect: allow
+                      id: 20
+                      resources: null
+                    - action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get team
+      x-summary-source: derived
+    put:
+      description: Update the information of a team of the organization.
+      tags:
+      - Organization teams
+      operationId: updateTeam
+      responses:
+        '200':
+          description: Team updated. The body contains information of the updated team.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Team'
+              example:
+                data:
+                  canonical: team-3
+                  created_at: 1503220026
+                  id: 1
+                  member_count: 12
+                  members_preview:
+                  - created_at: 678123
+                    email: coder@company.com
+                    full_name: Cody Coder
+                    id: 42
+                    username: coder
+                  - created_at: 678123
+                    email: tester@company.com
+                    full_name: Tony Tester
+                    id: 43
+                    username: tester
+                  name: Team 3
+                  owner:
+                    created_at: 1503225026
+                    email: superuser@company.com
+                    full_name: Owen Smith
+                    id: 99
+                    role:
+                      canonical: role-can
+                      description: Organization existing role
+                      id: 17
+                      name: existing
+                      rules:
+                      - action: organization:delete
+                        effect: allow
+                        id: 1
+                        resources:
+                        - organization:org-can
+                        - organization:org-can2
+                      - action: organization:team:create
+                        effect: allow
+                        id: 20
+                        resources: null
+                      - action: organization:team:read
+                        effect: allow
+                        id: 21
+                        resources:
+                        - organization:org-can:team:team-can
+                    username: superuser
+                  roles:
+                  - canonical: role-can
+                    description: Organization existing role
+                    id: 17
+                    name: existing
+                    rules:
+                    - action: organization:delete
+                      effect: allow
+                      id: 1
+                      resources:
+                      - organization:org-can
+                      - organization:org-can2
+                    - action: organization:team:create
+                      effect: allow
+                      id: 20
+                      resources: null
+                    - action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  - canonical: role-can
+                    description: Organization existing role
+                    id: 10
+                    name: existing
+                    rules:
+                    - action: organization:delete
+                      effect: allow
+                      id: 1
+                      resources:
+                      - organization:org-can
+                      - organization:org-can2
+                    - action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  updated_at: 1503335126
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateTeam'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateTeam'
+        description: The information of the team to update.
+        required: true
+      summary: Update team
+      x-summary-source: derived
+    delete:
+      description: Delete a team of the organization.
+      tags:
+      - Organization teams
+      operationId: deleteTeam
+      responses:
+        '204':
+          description: Team has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete team
+      x-summary-source: derived
+components:
+  parameters:
+    team_created_at_query:
+      description: Search by team's creation date
+      name: team_created_at
+      in: query
+      schema:
+        type: integer
+        format: uint64
+    order_by_query:
+      description: 'Allows to order the list of items. Example usage: field_name:asc. Multiple order_by parameters are allowed, applied in the order they are specified.
+
+        '
+      name: order_by
+      in: query
+      schema:
+        type: string
+    team_description_query:
+      description: Search by team's description
+      name: team_description
+      in: query
+      schema:
+        type: string
+    owner_query:
+      description: Search by entity's owner
+      name: member_id
+      in: query
+      schema:
+        type: integer
+        format: uint32
+    team_name_query:
+      description: Search by team's name
+      name: team_name
+      in: query
+      schema:
+        type: string
+    team_canonical:
+      description: A canonical of a team.
+      name: team_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  schemas:
+    Role:
+      description: Role represents the authorization level that an user has to access to a specific entity of the system. A role contains a list of rules to define the access control. Note not all the entities supports roles access control; see the API endpoints to know which entities support them.
+      title: Role access control
+      required:
+      - id
+      - name
+      - canonical
+      - description
+      - rules
+      - default
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        default:
+          type: boolean
+        description:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 100
+          minLength: 2
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        updated_at:
+          type: integer
+          format: uint64
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    SimpleMemberOrg:
+      description: Simplified model of a member of an organization. The member is 'accepted' and have an associated user account.
+      type: object
+      title: Simplified model of a member of an organization
+      required:
+      - id
+      - email
+      - created_at
+      properties:
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: Primary email
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          description: Member ID (different from the user ID)
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    Rule:
+      description: Rules define the specific access to the platform
+      title: Rule
+      required:
+      - id
+      - effect
+      - action
+      properties:
+        action:
+          description: It can be the normal Policy.Code or contain globs like `*` or `**`
+          type: string
+        effect:
+          type: string
+          enum:
+          - allow
+        id:
+          description: This is the id of the row from the database, but for blocking organizations we generate rules that are not in the database. When this happens the id is allowed to be 0.
+          type: integer
+          format: uint32
+        resources:
+          description: It is the list of resources in which this Rule applies to, the format of it is the one on the Policy.Code but with the `canonical` of the entities like `organization:org-can:team:team-can` for an action of `organization:team:read`
+          type: array
+          items:
+            type: string
+    UpdateTeam:
+      description: The entity which represents the information of the team to be updated.
+      type: object
+      title: Update Team
+      required:
+      - canonical
+      - name
+      - roles_canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'User canonical that owns this team. Only the owner or an
+
+            organization admin can update this field. When a user is the owner
+
+            of a team it has all the permission on it.
+
+            '
+          type: string
+        roles_canonical:
+          description: The roles to be re-assigned to a team.
+          type: array
+          items:
+            type: string
+            maxLength: 100
+            minLength: 2
+            pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    NewTeam:
+      description: The entity which represents the information of a new team.
+      type: object
+      title: Create Team
+      required:
+      - name
+      - roles_canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'User canonical that owns this team. If omitted then the person
+
+            creating this team will be assigned as owner. When a user is the
+
+            owner of a team it has all the permissions on it.
+
+            '
+          type: string
+        roles_canonical:
+          description: The roles to be assigned to a team.
+          type: array
+          items:
+            type: string
+            maxLength: 100
+            minLength: 2
+            pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    Team:
+      description: The entity which represents the information of a team.
+      type: object
+      title: Team
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - roles
+      - member_count
+      - members_preview
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        member_count:
+          description: The total count of members of the team.
+          type: integer
+          format: uint32
+        members_preview:
+          description: Preview of the list of team members, limited to 6 members.
+          type: array
+          maxItems: 6
+          items:
+            $ref: '#/components/schemas/MemberTeam'
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'Organization member that owns this team. When a user is the owner of a
+
+            team it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        roles:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Role'
+        updated_at:
+          type: integer
+          format: uint64
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    MemberTeam:
+      description: Member is a user who is associated to a team.
+      type: object
+      title: Member of a team
+      required:
+      - id
+      - email
+      - created_at
+      - mfa_enabled
+      properties:
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: user email
+          type: string
+          format: email
+        full_name:
+          description: Full name, can be empty in case if the user hasn't accepted the invitation yet.
+          type: string
+          maxLength: 255
+          minLength: 2
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        invited_by:
+          description: Team member who invited the current user to the team.
+          $ref: '#/components/schemas/SimpleMemberOrg'
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          description: User canonical, can be empty in case if the user hasn't accepted the invitation yet.
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

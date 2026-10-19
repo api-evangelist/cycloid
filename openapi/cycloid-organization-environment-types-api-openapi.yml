@@ -1,0 +1,534 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Environment Types API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Environment Types
+paths:
+  /organizations/{organization_canonical}/environment_types:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get all the environment types of the Organization
+      tags:
+      - Organization Environment Types
+      operationId: getOrganizationEnvironmentTypes
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: Returns all the Environment Types
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EnvironmentType'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - created_at: 1503225026
+                  id: 1
+                  name: Production
+                  updated_at: 1503335026
+                - created_at: 1503225026
+                  id: 2
+                  name: Staging
+                  updated_at: 1503335026
+                - created_at: 1503225026
+                  id: 3
+                  name: Development
+                  updated_at: 1503335026
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 3
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get organization environment types
+      x-summary-source: derived
+    post:
+      description: Create a new environment type
+      tags:
+      - Organization Environment Types
+      operationId: createEnvironmentType
+      responses:
+        '200':
+          description: Environment type created. The body contains the information of the new environment type.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/EnvironmentType'
+              example:
+                data:
+                  created_at: 1500135021
+                  id: 4
+                  name: QA
+                  updated_at: 1503332021
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewEnvironmentType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewEnvironmentType'
+        description: The body to create a new environment type
+        required: true
+      summary: Create environment type
+      x-summary-source: derived
+  /organizations/{organization_canonical}/environment_types/{environment_type_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/environment_type_canonical'
+    put:
+      description: Update an environment type of the organization.
+      tags:
+      - Organization Environment Types
+      operationId: updateEnvironmentType
+      responses:
+        '200':
+          description: Environment type has been updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/EnvironmentType'
+              example:
+                data:
+                  canonical: production
+                  created_at: 1503225026
+                  id: 1
+                  name: Production Updated
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateEnvironmentType'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateEnvironmentType'
+        description: The environment type data to update
+        required: true
+      summary: Update environment type
+      x-summary-source: derived
+    delete:
+      description: Delete an environment type of the organization.
+      tags:
+      - Organization Environment Types
+      operationId: deleteEnvironmentType
+      responses:
+        '204':
+          description: Environment type has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete environment type
+      x-summary-source: derived
+  /organizations/{organization_canonical}/environment_types/{environment_type_canonical}/label_selector:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/environment_type_canonical'
+    put:
+      description: Set the label selector of an environment type. Allowed on default types (e.g. production). The selector constrains which stacks are offered in environments of this type.
+      tags:
+      - Organization Environment Types
+      operationId: setEnvironmentTypeLabelSelector
+      responses:
+        '200':
+          description: The label selector has been set successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/EnvironmentType'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/LabelSelector'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LabelSelector'
+        description: The label selector to set
+        required: true
+      summary: Set environment type label selector
+      x-summary-source: derived
+    delete:
+      description: Clear the label selector of an environment type.
+      tags:
+      - Organization Environment Types
+      operationId: deleteEnvironmentTypeLabelSelector
+      responses:
+        '204':
+          description: The label selector has been cleared.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete environment type label selector
+      x-summary-source: derived
+components:
+  parameters:
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    environment_type_canonical:
+      description: The canonical of an environment type
+      name: environment_type_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-z]+(?:[\da-z\-._]+[\da-z]|[\da-z])$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  schemas:
+    UpdateEnvironmentType:
+      description: Represent an entity necessary for environment type update
+      title: Update Environment Type
+      required:
+      - name
+      - color
+      properties:
+        color:
+          description: Color associated with this environment type
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+    EnvironmentType:
+      description: Represent an environment type that belongs to an organization. Environment types are used to categorize environments (e.g., production, staging, development).
+      title: Environment Type
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - is_default
+      - color
+      - environments_count
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-z]+(?:[\da-z\-._]+[\da-z]|[\da-z])$
+        color:
+          description: Color associated with this environment type
+          type: string
+          maxLength: 64
+        created_at:
+          type: integer
+          format: uint64
+        environments_count:
+          description: The total count of environments using this environment type
+          type: integer
+          format: uint32
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_default:
+          description: Indicates if this is a system-provided default environment type that cannot be deleted or renamed
+          type: boolean
+        label_selector:
+          description: Optional label selector constraining which stacks are offered in environments of this type. Absent means no constraint.
+          $ref: '#/components/schemas/LabelSelector'
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+        updated_at:
+          type: integer
+          format: uint64
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    NewEnvironmentType:
+      description: Represent an entity necessary for environment type creation
+      title: New Environment Type
+      required:
+      - name
+      - color
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-z]+(?:[\da-z\-._]+[\da-z]|[\da-z])$
+        color:
+          description: Color associated with this environment type
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+    LabelSelector:
+      description: Constrains which stacks are offered in environments of a given type, based on the stack's labels. Every requirement must be satisfied for a stack to match.
+      title: Label Selector
+      required:
+      - requirements
+      properties:
+        enforcement:
+          description: '''soft'' only filters the available-stacks list; ''hard'' also rejects creating a component from a non-matching stack.'
+          type: string
+          default: soft
+          enum:
+          - soft
+          - hard
+        requirements:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LabelSelectorRequirement'
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    LabelSelectorRequirement:
+      description: A single label constraint applied to a stack's labels
+      title: Label Selector Requirement
+      required:
+      - key
+      - operator
+      - values
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        operator:
+          description: The matching operator. 'eq' requires the label to carry the single value; 'in' requires the label to carry at least one of the values.
+          type: string
+          enum:
+          - eq
+          - in
+        values:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            maxLength: 255
+            minLength: 1
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

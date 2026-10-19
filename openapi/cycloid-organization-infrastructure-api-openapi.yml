@@ -1,0 +1,1608 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Infrastructure API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on the infrastructure of an organization
+  name: Organization Infrastructure
+paths:
+  /organizations/{organization_canonical}/infrastructures/aws:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the number of resources classified by types, of the running AWS infrastructure of the organization and associated AWS account (credential). The parameters allow to select the scope of the request to one project of the organization and/or a set of type of resource.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWS
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/aws_infrastructure_resource_query'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The number of resources classified per type which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AWSInfrastructureResourcesAggregation'
+              example:
+                data:
+                  buckets:
+                    total_amount: 10
+                  db_instances:
+                    total_amount: 34
+                  images:
+                    total_amount: 6
+                  instances:
+                    total_amount: 94875
+                  load_balancers_v2:
+                    total_amount: 4
+                  security_groups:
+                    total_amount: 9
+                  snapshots:
+                    total_amount: 786
+                  subnets:
+                    total_amount: 31
+                  volumes:
+                    total_amount: 45
+                  vpcs:
+                    total_amount: 98
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/buckets:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of S3 buckets of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSBuckets
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS S3 buckets which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                description: Although this response contains a collection of items, it doesn't have pagination because the AWS SDK, to request the S3 Buckets resources, doesn't provide any pagination mechanism.
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceBucket'
+              example:
+                data:
+                - CreationDate: '2017-03-29T05:15:27Z'
+                  Name: config-bucket-123456789101
+                  Tags: null
+                - CreationDate: '2017-03-29T01:12:21Z'
+                  Name: data-some-log-dbm
+                  Tags:
+                  - Key: client
+                    Value: Cycloid
+                - CreationDate: '2017-03-29T10:28:14Z'
+                  Name: dev-sdk.web.fr
+                  Tags: null
+                - CreationDate: '2017-06-19T14:57:15Z'
+                  Name: marianorajoy.es
+                  Tags:
+                  - Key: owner
+                    Value: Mariano Rajoy
+                - CreationDate: '2017-03-29T18:01:25Z'
+                  Name: dtrump.com
+                  Tags: null
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS buckets
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/db_instances:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of RDS DB instances of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSDBInstances
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/aws_next_token'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS RDS DB Instances which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceDBInstance'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationAWS'
+              example:
+                data:
+                - AllocatedStorage: 50
+                  AutoMinorVersionUpgrade: true
+                  AvailabilityZone: eu-west-1b
+                  BackupRetentionPeriod: 7
+                  CACertificateIdentifier: rds-ca-2015
+                  CharacterSetName: null
+                  CopyTagsToSnapshot: false
+                  DBClusterIdentifier: null
+                  DBInstanceArn: arn:aws:rds:eu-west-1:123456789101:db:amazon-rds-api-gateway-dev
+                  DBInstanceClass: db.t2.small
+                  DBInstanceIdentifier: amazon-rds-api-gateway-dev
+                  DBInstanceStatus: available
+                  DBName: api_gateway_dev
+                  DBParameterGroups:
+                  - DBParameterGroupName: rds-optimized-postgresql-amazon-dev
+                    ParameterApplyStatus: in-sync
+                  DBSecurityGroups: null
+                  DBSubnetGroup:
+                    DBSubnetGroupArn: null
+                    DBSubnetGroupDescription: subnet-rds-amazon-dev
+                    DBSubnetGroupName: subnet-rds-amazon-dev
+                    SubnetGroupStatus: Complete
+                    Subnets:
+                    - SubnetAvailabilityZone:
+                        Name: eu-west-1b
+                      SubnetIdentifier: subnet-1ee9cf68
+                      SubnetStatus: Active
+                    - SubnetAvailabilityZone:
+                        Name: eu-west-1c
+                      SubnetIdentifier: subnet-5ccca204
+                      SubnetStatus: Active
+                    - SubnetAvailabilityZone:
+                        Name: eu-west-1a
+                      SubnetIdentifier: subnet-53614d37
+                      SubnetStatus: Active
+                    VpcId: vpc-257d2d41
+                  DbInstancePort: 0
+                  DbiResourceId: db-LLW4DT3OHVULRQ4GLZWSJ3MOVQ
+                  DomainMemberships: null
+                  EnabledCloudwatchLogsExports: null
+                  Endpoint:
+                    Address: amazon-rds-api-gateway-dev.cwhghoaxsi70.eu-west-1.rds.amazonaws.com
+                    HostedZoneId: Z29XKXDKYMONMX
+                    Port: 5432
+                  Engine: postgres
+                  EngineVersion: 9.4.7
+                  EnhancedMonitoringResourceArn: null
+                  IAMDatabaseAuthenticationEnabled: false
+                  InstanceCreateTime: '2017-12-05T18:21:34.311Z'
+                  Iops: null
+                  KmsKeyId: null
+                  LatestRestorableTime: '2018-02-06T11:40:39Z'
+                  LicenseModel: postgresql-license
+                  MasterUsername: amazon
+                  MonitoringInterval: 0
+                  MonitoringRoleArn: null
+                  MultiAZ: false
+                  OptionGroupMemberships:
+                  - OptionGroupName: default:postgres-9-4
+                    Status: in-sync
+                  PendingModifiedValues:
+                    AllocatedStorage: null
+                    BackupRetentionPeriod: null
+                    CACertificateIdentifier: null
+                    DBInstanceClass: null
+                    DBInstanceIdentifier: null
+                    DBSubnetGroupName: null
+                    EngineVersion: null
+                    Iops: null
+                    LicenseModel: null
+                    MasterUserPassword: null
+                    MultiAZ: null
+                    PendingCloudwatchLogsExports: null
+                    Port: null
+                    StorageType: null
+                  PerformanceInsightsEnabled: false
+                  PerformanceInsightsKMSKeyId: null
+                  PreferredBackupWindow: 02:00-04:00
+                  PreferredMaintenanceWindow: tue:06:00-tue:07:00
+                  PromotionTier: null
+                  PubliclyAccessible: false
+                  ReadReplicaDBClusterIdentifiers: null
+                  ReadReplicaDBInstanceIdentifiers: null
+                  ReadReplicaSourceDBInstanceIdentifier: null
+                  SecondaryAvailabilityZone: null
+                  StatusInfos: null
+                  StorageEncrypted: false
+                  StorageType: gp2
+                  Tags: null
+                  TdeCredentialArn: null
+                  Timezone: null
+                  VpcSecurityGroups:
+                  - Status: active
+                    VpcSecurityGroupId: sg-64d29802
+                pagination:
+                  next: ''
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWSDB instances
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/elasticache_clusters:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of Elasticache clusters of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSElasticacheClusters
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/aws_next_token'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS elasticache clusters which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceElasticacheCluster'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationAWS'
+              example:
+                data:
+                - AtRestEncryptionEnabled: false
+                  AuthTokenEnabled: false
+                  AutoMinorVersionUpgrade: true
+                  CacheClusterCreateTime: '2015-11-23T11:24:24.677Z'
+                  CacheClusterId: cache0
+                  CacheClusterStatus: available
+                  CacheNodeType: cache.t2.micro
+                  CacheNodes: null
+                  CacheParameterGroup:
+                    CacheNodeIdsToReboot: null
+                    CacheParameterGroupName: default.redis2.8
+                    ParameterApplyStatus: in-sync
+                  CacheSecurityGroups: null
+                  CacheSubnetGroupName: amazon-cache0-eu-we1
+                  ClientDownloadLandingPage: 'https://console.aws.amazon.com/elasticache/home#client-download:'
+                  ConfigurationEndpoint: null
+                  Engine: redis
+                  EngineVersion: 2.8.23
+                  NotificationConfiguration: null
+                  NumCacheNodes: 1
+                  PendingModifiedValues:
+                    CacheNodeIdsToRemove: null
+                    CacheNodeType: null
+                    EngineVersion: null
+                    NumCacheNodes: null
+                  PreferredAvailabilityZone: eu-west-1a
+                  PreferredMaintenanceWindow: tue:06:00-tue:07:00
+                  ReplicationGroupId: null
+                  SecurityGroups:
+                  - SecurityGroupId: sg-fff37b9b
+                    Status: active
+                  SnapshotRetentionLimit: null
+                  SnapshotWindow: null
+                  Tags:
+                  - Key: project
+                    Value: website
+                  - Key: client
+                    Value: cycloid
+                  - Key: env
+                    Value: prod
+                  - Key: role
+                    Value: cache
+                  TransitEncryptionEnabled: false
+                pagination:
+                  next: ''
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS elasticache clusters
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/images:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of images of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSImages
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS images which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                description: Although this response contains a collection of items, it doesn't have pagination because the AWS SDK, to request the images resources, doesn't provide any pagination mechanism.
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceImage'
+              example:
+                data:
+                - Architecture: x86_64
+                  BlockDeviceMappings:
+                  - DeviceName: /dev/xvda
+                    Ebs:
+                      DeleteOnTermination: true
+                      Encrypted: false
+                      Iops: null
+                      KmsKeyId: null
+                      SnapshotId: snap-e978d105
+                      VolumeSize: 8
+                      VolumeType: standard
+                    NoDevice: null
+                    VirtualName: null
+                  CreationDate: '2016-05-24T21:14:11.000Z'
+                  Description: hashicorp vault
+                  EnaSupport: null
+                  Hypervisor: xen
+                  ImageId: ami-01d94872
+                  ImageLocation: 123456789101/vault
+                  ImageOwnerAlias: null
+                  ImageType: machine
+                  KernelId: null
+                  Name: vault
+                  OwnerId: '123456789101'
+                  Platform: null
+                  ProductCodes: null
+                  Public: false
+                  RamdiskId: null
+                  RootDeviceName: /dev/xvda
+                  RootDeviceType: ebs
+                  SriovNetSupport: null
+                  State: available
+                  StateReason: null
+                  Tags: null
+                  VirtualizationType: hvm
+                - Architecture: x86_64
+                  BlockDeviceMappings:
+                  - DeviceName: /dev/xvda
+                    Ebs:
+                      DeleteOnTermination: true
+                      Encrypted: false
+                      Iops: null
+                      KmsKeyId: null
+                      SnapshotId: snap-0d4d246f98692cab9
+                      VolumeSize: 8
+                      VolumeType: gp2
+                    NoDevice: null
+                    VirtualName: null
+                  CreationDate: '2017-09-15T17:45:50.000Z'
+                  Description: null
+                  EnaSupport: null
+                  Hypervisor: xen
+                  ImageId: ami-34995b4d
+                  ImageLocation: 123456789101/pipeline_demo 1505497225
+                  ImageOwnerAlias: null
+                  ImageType: machine
+                  KernelId: null
+                  Name: pipeline_demo 1505497225
+                  OwnerId: '123456789101'
+                  Platform: null
+                  ProductCodes: null
+                  Public: false
+                  RamdiskId: null
+                  RootDeviceName: /dev/xvda
+                  RootDeviceType: ebs
+                  SriovNetSupport: simple
+                  State: available
+                  StateReason: null
+                  Tags:
+                  - Key: client
+                    Value: cycloid
+                  - Key: env
+                    Value: demo
+                  - Key: Name
+                    Value: demo-pipeline-1505497225
+                  - Key: role
+                    Value: front
+                  - Key: project
+                    Value: demo-website
+                  VirtualizationType: hvm
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS images
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/instances:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of instances of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSInstances
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/aws_next_token'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS instances which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceInstance'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationAWS'
+              example:
+                data:
+                - AmiLaunchIndex: 0
+                  Architecture: x86_64
+                  BlockDeviceMappings:
+                  - DeviceName: /dev/xvda
+                    Ebs:
+                      AttachTime: '2016-09-02T08:07:12Z'
+                      DeleteOnTermination: true
+                      Status: attached
+                      VolumeId: vol-c888994f
+                  ClientToken: ''
+                  EbsOptimized: false
+                  ElasticGpuAssociations: null
+                  EnaSupport: null
+                  Hypervisor: xen
+                  IamInstanceProfile:
+                    Arn: arn:aws:iam::123456789101:instance-profile/profile-front-website-prod
+                    Id: AIPAJFKQFTYM7KEEE2SWU
+                  ImageId: ami-e079f893
+                  InstanceId: i-2000dcad
+                  InstanceLifecycle: null
+                  InstanceType: t2.micro
+                  KernelId: null
+                  KeyName: cycloid
+                  LaunchTime: '2016-09-19T07:11:18Z'
+                  Monitoring:
+                    State: disabled
+                  NetworkInterfaces:
+                  - Association:
+                      IpOwnerId: amazon
+                      PublicDnsName: ec2-54-192-0-1.eu-west-1.compute.amazonaws.com
+                      PublicIp: 54.192.0.1
+                    Attachment:
+                      AttachTime: '2016-09-02T08:07:11Z'
+                      AttachmentId: eni-attach-10d509cf
+                      DeleteOnTermination: true
+                      DeviceIndex: 0
+                      Status: attached
+                    Description: ''
+                    Groups:
+                    - GroupId: sg-64565003
+                      GroupName: website-front-prod
+                    - GroupId: sg-3543334e
+                      GroupName: allow_metrics
+                    - GroupId: sg-c1db70a6
+                      GroupName: allow_bastion
+                    Ipv6Addresses: null
+                    MacAddress: 06:9a:1a:77:6c:db
+                    NetworkInterfaceId: eni-b1f859fd
+                    OwnerId: '123456789101'
+                    PrivateDnsName: ip-10-42-0-2.eu-west-1.compute.internal
+                    PrivateIpAddress: 10.42.0.2
+                    PrivateIpAddresses:
+                    - Association:
+                        IpOwnerId: amazon
+                        PublicDnsName: ec2-54-192-0-1.eu-west-1.compute.amazonaws.com
+                        PublicIp: 54.192.0.1
+                      Primary: true
+                      PrivateDnsName: ip-10-42-0-2.eu-west-1.compute.internal
+                      PrivateIpAddress: 10.42.0.2
+                    SourceDestCheck: true
+                    Status: in-use
+                    SubnetId: subnet-6b5a8f1d
+                    VpcId: vpc-21fb3e45
+                  Placement:
+                    Affinity: null
+                    AvailabilityZone: eu-west-1b
+                    GroupName: ''
+                    HostId: null
+                    SpreadDomain: null
+                    Tenancy: default
+                  Platform: null
+                  PrivateDnsName: ip-10-42-0-2.eu-west-1.compute.internal
+                  PrivateIpAddress: 10.42.0.2
+                  ProductCodes: null
+                  PublicDnsName: ec2-54-192-0-1.eu-west-1.compute.amazonaws.com
+                  PublicIpAddress: 54.192.0.1
+                  RamdiskId: null
+                  RootDeviceName: /dev/xvda
+                  RootDeviceType: ebs
+                  SecurityGroups:
+                  - GroupId: sg-64565003
+                    GroupName: website-front-prod
+                  - GroupId: sg-3543334e
+                    GroupName: allow_metrics
+                  - GroupId: sg-c1db70a6
+                    GroupName: allow_bastion
+                  SourceDestCheck: true
+                  SpotInstanceRequestId: null
+                  SriovNetSupport: null
+                  State:
+                    Code: 16
+                    Name: running
+                  StateReason:
+                    Code: Client.UserInitiatedShutdown
+                    Message: 'Client.UserInitiatedShutdown: User initiated shutdown'
+                  StateTransitionReason: ''
+                  SubnetId: subnet-6b5a8f1d
+                  Tags:
+                  - Key: project
+                    Value: website
+                  - Key: client
+                    Value: cycloid
+                  - Key: Name
+                    Value: CYCLOID-WEBSITE-FRONT1-EU-WE1-PROD
+                  - Key: env
+                    Value: prod
+                  - Key: role
+                    Value: front
+                  VirtualizationType: hvm
+                  VpcId: vpc-21fb3e45
+                pagination:
+                  next: ''
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS instances
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/load_balancers_v1:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of load balancers (ELB) of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSLoadBalancersV1
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/aws_next_token'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS load balancers (ELB) which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceLoadBalancerV1'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationAWS'
+              example:
+                data:
+                - AvailabilityZones:
+                  - eu-west-1b
+                  - eu-west-1c
+                  - eu-west-1a
+                  BackendServerDescriptions: null
+                  CanonicalHostedZoneName: WEBSITE-FRONT-PROD-1234567890.eu-west-1.elb.amazonaws.com
+                  CanonicalHostedZoneNameID: Z32O12XQLNTSW2
+                  CreatedTime: '2016-09-02T08:07:35.52Z'
+                  DNSName: WEBSITE-FRONT-PROD-1234567890.eu-west-1.elb.amazonaws.com
+                  HealthCheck:
+                    HealthyThreshold: 2
+                    Interval: 30
+                    Target: HTTP:80/
+                    Timeout: 20
+                    UnhealthyThreshold: 2
+                  Instances:
+                  - InstanceId: i-2000dcdd
+                  - InstanceId: i-911b05af
+                  ListenerDescriptions:
+                  - Listener:
+                      InstancePort: 80
+                      InstanceProtocol: HTTP
+                      LoadBalancerPort: 80
+                      Protocol: HTTP
+                      SSLCertificateId: null
+                    PolicyNames: null
+                  - Listener:
+                      InstancePort: 80
+                      InstanceProtocol: HTTP
+                      LoadBalancerPort: 443
+                      Protocol: HTTPS
+                      SSLCertificateId: arn:aws:iam::123456789101:server-certificate/cloudfront/example
+                    PolicyNames:
+                    - website-front-prod
+                    - ELBSecurityPolicy-2016-08
+                  LoadBalancerName: WEBSITE-FRONT-PROD
+                  Policies:
+                    AppCookieStickinessPolicies: null
+                    LBCookieStickinessPolicies:
+                    - CookieExpirationPeriod: 3600
+                      PolicyName: website-front-prod
+                    OtherPolicies:
+                    - ELBSecurityPolicy-2016-08
+                  Scheme: internet-facing
+                  SecurityGroups:
+                  - sg-9c494ffb
+                  SourceSecurityGroup:
+                    GroupName: website-elb-front-prod
+                    OwnerAlias: '123456789101'
+                  Subnets:
+                  - subnet-550fac31
+                  - subnet-6b5a8f1d
+                  - subnet-b95dbde1
+                  Tags:
+                  - Key: client
+                    Value: cycloid
+                  VPCId: vpc-21fb3e45
+                - AvailabilityZones:
+                  - eu-west-1b
+                  - eu-west-1c
+                  - eu-west-1a
+                  BackendServerDescriptions: null
+                  CanonicalHostedZoneName: WEBSITE-FRONT-PREPROD-1234567890.eu-west-1.elb.amazonaws.com
+                  CanonicalHostedZoneNameID: Z32O12XQLNTSW2
+                  CreatedTime: '2016-09-02T08:07:35.91Z'
+                  DNSName: WEBSITE-FRONT-PREPROD-1234567890.eu-west-1.elb.amazonaws.com
+                  HealthCheck:
+                    HealthyThreshold: 2
+                    Interval: 30
+                    Target: HTTP:80/
+                    Timeout: 20
+                    UnhealthyThreshold: 2
+                  Instances:
+                  - InstanceId: i-ab00dc26
+                  - InstanceId: i-9ec9a815
+                  ListenerDescriptions:
+                  - Listener:
+                      InstancePort: 80
+                      InstanceProtocol: HTTP
+                      LoadBalancerPort: 80
+                      Protocol: HTTP
+                      SSLCertificateId: null
+                    PolicyNames: null
+                  - Listener:
+                      InstancePort: 80
+                      InstanceProtocol: HTTP
+                      LoadBalancerPort: 443
+                      Protocol: HTTPS
+                      SSLCertificateId: arn:aws:iam::123456789101:server-certificate/cloudfront/example
+                    PolicyNames:
+                    - website-front-preprod
+                    - ELBSecurityPolicy-2016-08
+                  LoadBalancerName: WEBSITE-FRONT-PREPROD
+                  Policies:
+                    AppCookieStickinessPolicies: null
+                    LBCookieStickinessPolicies:
+                    - CookieExpirationPeriod: 3600
+                      PolicyName: AWSConsole-LBCookieStickinessPolicy-WEBSITE-FRONT-PREPROD-1473338142315
+                    - CookieExpirationPeriod: 3600
+                      PolicyName: AWSConsole-LBCookieStickinessPolicy-WEBSITE-FRONT-PREPROD-1473337367977
+                    - CookieExpirationPeriod: 3600
+                      PolicyName: website-front-preprod
+                    - CookieExpirationPeriod: 3600
+                      PolicyName: AWSConsole-LBCookieStickinessPolicy-WEBSITE-FRONT-PREPROD-1473337375883
+                    OtherPolicies:
+                    - ELBSecurityPolicy-2016-08
+                  Scheme: internet-facing
+                  SecurityGroups:
+                  - sg-9b494ffc
+                  SourceSecurityGroup:
+                    GroupName: website-elb-front-preprod
+                    OwnerAlias: '123456789101'
+                  Subnets:
+                  - subnet-550fac31
+                  - subnet-6b5a8f1d
+                  - subnet-b95dbde1
+                  Tags: null
+                  VPCId: vpc-21fb3e45
+                pagination:
+                  next: ''
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS load balancers V1
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/load_balancers_v2:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of load balancers (ELB v2 or a.k.a ALB) of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSLoadBalancersV2
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/aws_next_token'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS load balancers (ELB v2 or a.k.a ALB) which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceLoadBalancerV2'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationAWS'
+              example:
+                data:
+                - AvailabilityZones:
+                  - LoadBalancerAddresses: null
+                    SubnetId: subnet-225f3155
+                    ZoneName: eu-west-1b
+                  - LoadBalancerAddresses: null
+                    SubnetId: subnet-74f1712d
+                    ZoneName: eu-west-1c
+                  - LoadBalancerAddresses: null
+                    SubnetId: subnet-cd793fa8
+                    ZoneName: eu-west-1a
+                  CanonicalHostedZoneId: Z32O12XQLNTSW2
+                  CreatedTime: '2016-12-14T15:32:58.83Z'
+                  DNSName: alb-amazon-front-prex-1234567890.eu-west-1.elb.amazonaws.com
+                  IpAddressType: ipv4
+                  LoadBalancerArn: arn:aws:elasticloadbalancing:eu-west-1:123456789101:loadbalancer/app/alb-amazon-front-prex/f81f78ed3ec382cf
+                  LoadBalancerName: alb-amazon-front-prex
+                  Scheme: internet-facing
+                  SecurityGroups:
+                  - sg-4c10e028
+                  State:
+                    Code: active
+                    Reason: null
+                  Tags: null
+                  Type: application
+                  VpcId: vpc-315ed454
+                - AvailabilityZones:
+                  - LoadBalancerAddresses: null
+                    SubnetId: subnet-3ba8a072
+                    ZoneName: eu-west-1b
+                  - LoadBalancerAddresses: null
+                    SubnetId: subnet-45d1d622
+                    ZoneName: eu-west-1a
+                  - LoadBalancerAddresses: null
+                    SubnetId: subnet-6b034030
+                    ZoneName: eu-west-1c
+                  CanonicalHostedZoneId: Z32O12XQLNTSW2
+                  CreatedTime: '2017-12-19T09:12:39.84Z'
+                  DNSName: amazon-apicache-staging-1234567890.eu-west-1.elb.amazonaws.com
+                  IpAddressType: ipv4
+                  LoadBalancerArn: arn:aws:elasticloadbalancing:eu-west-1:123456789101:loadbalancer/app/amazon-apicache-staging/f6404ce290fc3434
+                  LoadBalancerName: amazon-apicache-staging
+                  Scheme: internet-facing
+                  SecurityGroups:
+                  - sg-02510079
+                  State:
+                    Code: active
+                    Reason: null
+                  Tags:
+                  - Key: client
+                    Value: cycloid
+                  Type: application
+                  VpcId: vpc-d7d3cdb0
+                - AvailabilityZones:
+                  - LoadBalancerAddresses: null
+                    SubnetId: subnet-1fe9cf69
+                    ZoneName: eu-west-1b
+                  - LoadBalancerAddresses: null
+                    SubnetId: subnet-5e614d3a
+                    ZoneName: eu-west-1a
+                  - LoadBalancerAddresses: null
+                    SubnetId: subnet-5ecca206
+                    ZoneName: eu-west-1c
+                  CanonicalHostedZoneId: Z32O12XQLNTSW2
+                  CreatedTime: '2017-12-19T17:08:25.2Z'
+                  DNSName: amazon-apicache-dev-1234567890.eu-west-1.elb.amazonaws.com
+                  IpAddressType: ipv4
+                  LoadBalancerArn: arn:aws:elasticloadbalancing:eu-west-1:123456789101:loadbalancer/app/amazon-apicache-dev/9f76887ef888cf4a
+                  LoadBalancerName: amazon-apicache-dev
+                  Scheme: internet-facing
+                  SecurityGroups:
+                  - sg-3980d042
+                  State:
+                    Code: active
+                    Reason: null
+                  Tags: null
+                  Type: application
+                  VpcId: vpc-257d2d41
+                pagination:
+                  next: ''
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS load balancers V2
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/security_groups:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of security groups of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSSecurityGroups
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/aws_next_token'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS security groups which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceSecurityGroup'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationAWS'
+              example:
+                data:
+                - Description: Allow metrics server to collect metrics
+                  GroupId: sg-35c7b54e
+                  GroupName: test_allow_metrics
+                  IpPermissions:
+                  - FromPort: 9100
+                    IpProtocol: tcp
+                    IpRanges: null
+                    Ipv6Ranges: null
+                    PrefixListIds: null
+                    ToPort: 9100
+                    UserIdGroupPairs:
+                    - Description: null
+                      GroupId: sg-cada71ad
+                      GroupName: null
+                      PeeringStatus: active
+                      UserId: '123456789101'
+                      VpcId: vpc-21fb3e45
+                      VpcPeeringConnectionId: pcx-ab75ccc2
+                  IpPermissionsEgress:
+                  - FromPort: null
+                    IpProtocol: '-1'
+                    IpRanges:
+                    - CidrIp: 0.0.0.0/0
+                      Description: null
+                    Ipv6Ranges: null
+                    PrefixListIds: null
+                    ToPort: null
+                    UserIdGroupPairs: null
+                  OwnerId: '123456789101'
+                  Tags:
+                  - Key: project
+                    Value: infra
+                  - Key: Name
+                    Value: allow-metrics
+                  - Key: client
+                    Value: cycloid
+                  VpcId: vpc-0296ad66
+                pagination:
+                  next: ''
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS security groups
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/snapshots:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of snapshots of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSSnapshots
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/aws_next_token'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS snapshots which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceSnapshot'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationAWS'
+              example:
+                data:
+                - DataEncryptionKeyId: null
+                  Description: Created by CreateImage(i-7c6ea6bc) for ami-67affc14 from vol-fadc527c
+                  Encrypted: false
+                  KmsKeyId: null
+                  OwnerAlias: null
+                  OwnerId: '123456789101'
+                  Progress: 100%
+                  SnapshotId: snap-f4c73492
+                  StartTime: '2016-11-17T16:17:18Z'
+                  State: completed
+                  StateMessage: null
+                  Tags: null
+                  VolumeId: vol-fadc527c
+                  VolumeSize: 8
+                - DataEncryptionKeyId: null
+                  Description: Created by CreateImage(i-78a845ee) for ami-9d5a09ee from vol-73d82bc3
+                  Encrypted: false
+                  KmsKeyId: null
+                  OwnerAlias: null
+                  OwnerId: '123456789101'
+                  Progress: 100%
+                  SnapshotId: snap-94f92ff2
+                  StartTime: '2016-11-16T16:46:39Z'
+                  State: completed
+                  StateMessage: null
+                  Tags: null
+                  VolumeId: vol-73d82bc3
+                  VolumeSize: 8
+                pagination:
+                  next: ''
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS snapshots
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/subnets:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of subnets of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSSubnets
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS subnets instances which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                description: Although this response contains a collection of items, it doesn't have pagination because the AWS SDK, to request the subnets resources, doesn't provide any pagination mechanism.
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceSubnet'
+              example:
+                data:
+                - AssignIpv6AddressOnCreation: false
+                  AvailabilityZone: eu-west-1b
+                  AvailableIpAddressCount: 251
+                  CidrBlock: 10.50.3.0/24
+                  DefaultForAz: false
+                  Ipv6CidrBlockAssociationSet: null
+                  MapPublicIpOnLaunch: false
+                  State: available
+                  SubnetId: subnet-373f3241
+                  Tags:
+                  - Key: client
+                    Value: cycloid
+                  - Key: Name
+                    Value: private-subnet-eu-west-1b
+                  VpcId: vpc-0296ad66
+                - AssignIpv6AddressOnCreation: false
+                  AvailabilityZone: eu-west-1a
+                  AvailableIpAddressCount: 251
+                  CidrBlock: 10.50.1.0/24
+                  DefaultForAz: false
+                  Ipv6CidrBlockAssociationSet: null
+                  MapPublicIpOnLaunch: false
+                  State: available
+                  SubnetId: subnet-6e131c0a
+                  Tags:
+                  - Key: client
+                    Value: cycloid
+                  - Key: Name
+                    Value: private-subnet-eu-west-1a
+                  VpcId: vpc-0296ad66
+                - AssignIpv6AddressOnCreation: false
+                  AvailabilityZone: eu-west-1a
+                  AvailableIpAddressCount: 251
+                  CidrBlock: 10.51.1.0/24
+                  DefaultForAz: false
+                  Ipv6CidrBlockAssociationSet: null
+                  MapPublicIpOnLaunch: false
+                  State: available
+                  SubnetId: subnet-76131c12
+                  Tags:
+                  - Key: client
+                    Value: cycloid
+                  - Key: Name
+                    Value: private-subnet-eu-west-1a
+                  VpcId: vpc-0c96ad68
+                - AssignIpv6AddressOnCreation: false
+                  AvailabilityZone: eu-west-1c
+                  AvailableIpAddressCount: 251
+                  CidrBlock: 10.42.0.0/24
+                  DefaultForAz: false
+                  Ipv6CidrBlockAssociationSet: null
+                  MapPublicIpOnLaunch: true
+                  State: available
+                  SubnetId: subnet-b95dbde1
+                  Tags:
+                  - Key: client
+                    Value: cycloid
+                  - Key: Name
+                    Value: public-subnet-eu-west-1c
+                  VpcId: vpc-21fb3e45
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS subnets
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/volumes:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of volumes of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSVolumes
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/aws_next_token'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS volumes which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceVolume'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationAWS'
+              example:
+                data:
+                - Attachments:
+                  - AttachTime: '2017-04-26T09:31:12Z'
+                    DeleteOnTermination: false
+                    Device: /dev/xvdf
+                    InstanceId: i-02e0848c23c9cf89d
+                    State: attached
+                    VolumeId: vol-0e976363ad5f4f523
+                  AvailabilityZone: eu-west-1c
+                  CreateTime: '2017-04-26T09:30:51.516Z'
+                  Encrypted: false
+                  Iops: null
+                  KmsKeyId: null
+                  Size: 10
+                  SnapshotId: ''
+                  State: in-use
+                  Tags:
+                  - Key: Name
+                    Value: cycloid-kubernetes-etcd2-eu-we1-prod
+                  VolumeId: vol-0e976363ad5f4f523
+                  VolumeType: standard
+                - Attachments:
+                  - AttachTime: '2016-09-02T08:07:12Z'
+                    DeleteOnTermination: true
+                    Device: /dev/xvda
+                    InstanceId: i-2000dcad
+                    State: attached
+                    VolumeId: vol-c888994f
+                  AvailabilityZone: eu-west-1b
+                  CreateTime: '2016-09-02T08:07:12.162Z'
+                  Encrypted: false
+                  Iops: null
+                  KmsKeyId: null
+                  Size: 10
+                  SnapshotId: snap-de88bcce
+                  State: in-use
+                  Tags: null
+                  VolumeId: vol-c888994f
+                  VolumeType: standard
+                - Attachments:
+                  - AttachTime: '2016-09-02T08:07:12Z'
+                    DeleteOnTermination: true
+                    Device: /dev/xvda
+                    InstanceId: i-ab00dc26
+                    State: attached
+                    VolumeId: vol-01889986
+                  AvailabilityZone: eu-west-1b
+                  CreateTime: '2016-09-02T08:07:12.887Z'
+                  Encrypted: false
+                  Iops: null
+                  KmsKeyId: null
+                  Size: 10
+                  SnapshotId: snap-de88bcce
+                  State: in-use
+                  Tags: null
+                  VolumeId: vol-01889986
+                  VolumeType: standard
+                pagination:
+                  next: ''
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWS volumes
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infrastructures/aws/vpcs:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of VPCs of the running AWS infrastructure and associated with the AWS account (credential). The parameters allow to select the scope of the request to one project of the organization.
+      tags:
+      - Organization Infrastructure
+      operationId: getRunningInfraAWSVPCs
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/credential_canonical_query'
+      - $ref: '#/components/parameters/project_canonical_query'
+      - $ref: '#/components/parameters/aws_tags'
+      responses:
+        '200':
+          description: The list of AWS VPCs which matches the scope specified by the filter.
+          content:
+            application/json:
+              schema:
+                description: Although this response contains a collection of items, it doesn't have pagination because the AWS SDK, to request the VPCs resources, doesn't provide any pagination mechanism.
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AWSInfrastructureResourceVPC'
+              example:
+                data:
+                - CidrBlock: 172.31.0.0/16
+                  CidrBlockAssociationSet:
+                  - AssociationId: vpc-cidr-assoc-5bd62d32
+                    CidrBlock: 172.31.0.0/16
+                    CidrBlockState:
+                      State: associated
+                      StatusMessage: null
+                  DhcpOptionsId: dopt-2e748c47
+                  InstanceTenancy: default
+                  Ipv6CidrBlockAssociationSet: null
+                  IsDefault: true
+                  State: available
+                  Tags: null
+                  VpcId: vpc-462bd42f
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get running infra AWSVPCs
+      x-summary-source: derived
+components:
+  schemas:
+    AWSInfrastructureResourceVolume:
+      description: This object contains the items described in the volume data type described in https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Volume.html Tags property is set, for guaranteeing that the respond will always have the property of the type array, not allowing null in case that the resource doesn't have any, hence an empty array is used in such case. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure volume Resource
+    InfrastructureResourcesAggregationItem:
+      description: Contains aggregated data of a single type of an infrastructure resource.
+      title: Infrastructure Resource Aggregation Item
+      required:
+      - total_amount
+      properties:
+        total_amount:
+          description: The number of items of the specific type of resource.
+          type: integer
+          format: uint32
+    AWSInfrastructureResourceSecurityGroup:
+      description: This object contains the items described in the security group data type described in https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_SecurityGroup.html Tags property is set, for guaranteeing that the respond will always have the property of the type array, not allowing null in case that the resource doesn't have any, hence an empty array is used in such case. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure security group Resource
+    AWSInfrastructureResourceSnapshot:
+      description: This object contains the items described in the snapshot data type described in https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Snapshot.html Tags property is set, for guaranteeing that the respond will always have the property of the type array, not allowing null in case that the resource doesn't have any, hence an empty array is used in such case. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure snapshot Resource
+    AWSInfrastructureResourceVPC:
+      description: This object contains the items described in the VPC data type described in https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Vpc.html Tags property is set, for guaranteeing that the respond will always have the property of the type array, not allowing null in case that the resource doesn't have any, hence an empty array is used in such case. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure VPC Resource
+    AWSInfrastructureResourceBucket:
+      description: This object contains the items described in the S3 bucket data type described in but it also contains its associated tags which are documented in the properties of this object definition. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure S3 bucket Resource
+    AWSInfrastructureResourceSubnet:
+      description: This object contains the items described in the subnet data type described in https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Subnet.html Tags property is set, for guaranteeing that the respond will always have the property of the type array, not allowing null in case that the resource doesn't have any, hence an empty array is used in such case. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure subnet Resource
+    AWSInfrastructureResourceImage:
+      description: This object contains the items described in the image data type described in https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Image.html Tags property is set, for guaranteeing that the respond will always have the property of the type array, not allowing null in case that the resource doesn't have any, hence an empty array is used in such case. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure image Resource
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    PaginationAWS:
+      type: object
+      title: AWS Pagination
+      required:
+      - next
+      properties:
+        next:
+          description: The token to retrieve the next page of results. Empty string when there isn't a next page.
+          type: string
+    AWSInfrastructureResourcesAggregation:
+      title: AWS Infrastructure Resources Aggregation
+      maxProperties: 12
+      minProperties: 1
+      properties:
+        buckets:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        cache_clusters:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        db_instances:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        images:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        instances:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        load_balancers_v1:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        load_balancers_v2:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        security_groups:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        snapshots:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        subnets:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        volumes:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+        vpcs:
+          $ref: '#/components/schemas/InfrastructureResourcesAggregationItem'
+    AWSInfrastructureResourceElasticacheCluster:
+      description: This object contains the items described in the ElastiCache cluster data type described in https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CacheCluster.html but it also contains its associated tags which are documented in the properties of this object definition. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure Elasticache cluster Resource
+    AWSInfrastructureResourceDBInstance:
+      description: This object contains the items described in the RDS DB instance data type described in https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_DBInstance.html but it also contains its associated tags which are documented in the properties of this object definition. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure RDS DB instance Resource
+    AWSInfrastructureResourceLoadBalancerV2:
+      description: This object contains the items described in the load balancer (ELB v2 or a.k.a ALB) data type described in https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_LoadBalancer.html but it also contains its associated tags which are documented in the properties of this object definition. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure load balancer (ELB v2 or a.k.a ALB) Resource
+    AWSInfrastructureResourceLoadBalancerV1:
+      description: This object contains the items described in the load balancer (ELB) data type described in https://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_LoadBalancerDescription.html but it also contains its associated tags which are documented in the properties of this object definition. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure load balancer (ELB) Resource
+    AWSInfrastructureResourceInstance:
+      description: This object contains the items described in the instance data type described in https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Instance.html Tags property is set, for guaranteeing that the respond will always have the property of the type array, not allowing null in case that the resource doesn't have any, hence an empty array is used in such case. This object will contain a property named 'Tags' which is of the type defined by the schema definition '#/definitions/AWSTags'
+      title: AWS Infrastructure Instance Resource
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+  parameters:
+    credential_canonical_query:
+      description: A Credential canonical
+      name: credential_canonical
+      in: query
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    aws_tags:
+      description: An amazon tag, represented as `key|value` and where `key` or `value` could be omitted but not both, in order to select resources which has a `key` or a `value` whatever is its counterpart. `key` nor `value` can contains the `|` character. The parameter can be specified several times in order to request resources which match with at least one of the `tag|value` pairs
+      name: tag
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          maxLength: 383
+          minLength: 2
+          pattern: ^(?:(?:[\w\-+=.:/@ ]+\|)|(?:\|[\w\-+=.:/@ ]+)|(?:[\w\-+=.:/@ ]+\|[\w\-+=.:/@ ]+))$
+          type: string
+        uniqueItems: true
+    aws_infrastructure_resource_query:
+      description: Supported AWS type of resource to query. The parameter can be specified several times in order to request for different kind of resources.
+      name: resource
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          enum:
+          - instances
+          - vpcs
+          - images
+          - security_groups
+          - subnets
+          - volumes
+          - snapshots
+          - cache_clusters
+          - load_balancers_v1
+          - load_balancers_v2
+          - db_instances
+          - buckets
+          type: string
+        uniqueItems: true
+    aws_next_token:
+      description: The token to retrieve the next page of results
+      name: next
+      in: query
+      schema:
+        type: string
+        minLength: 1
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    project_canonical_query:
+      description: A list of projects' canonical to filter from
+      name: project_canonical
+      in: query
+      schema:
+        type: string
+        pattern: ^[\da-z]+(?:(?:[\da-z\-._]+)?[\da-z])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

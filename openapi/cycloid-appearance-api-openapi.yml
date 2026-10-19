@@ -1,0 +1,240 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Appearance API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Appearance
+paths:
+  /appearance:
+    get:
+      security: []
+      description: Get the default appearance available in the platform
+      tags:
+      - Appearance
+      operationId: getDefaultAppearance
+      responses:
+        '200':
+          description: Default Appearance available in the platform.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Appearance'
+              example:
+                data:
+                  canonical: default
+                  color:
+                    b: 151
+                    g: 151
+                    r: 28
+                  created_at: 1503225026
+                  display_name: Cycloid
+                  favicon: /static/favicons/favicon.ico
+                  footer: ''
+                  is_active: true
+                  logo: /static/logos/logo.svg
+                  name: Default
+                  tab_title: Cycloid
+                  updated_at: 1503335026
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get default appearance
+      x-summary-source: derived
+  /appearance/{organization_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      security: []
+      description: Get the active appearance available in the organization
+      tags:
+      - Appearance
+      operationId: getActiveAppearance
+      responses:
+        '200':
+          description: Default Appearance available in the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Appearance'
+              example:
+                data:
+                  canonical: default
+                  color:
+                    b: 151
+                    g: 151
+                    r: 28
+                  created_at: 1503225026
+                  display_name: Cycloid
+                  favicon: https://console.cycloid.io/static/favicons/favicon.ico
+                  footer: ''
+                  is_active: true
+                  logo: https://console.cycloid.io/static/images/app-logo-square.svg
+                  name: Default
+                  tab_title: Cycloid
+                  updated_at: 1503335026
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get active appearance
+      x-summary-source: derived
+components:
+  schemas:
+    Appearance:
+      description: An Appearance holds the values of the branding configuration, which are rendered across an organization
+      title: Appearance
+      required:
+      - canonical
+      - name
+      - display_name
+      - tab_title
+      - color
+      - logo
+      - favicon
+      - footer
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        color:
+          type: object
+          required:
+          - r
+          - g
+          - b
+          properties:
+            b:
+              description: Blue color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+            g:
+              description: Green color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+            r:
+              description: Red color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+        created_at:
+          type: integer
+          format: uint64
+        display_name:
+          type: string
+          maxLength: 50
+          minLength: 1
+        favicon:
+          type: string
+          format: uri
+        footer:
+          type: string
+          maxLength: 1000
+        is_active:
+          type: boolean
+        logo:
+          type: string
+          format: uri
+        name:
+          type: string
+          maxLength: 50
+          minLength: 1
+        tab_title:
+          type: string
+          maxLength: 50
+          minLength: 1
+        updated_at:
+          type: integer
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  parameters:
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

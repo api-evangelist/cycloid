@@ -1,0 +1,1757 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Inventory API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Inventory
+paths:
+  /inventory:
+    parameters:
+    - $ref: '#/components/parameters/jwt'
+    get:
+      security: []
+      description: Get the state
+      tags:
+      - Organization Inventory
+      operationId: getState
+      parameters:
+      - description: State label identifying the slot within this component's backend
+        name: label
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get the state of an organization
+          content:
+            application/json:
+              schema:
+                description: The state of an organization
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: object
+              example:
+                data:
+                  lineage: 2f9ab173-9fc7-965b-c17d-2e43868f14cf
+                  resources:
+                  - id: 1
+                    instances:
+                      attributes:
+                        id: sg-0e74bbe876eba7e6f
+                        ingress:
+                          cidr_blocks: null
+                          description: ''
+                          from_port: 80
+                          ipv6_cidr_blocks: null
+                          prefix_list_ids: null
+                          protocol: tcp
+                          security_groups:
+                          - sg-0cfe32960213dea69
+                          self: false
+                          to_port: 80
+                      custom_attributes:
+                        custom_att: sg-0e74bbe876eba7e6f
+                    module: module.kapsule
+                    name: front
+                    outputs:
+                      alb_front_dns_name:
+                        type: string
+                        value: cycloidio-website-front-prod-119239496.eu-west-1.elb.amazonaws.com
+                    provider: aws
+                    type: aws_instance
+                  serial: 1
+                  terraform version: 0.12.28
+                  version: 1
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get state
+      x-summary-source: derived
+    post:
+      security: []
+      description: Create or update an Inventory State
+      tags:
+      - Organization Inventory
+      operationId: createOrUpdateState
+      parameters:
+      - description: State label identifying the slot within this component's backend
+        name: label
+        in: query
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Success update
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        '423':
+          $ref: '#/components/responses/locked_state'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+        description: The information of the Inventory new data
+        required: true
+      summary: Create or update state
+      x-summary-source: derived
+  /inventory/lock:
+    parameters:
+    - $ref: '#/components/parameters/jwt'
+    post:
+      security: []
+      description: Locks an Inventory State
+      tags:
+      - Organization Inventory
+      operationId: lockState
+      parameters:
+      - description: State label identifying the slot within this component's backend
+        name: label
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lock ID of the Organization Inventory State
+          content:
+            application/json:
+              schema:
+                description: The Inventory from the Project's environment
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/StateLock'
+              example:
+                data:
+                  created: '2024-01-15T10:30:00Z'
+                  id: terraform-lock-12345
+                  info: Terraform apply started
+                  operation: OperationTypeApply
+                  version: 1.5.0
+                  who: user@cycloid.io
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StateLock'
+        description: The information of the Inventory new data
+        required: true
+      summary: Lock state
+      x-summary-source: derived
+    delete:
+      security: []
+      description: unlocks an State of Inventory
+      tags:
+      - Organization Inventory
+      operationId: unlockState
+      parameters:
+      - description: State label identifying the slot within this component's backend
+        name: label
+        in: query
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Unlocking the Status of an Organization Status Inventory Item
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StateLock'
+        description: The information of the Inventory new data
+        required: true
+      summary: Unlock state
+      x-summary-source: derived
+  /organizations/{organization_canonical}/inventory:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: List the inventory resources
+      tags:
+      - Organization Inventory
+      operationId: listInventoryResources
+      responses:
+        '200':
+          description: List the Inventory Resources
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                - filters
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InventoryResource'
+                  filters:
+                    $ref: '#/components/schemas/Filters'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - attributes:
+                    id: sg-0e74bbe876eba7e6f
+                    ingress:
+                      cidr_blocks: null
+                      description: ''
+                      from_port: 80
+                      ipv6_cidr_blocks: null
+                      prefix_list_ids: null
+                      protocol: tcp
+                      security_groups:
+                      - sg-0cfe32960213dea69
+                      self: false
+                      to_port: 80
+                  custom_attributes:
+                    custom_att: sg-0e74bbe876eba7e6f
+                  id: 1
+                  module: module.kapsule
+                  name: front
+                  provider: aws
+                  type: aws_instance
+                filters:
+                  types:
+                  - aws_instance
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List inventory resources
+      x-summary-source: derived
+  /organizations/{organization_canonical}/inventory/outputs:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: 'List the outputs of terraform states of an organization. Can be filtered by: * output_key * output_attribute * project_canonical * environment_canonical * component_canonical * service_catalog_canonical'
+      tags:
+      - Organization Inventory
+      operationId: listInventoryOutputs
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/order_by_query'
+      responses:
+        '200':
+          description: List the Inventory Outputs
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                - filters
+                properties:
+                  component_total:
+                    description: The total number of outputs for the queried component. It's 0 if any of component_canonical, environment_canonical or project_canonical filters is not provided.
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InventoryOutput'
+                  filters:
+                    $ref: '#/components/schemas/Filters'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: 1
+                  key: instance_ip_addr
+                  type: tuple(string, string)
+                  value: tuple([ aws_instance.example.public_ip, aws_instance.example.private_ip, ])
+                filters:
+                  components:
+                  - component1
+                  environments:
+                  - env1
+                  projects:
+                  - project1
+                  service_catalogs:
+                  - sc1
+                  - sc2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List inventory outputs
+      x-summary-source: derived
+  /organizations/{organization_canonical}/inventory/outputs/{inventory_output_id}/pin:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/inventory_output_id'
+    post:
+      description: -| Pin an Inventory Output (a terraform state output). Pinning the output will highlight it on the frontend.
+      tags:
+      - Organization Inventory
+      operationId: pinInventoryOutput
+      responses:
+        '204':
+          description: Inventory output has been pinned. The response 204 is also returned if the output was already pinned.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Pin inventory output
+      x-summary-source: derived
+  /organizations/{organization_canonical}/inventory/outputs/{inventory_output_id}/unpin:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/inventory_output_id'
+    post:
+      description: -| Unpin an Inventory Output (a terraform state output). Unpinning the output will prevent it from being highlighted on the frontend.
+      tags:
+      - Organization Inventory
+      operationId: unpinInventoryOutput
+      responses:
+        '204':
+          description: Inventory output has been unpinned. The response 204 is also returned if the output was already unpinned.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Unpin inventory output
+      x-summary-source: derived
+  /organizations/{organization_canonical}/inventory/resource_labels:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: List Resource Labels
+      tags:
+      - Organization Inventory
+      operationId: listResourceLabels
+      responses:
+        '200':
+          description: Get Resource Labels
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InventoryResourceLabel'
+              example:
+                data:
+                - cpu: 8
+                  memory: 16384
+                  name: frontend
+                  storage: 102400
+                - cpu: 16
+                  memory: 32768
+                  name: backend
+                  storage: 204800
+                - cpu: 32
+                  memory: 65536
+                  name: database
+                  storage: 512000
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List resource labels
+      x-summary-source: derived
+  /organizations/{organization_canonical}/inventory/resource_types:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: List Resource Types
+      tags:
+      - Organization Inventory
+      operationId: listResourceTypes
+      parameters:
+      - $ref: '#/components/parameters/inventory_resource_provider_query'
+      responses:
+        '200':
+          description: Get Resource Types
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: string
+              example:
+                data:
+                - aws_instance
+                - aws_vpc
+                - aws_subnet
+                - aws_security_group
+                - aws_s3_bucket
+                - google_compute_instance
+                - azurerm_virtual_machine
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List resource types
+      x-summary-source: derived
+  /organizations/{organization_canonical}/inventory/resources:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Create an Inventory Resource
+      tags:
+      - Organization Inventory
+      operationId: createInventoryResource
+      responses:
+        '204':
+          description: Resource Created
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewInventoryResource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewInventoryResource'
+        description: The information of the Inventory new resource data
+        required: true
+      summary: Create inventory resource
+      x-summary-source: derived
+  /organizations/{organization_canonical}/inventory/resources/{inventory_resource_id}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/inventory_resource_id'
+    get:
+      description: Get the inventory resource by the ID
+      tags:
+      - Organization Inventory
+      operationId: getInventoryResource
+      responses:
+        '200':
+          description: Resource with the given ID
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/InventoryResource'
+              example:
+                data:
+                  attributes:
+                    id: sg-0e74bbe876eba7e6f
+                    ingress:
+                      cidr_blocks: null
+                      description: ''
+                      from_port: 80
+                      ipv6_cidr_blocks: null
+                      prefix_list_ids: null
+                      protocol: tcp
+                      security_groups:
+                      - sg-0cfe32960213dea69
+                      self: false
+                      to_port: 80
+                  custom_attributes:
+                    custom_att: sg-0e74bbe876eba7e6f
+                  id: 1
+                  module: module.kapsule
+                  name: front
+                  provider: aws
+                  type: aws_instance
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get inventory resource
+      x-summary-source: derived
+    put:
+      description: Create an Inventory Resource
+      tags:
+      - Organization Inventory
+      operationId: updateInventoryResource
+      responses:
+        '200':
+          description: The updated Inventory Resource
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/InventoryResource'
+              example:
+                data:
+                  attributes:
+                    id: sg-0e74bbe876eba7e6f
+                    ingress:
+                      cidr_blocks: null
+                      description: ''
+                      from_port: 80
+                      ipv6_cidr_blocks: null
+                      prefix_list_ids: null
+                      protocol: tcp
+                      security_groups:
+                      - sg-0cfe32960213dea69
+                      self: false
+                      to_port: 80
+                  custom_attributes:
+                    custom_att: sg-0e74bbe876eba7e6f
+                  id: 1
+                  module: module.kapsule
+                  name: front
+                  provider: aws
+                  type: aws_instance
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewInventoryResource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewInventoryResource'
+        description: The information of the Inventory new data
+        required: true
+      summary: Update inventory resource
+      x-summary-source: derived
+    delete:
+      description: Delete an Inventory Resource
+      tags:
+      - Organization Inventory
+      operationId: deleteInventoryResource
+      responses:
+        '204':
+          description: Inventory Resource deleted
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete inventory resource
+      x-summary-source: derived
+components:
+  parameters:
+    inventory_resource_id:
+      description: Inventory Resource ID
+      name: inventory_resource_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    order_by_query:
+      description: 'Allows to order the list of items. Example usage: field_name:asc. Multiple order_by parameters are allowed, applied in the order they are specified.
+
+        '
+      name: order_by
+      in: query
+      schema:
+        type: string
+    jwt:
+      description: Token with the information about state and credentials.
+      name: jwt
+      in: query
+      required: true
+      schema:
+        type: string
+    inventory_resource_provider_query:
+      description: Provider of Inventory Resource
+      name: resources_provider
+      in: query
+      required: true
+      schema:
+        type: string
+    inventory_output_id:
+      description: ID of an inventory output (terraform state output)
+      name: inventory_output_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  schemas:
+    StateLock:
+      description: The Lock management of a State in the Inventory of the Project's environment
+      title: State Lock
+      properties:
+        created:
+          type: string
+        id:
+          type: string
+        info:
+          type: string
+        operation:
+          type: string
+        version:
+          type: string
+        who:
+          type: string
+    ComponentSimple:
+      description: The entity which represents minimal information of a component.
+      type: object
+      title: ComponentSimple
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - service_catalog
+      - version
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        cloud_provider:
+          description: 'The cloud provider object that this environment is using.
+
+            In the event where the cloud provider is not yet defined/supported
+
+            that field might be empty.
+
+            '
+          $ref: '#/components/schemas/CloudProvider'
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 1
+        service_catalog:
+          description: The Service Catalog that was used to create project.
+          $ref: '#/components/schemas/ServiceCatalog'
+        updated_at:
+          type: integer
+          format: uint64
+        use_case:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        version:
+          description: The version used by the Component
+          $ref: '#/components/schemas/ServiceCatalogSourceVersion'
+    ConfigRepositorySyncStatus:
+      description: Derived health of a config repository's asynchronous git projection, computed from the pending commit-outbox entries. Surfaced so the UI can tell the user their saved configuration is failing to sync (and is being retried automatically) without implying the configuration was lost.
+      type: object
+      title: ConfigRepositorySyncStatus
+      required:
+      - state
+      properties:
+        last_error:
+          description: The most recent sync failure message (present when state is error).
+          type: string
+        oldest_pending_at:
+          description: Unix timestamp in milliseconds of the oldest change still pending projection to git.
+          type: integer
+          format: uint64
+        pending_count:
+          description: Number of buffered changes not yet mirrored to git.
+          type: integer
+          format: uint64
+        state:
+          description: 'synced: nothing pending, git mirror up to date. syncing: pending entries, no recorded error (normal catch-up). error: pending entries are failing to sync and are being retried.'
+          type: string
+          enum:
+          - synced
+          - syncing
+          - error
+    ServiceCatalogTechnology:
+      description: ServiceCatalogTechnology is a Technology of the Service Catalog
+      title: ServiceCatalogTechnology
+      properties:
+        technology:
+          type: string
+        version:
+          type: string
+    ServiceCatalog:
+      description: Represents the Service Catalog item
+      title: Service Catalog
+      required:
+      - id
+      - name
+      - canonical
+      - author
+      - keywords
+      - ref
+      - form_enabled
+      - trusted
+      - directory
+      - visibility
+      - organization_canonical
+      - version
+      - latest
+      properties:
+        author:
+          type: string
+        blueprint:
+          description: Determines if given stack is a blueprint
+          type: boolean
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_providers:
+          description: Cloud providers supported by the stack
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudProvider'
+        created_at:
+          type: integer
+          format: uint64
+        default_version_branch:
+          description: Default version of the stack, based on the Catalog Repository branch
+          type: string
+        dependencies:
+          description: 'Canonicals of the stacks that must be instantiated before this one. Read-only: dependencies can only be declared in the stack''s .cycloid.yml source file and are refreshed from it; they cannot be set or changed through the API.'
+          type: array
+          items:
+            type: string
+          readOnly: true
+        description:
+          type: string
+        directory:
+          description: Directory where the ServiceCatalog configuration is found.
+          type: string
+        form_enabled:
+          description: Indicates if this stack can be configured with form's or not. Based on the presence or not of a valid .forms.yaml file since it's creation or last refresh.
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        image:
+          type: string
+          format: uri
+        keywords:
+          type: array
+          items:
+            type: string
+        labels:
+          description: Structured key:value labels declared in the stack's .cycloid.yml
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogLabel'
+        latest:
+          description: Indicates if the stack uses the latest version
+          type: boolean
+        name:
+          type: string
+        organization_canonical:
+          description: Organization that the stack belongs to
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        readme:
+          description: Readme of the stack
+          type: string
+        ref:
+          type: string
+        service_catalog_source_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        team:
+          description: Team that maintains the stack
+          $ref: '#/components/schemas/SimpleTeam'
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogTechnology'
+        trusted:
+          description: If 'true' the ServiceCatalog is from the main organization and can be trusted.
+          type: boolean
+        unique:
+          description: Determines if the stack can be instantiated only once per organization, project and environment
+          type: boolean
+        updated_at:
+          type: integer
+          format: uint64
+        version:
+          description: Version of the stack
+          type: string
+        visibility:
+          type: string
+    InventoryOutput:
+      description: Output of inventory terraform states
+      title: Output of inventory terraform states
+      required:
+      - id
+      - key
+      properties:
+        description:
+          description: Description
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        key:
+          description: Output key used to identify the output
+          type: string
+        pinned:
+          description: Defines whether this output is pinned. Pinned outputs are highlighted on the frontend.
+          type: boolean
+        sensitive:
+          description: Whether this output is a sensitive field
+          type: boolean
+        type:
+          description: Output type
+          type: object
+        value:
+          description: Output value
+          type: object
+    EnvironmentType:
+      description: Represent an environment type that belongs to an organization. Environment types are used to categorize environments (e.g., production, staging, development).
+      title: Environment Type
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - is_default
+      - color
+      - environments_count
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-z]+(?:[\da-z\-._]+[\da-z]|[\da-z])$
+        color:
+          description: Color associated with this environment type
+          type: string
+          maxLength: 64
+        created_at:
+          type: integer
+          format: uint64
+        environments_count:
+          description: The total count of environments using this environment type
+          type: integer
+          format: uint32
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_default:
+          description: Indicates if this is a system-provided default environment type that cannot be deleted or renamed
+          type: boolean
+        label_selector:
+          description: Optional label selector constraining which stacks are offered in environments of this type. Absent means no constraint.
+          $ref: '#/components/schemas/LabelSelector'
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+        updated_at:
+          type: integer
+          format: uint64
+    ServiceCatalogLabel:
+      description: A structured key:value label declared on a stack
+      title: Service Catalog Label
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        value:
+          type: string
+          maxLength: 255
+          minLength: 1
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    CloudAccountSimple:
+      description: A simplified cloud account representation without credentials, used when embedding a cloud account in other entities.
+      title: Cloud Account Simple
+      required:
+      - id
+      - canonical
+      - name
+      - cloud_provider
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_provider:
+          description: The canonical of the associated cloud provider. Can be a built-in provider canonical (aws, google, azurerm; aliases like gcp/microsoft azure are accepted and normalized) or an org-scoped custom cloud provider canonical.
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: A user-defined name for the cloud account
+          type: string
+          maxLength: 255
+          minLength: 1
+    CloudProvider:
+      description: CloudProvider represents a cloud provider. Those cloud providers are used to identify the scope of projects and/or stacks.
+      title: Cloud Provider
+      required:
+      - canonical
+      - name
+      properties:
+        abbreviation:
+          type: string
+          maxLength: 60
+          minLength: 2
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+          enum:
+          - aws
+          - google
+          - azurerm
+          - flexibleengine
+          - openstack
+          - scaleway
+          - vmware
+          - ovh
+          - alibaba
+          - oracle
+          - vsphere
+          - kubernetes
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 60
+          minLength: 2
+        regions:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: integer
+          format: uint64
+    ServiceCatalogSourceVersion:
+      description: Version of a SCS for the Stacks
+      type: object
+      title: Version
+      required:
+      - id
+      - name
+      - commit_hash
+      - status
+      - type
+      - usage
+      - is_latest
+      properties:
+        commit_hash:
+          description: Last commit hash that references it
+          type: string
+          minLength: 1
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_latest:
+          description: If it's the latest
+          type: boolean
+        name:
+          description: Name of the version
+          type: string
+        status:
+          description: Status of the version
+          type: string
+          enum:
+          - no_status
+          - active
+          - deleted
+          - outdated
+        type:
+          description: Type of the version
+          type: string
+          enum:
+          - tag
+          - branch
+        usage:
+          description: How many stacks use it
+          type: integer
+    EnvironmentVariableItem:
+      description: A single key/value pair attached to an Environment. The value is surfaced to interpolation contexts (StackForms, value_ref, pipelines, Terraform templates) under the `.environment.variables` template path.
+      title: Environment Variable Item
+      required:
+      - key
+      - type
+      - value
+      properties:
+        created_at:
+          description: The date and time (unix timestamp) the variable was created.
+          type: integer
+          format: uint64
+          readOnly: true
+        description:
+          description: Optional free-form description of the variable.
+          type: string
+          maxLength: 1000
+        key:
+          description: Identifier used to reference the variable in templates (e.g. `($ .environment.variables.my_key $)`). Must not contain dots and must include at least one alphanumeric character.
+          type: string
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^.]*[A-Za-z0-9][^.]*$
+        sensitive:
+          description: Display hint for the UI to mask this value. The API returns the value in plaintext regardless.
+          type: boolean
+          default: false
+        type:
+          description: Declared shape of the value. Names mirror stackforms widget types so the two APIs stay consistent.
+          type: string
+          enum:
+          - string
+          - boolean
+          - integer
+          - float
+          - array
+          - map
+        updated_at:
+          description: The date and time (unix timestamp) the variable was last updated.
+          type: integer
+          format: uint64
+          readOnly: true
+        value:
+          description: 'The variable value. Its shape must match the `type` field: a JSON string, boolean, integer, float, array or object respectively.'
+          type: object
+    ProjectSimple:
+      description: The entity which represents minimal information of a project.
+      type: object
+      title: ProjectSimple
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - color
+      - icon
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        color:
+          type: string
+          maxLength: 64
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        favorite:
+          type: boolean
+        icon:
+          type: string
+          maxLength: 64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this project. When a user is the owner of a
+
+            project it has all the permissions on it.
+
+            In the event where the user has been deleted that field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    Environment:
+      description: Represent an environment that belongs to an organization. This is the base environment entity without project-specific relations.
+      title: Environment
+      required:
+      - id
+      - canonical
+      - created_at
+      - updated_at
+      - resources_count
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:[\da-zA-Z\-._]+[\da-zA-Z]|[\da-zA-Z])$
+        cloud_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudAccountSimple'
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/Component'
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          description: Optional description of the environment
+          type: string
+          maxLength: 1000
+        environment_type:
+          $ref: '#/components/schemas/EnvironmentType'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: The display name of the environment
+          type: string
+          maxLength: 100
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this environment. When a user is the owner of an
+
+            environment it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        resources_count:
+          description: The total count of resources attributed to this environment
+          type: integer
+          format: uint32
+        updated_at:
+          type: integer
+          format: uint64
+        variables:
+          description: Full set of environment variables attached to this environment, available under the `.environment.variables` template path during interpolation.
+          type: array
+          items:
+            $ref: '#/components/schemas/EnvironmentVariableItem'
+        version_status:
+          description: Aggregated value of the Components Version.Status in this environment. Only populated when the environment is returned alongside a Project.
+          type: array
+          items:
+            type: string
+            enum:
+            - no_status
+            - latest
+            - active
+            - deleted
+            - outdated
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    LabelSelector:
+      description: Constrains which stacks are offered in environments of a given type, based on the stack's labels. Every requirement must be satisfied for a stack to match.
+      title: Label Selector
+      required:
+      - requirements
+      properties:
+        enforcement:
+          description: '''soft'' only filters the available-stacks list; ''hard'' also rejects creating a component from a non-matching stack.'
+          type: string
+          default: soft
+          enum:
+          - soft
+          - hard
+        requirements:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LabelSelectorRequirement'
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    SimpleTeam:
+      description: The entity which represents the information of a team a bit simplified.
+      type: object
+      title: SimpleTeam
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'Organization member that owns this team. When a user is the owner of a
+
+            team it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    InventoryResource:
+      description: The Resource of the Inventory representing an element of your infrastructure
+      title: Inventory Resource
+      required:
+      - provider
+      - type
+      - name
+      properties:
+        attributes:
+          type: object
+        category:
+          description: Category of the resource type
+          type: string
+        component:
+          description: Component in which this resource is used
+          $ref: '#/components/schemas/ComponentSimple'
+        cpu:
+          description: The amount of cpu that it has in units
+          type: integer
+          format: uint64
+        custom_attributes:
+          description: List of attributes of the Resource, can be anything
+          type: object
+        description:
+          description: Full description of the resource type documentation
+          type: string
+        environment:
+          description: Environment in which this resource is used
+          $ref: '#/components/schemas/Environment'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        image:
+          description: Image of the resource type
+          type: string
+          format: uri
+        keywords:
+          description: Set of keywords to categorize the resource type
+          type: array
+          items:
+            type: string
+        label:
+          description: A way to distinguish and categorize resources
+          type: string
+        memory:
+          description: The amount of memory that it has in MB
+          type: integer
+          format: uint64
+        mode:
+          description: The way this resource is handled
+          type: string
+        module:
+          description: The module it belongs to
+          type: string
+        name:
+          description: The name of the resource
+          type: string
+        project:
+          description: Project in which this resource is used
+          $ref: '#/components/schemas/ProjectSimple'
+        provider:
+          description: The provider of the created Resource
+          type: string
+        short_description:
+          description: Short description of the resource type documentation
+          type: string
+        storage:
+          description: The amount of storage that it has in MB
+          type: integer
+          format: uint64
+        type:
+          description: The type of the resource
+          type: string
+    NewInventoryResource:
+      description: The Resource of the Inventory representing an element of your infrastructure
+      title: New Inventory Resource
+      required:
+      - provider
+      - type
+      - label
+      - name
+      properties:
+        cpu:
+          description: The amount of cpu cores that it has in units
+          type: integer
+          format: uint64
+        custom_attributes:
+          description: List of attributes (key value object) of the Resource, can be anything
+          type: object
+          example:
+            another: one
+            custom: attribute
+        label:
+          description: A way to distinguish and categorize resources
+          type: string
+          example: my-label
+        memory:
+          description: The amount of memory that it has in MB
+          type: integer
+          format: uint64
+        name:
+          description: The name of the resource
+          type: string
+        provider:
+          description: The provider of the created Resource
+          type: string
+        storage:
+          description: The amount of storage that it has in MB
+          type: integer
+          format: uint64
+        type:
+          description: The type of the resource
+          type: string
+    Filters:
+      description: Filters is the possible values the filters can have on list requests
+      type: object
+      title: Filters
+    InventoryResourceLabel:
+      description: Aggregated information of resources having a label
+      type: object
+      title: Inventory Resource Label
+      required:
+      - name
+      - cpu
+      - storage
+      - memory
+      properties:
+        cpu:
+          description: The aggregated amount of cpu of resources having the label
+          type: integer
+          format: uint64
+        memory:
+          description: The aggregated amount of memory of resources having the label in MB
+          type: integer
+          format: uint64
+        name:
+          description: Value of the resources' label
+          type: string
+        storage:
+          description: The aggregated amount of storage of resources having the label in MB
+          type: integer
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    Component:
+      description: The entity which represents the information of a component.
+      type: object
+      title: Component
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - service_catalog
+      - environment
+      - project
+      - version
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        cloud_provider:
+          description: 'The cloud provider object that this environment is using.
+
+            In the event where the cloud provider is not yet defined/supported
+
+            that field might be empty.
+
+            '
+          $ref: '#/components/schemas/CloudProvider'
+        config_repository_sync_status:
+          description: Status of the asynchronous projection of this component's saved StackForms configuration to its project's config git repository. The configuration is always persisted (DB source of truth); this reports whether the git mirror is up to date, catching up, or failing. Absent when there is nothing pending to mirror.
+          $ref: '#/components/schemas/ConfigRepositorySyncStatus'
+        config_revision:
+          description: 'The revision of this component''s StackForms configuration currently mirrored to the config git repository, and therefore the one a build started now would plan against. Unlike config_repository_sync_status it is reported even when the mirror is up to date, so an automation that wrote a configuration can confirm the revision a build will read is its own, and match it against the config_revision reported when creating a build. Absent when the component has no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        environment:
+          description: The environment object that this component is using.
+          $ref: '#/components/schemas/Environment'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_configured:
+          description: The status of the component.
+          type: boolean
+        name:
+          type: string
+          minLength: 1
+        project:
+          description: The project object that this component is using.
+          $ref: '#/components/schemas/ProjectSimple'
+        service_catalog:
+          description: The Service Catalog that was used to create project.
+          $ref: '#/components/schemas/ServiceCatalog'
+        stackform_updated_at:
+          description: Unix timestamp in milliseconds of when the component was last configured via StackForms. Absent if the component has never been configured or the information is unavailable.
+          type: integer
+          format: uint64
+        updated_at:
+          type: integer
+          format: uint64
+        use_case:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        version:
+          description: The version used by the Component
+          $ref: '#/components/schemas/ServiceCatalogSourceVersion'
+    LabelSelectorRequirement:
+      description: A single label constraint applied to a stack's labels
+      title: Label Selector Requirement
+      required:
+      - key
+      - operator
+      - values
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        operator:
+          description: The matching operator. 'eq' requires the label to carry the single value; 'in' requires the label to carry at least one of the values.
+          type: string
+          enum:
+          - eq
+          - in
+        values:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            maxLength: 255
+            minLength: 1
+  responses:
+    locked_state:
+      description: The operation couldn't be executed or completed because the state is locked.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

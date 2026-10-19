@@ -1,0 +1,625 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Cycloid API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operation related to Cycloid's application.
+  name: Cycloid
+paths:
+  /api/v1/cli/download:
+    get:
+      security: []
+      description: Download the cy CLI binary matching the requested os/arch. Unauthenticated so the CLI can be fetched before a user has logged in.
+      tags:
+      - Cycloid
+      operationId: getCliDownload
+      parameters:
+      - description: The operating system.
+        name: os
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - linux
+          - darwin
+          - windows
+      - description: The CPU architecture.
+        name: arch
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - amd64
+          - arm64
+      responses:
+        '200':
+          description: The cy CLI binary for the requested os/arch.
+          headers:
+            Content-Disposition:
+              description: attachment; filename="cy-<os>-<arch>[.exe]"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get cli download
+      x-summary-source: derived
+  /api/v1/cli/version:
+    get:
+      security: []
+      description: 'Get the cy CLI release manifest served by this backend: the CLI version (coupled to this backend''s release) and the os/arch pairs available for download.'
+      tags:
+      - Cycloid
+      operationId: getCliVersion
+      responses:
+        '200':
+          description: The cy CLI release manifest.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CliVersion'
+              example:
+                data:
+                  platforms:
+                  - arch: amd64
+                    os: linux
+                  - arch: arm64
+                    os: linux
+                  - arch: amd64
+                    os: darwin
+                  - arch: arm64
+                    os: darwin
+                  - arch: amd64
+                    os: windows
+                  version: 1.0.0
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get cli version
+      x-summary-source: derived
+  /config:
+    get:
+      security: []
+      description: Get the Cycloid configuration.
+      tags:
+      - Cycloid
+      operationId: getConfig
+      responses:
+        '200':
+          description: Cycloid configuration, including available authentication methods.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/AppConfiguration'
+              example:
+                data:
+                  cyclobot_api_url: https://cyclobot-api.cycloid.io
+                  cyclobot_enabled: false
+                  cyclobot_graph_id: cycloid_agent
+                  sentry_enabled: false
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get config
+      x-summary-source: derived
+  /countries:
+    get:
+      security: []
+      description: Get the Cycloid supported countries.
+      tags:
+      - Cycloid
+      operationId: getCountries
+      responses:
+        '200':
+          description: Cycloid supported countries
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Country'
+              example:
+                data:
+                - code: AD
+                  name: Andorra
+                - code: FR
+                  name: France
+                - code: GB
+                  name: United Kingdom
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get countries
+      x-summary-source: derived
+  /events/actions:
+    get:
+      security: []
+      description: Get the Cycloid possible actions and entities for the events
+      tags:
+      - Cycloid
+      operationId: getEventsActionsAndEntities
+      responses:
+        '200':
+          description: Cycloid supported actions and entities for the events
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/EventsActionsAndEntities'
+              example:
+                data:
+                  actions:
+                  - create
+                  - update
+                  - delete
+                  - pin
+                  entities:
+                  - organization
+                  - project
+                  - environment
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get events actions and entities
+      x-summary-source: derived
+  /health_check:
+    get:
+      security: []
+      description: Returns the health status of internal services as Prometheus-formatted metrics. Each service is represented by a gauge with value 1 (up) or 0 (down).
+      tags:
+      - Cycloid
+      operationId: getHealthCheck
+      responses:
+        '200':
+          description: Prometheus metrics text
+          content:
+            application/json:
+              schema:
+                type: string
+                example: '# HELP service_xyz_status Status of service XYZ
+
+                  # TYPE service_xyz_status gauge
+
+                  service_xyz_status 1
+
+                  service_abc_status 0
+
+                  '
+      summary: Get health check
+      x-summary-source: derived
+  /metrics:
+    get:
+      security: []
+      description: Exposes process, runtime, and application metrics in Prometheus text exposition format. Metrics are collected from the Prometheus registry.
+      tags:
+      - Cycloid
+      operationId: getMetrics
+      responses:
+        '200':
+          description: Prometheus metrics exposition
+          content:
+            application/json:
+              schema:
+                type: string
+                example: '# HELP go_memstats_alloc_bytes Number of bytes allocated and still in use
+
+                  # TYPE go_memstats_alloc_bytes gauge
+
+                  go_memstats_alloc_bytes 6.51536e+06
+
+                  # HELP http_requests_total The total number of HTTP requests
+
+                  # TYPE http_requests_total counter
+
+                  http_requests_total{method="get",code="200"} 1027
+
+                  '
+      summary: Get metrics
+      x-summary-source: derived
+  /status:
+    get:
+      security: []
+      description: Get the status of the Cycloid's services.
+      tags:
+      - Cycloid
+      operationId: getStatus
+      responses:
+        '200':
+          description: General application status and services statuses.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/GeneralStatus'
+              example:
+                data:
+                  checks:
+                  - canonical: s0
+                    category: internal
+                    message: no issue reported while connecting to s0
+                    status: Success
+                  - canonical: s1
+                    category: internal
+                    message: unknown state for s1 service
+                    status: Unknown
+                  - canonical: s2
+                    category: internal
+                    message: issue detected while connecting to s2
+                    status: Error
+                  - canonical: s3
+                    category: internal
+                    message: issue detected while connecting to s3
+                    status: Success
+                  message: some services returned an unknown state (s1), while some other returned errors (s2, s3)
+                  status: Error
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get status
+      x-summary-source: derived
+  /status/{service_status_canonical}:
+    get:
+      security: []
+      description: Get the status of the Cycloid's service. It uses 200 and 500 to also identify the status
+      tags:
+      - Cycloid
+      operationId: getServiceStatus
+      parameters:
+      - $ref: '#/components/parameters/service_status_canonical'
+      responses:
+        '200':
+          description: General application status and services statuses.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CheckReport'
+              example:
+                data:
+                  canonical: s0
+                  category: internal
+                  message: no issue reported while connecting to s0
+                  status: Success
+        '500':
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get service status
+      x-summary-source: derived
+  /version:
+    get:
+      security: []
+      description: Get the version of the Cycloid's API.
+      tags:
+      - Cycloid
+      operationId: getAppVersion
+      responses:
+        '200':
+          description: Application version.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AppVersion'
+              example:
+                data:
+                  branch: master
+                  revision: 9d3d4d97
+                  version: 1.0.0
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get app version
+      x-summary-source: derived
+components:
+  schemas:
+    CliPlatform:
+      description: A single os/arch download target for the cy CLI.
+      type: object
+      title: CliPlatform
+      required:
+      - os
+      - arch
+      properties:
+        arch:
+          description: The CPU architecture.
+          type: string
+          enum:
+          - amd64
+          - arm64
+        os:
+          description: The operating system.
+          type: string
+          enum:
+          - linux
+          - darwin
+          - windows
+    AppVersion:
+      type: object
+      title: AppVersion
+      required:
+      - version
+      - branch
+      - revision
+      properties:
+        branch:
+          description: The Git branch used to build the application.
+          type: string
+          minLength: 1
+        revision:
+          description: The Git revision used to build the application.
+          type: string
+          maxLength: 40
+          minLength: 8
+        version:
+          description: The version of the application.
+          type: string
+          minLength: 5
+    CliVersion:
+      description: cy CLI release manifest served by the backend.
+      type: object
+      title: CliVersion
+      required:
+      - version
+      - platforms
+      properties:
+        platforms:
+          description: The os/arch pairs available for download.
+          type: array
+          items:
+            $ref: '#/components/schemas/CliPlatform'
+        version:
+          description: The cy CLI version, coupled to this backend's release.
+          type: string
+          minLength: 1
+    Country:
+      description: Single country Representation
+      title: Country
+      required:
+      - code
+      - name
+      properties:
+        code:
+          type: string
+          pattern: ^[A-Z]{2}$
+        name:
+          type: string
+    AppConfiguration:
+      description: Contains application-wide configuration
+      type: object
+      title: AppConfiguration
+      required:
+      - sentry_enabled
+      properties:
+        cyclobot_api_url:
+          description: Base URL of the Cyclobot API the frontend should use.
+          type: string
+        cyclobot_enabled:
+          description: Indicates if Cyclobot is enabled for the frontend.
+          type: boolean
+        cyclobot_graph_id:
+          description: Graph ID to use for the Cyclobot agent.
+          type: string
+        sentry_enabled:
+          description: Indicates if Sentry is enabled.
+          type: boolean
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    GeneralStatus:
+      type: object
+      title: GeneralStatus
+      required:
+      - status
+      - message
+      - checks
+      properties:
+        checks:
+          description: List of all checks report type/name/status.
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckReport'
+        message:
+          description: Message providing information regarding the status.
+          type: string
+          minLength: 1
+        status:
+          description: The overall status for the application.
+          type: string
+          enum:
+          - Unknown
+          - Success
+          - Error
+    EventsActionsAndEntities:
+      description: The entity which represents the information of the actions and entities of an event
+      type: object
+      title: Events Actions and Entities
+      required:
+      - actions
+      - entities
+      properties:
+        actions:
+          type: array
+          items:
+            type: string
+        entities:
+          type: array
+          items:
+            type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    CheckReport:
+      type: object
+      title: CheckReport
+      required:
+      - canonical
+      - category
+      - status
+      - message
+      properties:
+        canonical:
+          description: The name of the service checked.
+          type: string
+          minLength: 1
+        category:
+          description: The category of the service checked.
+          type: string
+          minLength: 1
+        message:
+          description: The message providing information regarding the state of the service.
+          type: string
+          minLength: 1
+        status:
+          description: The status of the service checked.
+          type: string
+          enum:
+          - Unknown
+          - Success
+          - Error
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  parameters:
+    service_status_canonical:
+      description: The canonical of the service you want to get the status from
+      name: service_status_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

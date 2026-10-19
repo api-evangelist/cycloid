@@ -1,0 +1,829 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Infrastructure Policies API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on the infrastructure policies of an organization
+  name: Organization Infrastructure Policies
+paths:
+  /organizations/{organization_canonical}/infra_policies:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Return a list of infrastructure policies which matches the scope specified by the filter.
+      tags:
+      - Organization Infrastructure Policies
+      operationId: getInfraPolicies
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/infra_policy_name_query'
+      - $ref: '#/components/parameters/infra_policy_created_at_query'
+      - $ref: '#/components/parameters/infra_policy_severity_query'
+      - $ref: '#/components/parameters/infra_policy_enabled_query'
+      - $ref: '#/components/parameters/infra_policy_canonical_query'
+      - $ref: '#/components/parameters/order_by_query'
+      responses:
+        '200':
+          description: List of infrastructure policies.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InfraPolicy'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: my-infra-policy
+                  created_at: 1503225026
+                  description: Apply changes across my infrastructure in a safe way!
+                  enabled: true
+                  id: 1
+                  name: My Infra Policy
+                  owner:
+                    created_at: 1503225026
+                    email: mariano.jimenez@fakeemail.com
+                    full_name: Mariano Jimenez
+                    id: 1
+                    picture_url: https://avatars2.githubusercontent.com/u/14579210
+                    role:
+                      description: this is the standard role
+                      id: 42
+                      name: standard role
+                      policies:
+                      - code: team:create
+                        description: this is the policy
+                        id: 1
+                    username: user-1
+                  raw: allow = true {count(violation) == 0}
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get infra policies
+      x-summary-source: derived
+    post:
+      description: Create a new policy.
+      tags:
+      - Organization Infrastructure Policies
+      operationId: createInfraPolicy
+      responses:
+        '200':
+          description: The new InfraPolicy created.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/InfraPolicy'
+              example:
+                data:
+                  canonical: my-infra-policy
+                  created_at: 1503225026
+                  description: Apply changes across my infrastructure in a safe way!
+                  enabled: true
+                  id: 1
+                  name: My Infra Policy
+                  owner:
+                    created_at: 1503225026
+                    email: mariano.jimenez@fakeemail.com
+                    full_name: Mariano Jimenez
+                    id: 1
+                    picture_url: https://avatars2.githubusercontent.com/u/14579210
+                    role:
+                      description: this is the standard role
+                      id: 42
+                      name: standard role
+                      policies:
+                      - code: team:create
+                        description: this is the policy
+                        id: 1
+                    username: user-1
+                  raw: allow = true {count(violation) == 0}
+                  updated_at: 1503335026
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewInfraPolicy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewInfraPolicy'
+        required: true
+      summary: Create infra policy
+      x-summary-source: derived
+  /organizations/{organization_canonical}/infra_policies/{infra_policy_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/infra_policy_canonical'
+    get:
+      description: Get the information of the InfraPolicy.
+      tags:
+      - Organization Infrastructure Policies
+      operationId: getInfraPolicy
+      responses:
+        '200':
+          description: The information of the InfraPolicy which has the specified canonical.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/InfraPolicy'
+              example:
+                data:
+                  canonical: my-infra-policy
+                  created_at: 1503225026
+                  description: Apply changes across my infrastructure in a safe way!
+                  enabled: true
+                  id: 1
+                  name: My Infra Policy
+                  owner:
+                    created_at: 1503225026
+                    email: mariano.jimenez@fakeemail.com
+                    full_name: Mariano Jimenez
+                    id: 1
+                    picture_url: https://avatars2.githubusercontent.com/u/14579210
+                    role:
+                      description: this is the standard role
+                      id: 42
+                      name: standard role
+                      policies:
+                      - code: team:create
+                        description: this is the policy
+                        id: 1
+                    username: user-1
+                  raw: allow = true {count(violation) == 0}
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get infra policy
+      x-summary-source: derived
+    put:
+      description: Update an existing InfraPolicy
+      tags:
+      - Organization Infrastructure Policies
+      operationId: updateInfraPolicy
+      responses:
+        '200':
+          description: InfraPolicy updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/InfraPolicy'
+              example:
+                data:
+                  body: allow = true {count(violation) == 0}
+                  canonical: my-infra-policy
+                  created_at: 1503225026
+                  description: Apply changes across my infrastructure in a safe way!
+                  enabled: true
+                  id: 1
+                  name: My Infra Policy
+                  owner:
+                    created_at: 1503225026
+                    email: mariano.jimenez@fakeemail.com
+                    full_name: Mariano Jimenez
+                    id: 1
+                    picture_url: https://avatars2.githubusercontent.com/u/14579210
+                    role:
+                      description: this is the standard role
+                      id: 42
+                      name: standard role
+                      policies:
+                      - code: team:create
+                        description: this is the policy
+                        id: 1
+                    username: user-1
+                  severity: critical
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateInfraPolicy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateInfraPolicy'
+        description: The information of the organization to update.
+        required: true
+      summary: Update infra policy
+      x-summary-source: derived
+    delete:
+      description: Delete the InfraPolicy.
+      tags:
+      - Organization Infrastructure Policies
+      operationId: deleteInfraPolicy
+      responses:
+        '204':
+          description: InfraPolicy has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete infra policy
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/validate_infra_policies
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    post:
+      description: Check the InfraPolicies assigned to the Project and the Environment to identify if some are not respected.
+      tags:
+      - Organization Infrastructure Policies
+      operationId: validateProjectInfraPolicies
+      responses:
+        '200':
+          description: The list of the policies not respected.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: '#/components/schemas/InfraPoliciesValidationResult'
+              example:
+                data:
+                  advisories: null
+                  criticals:
+                  - body: "package example\n\ndeny[reason] {\n    reason := \"This is a failing error example\"\n}"
+                    canonical: infrapolicy-1
+                    created_at: 1606735667
+                    description: This is an example
+                    enabled: true
+                    id: 8
+                    infra_policy: null
+                    name: InfraPolicy 1
+                    owner:
+                      created_at: 1503225026
+                      email: mariano.jimenez@fakeemail.com
+                      full_name: Mariano Jimenez
+                      id: 1
+                      picture_url: https://avatars2.githubusercontent.com/u/14579210
+                      role:
+                        description: this is the standard role
+                        id: 42
+                        name: standard role
+                        policies:
+                        - code: team:read
+                          description: this is the policy
+                          id: 1
+                      username: user-1
+                    severity: critical
+                    updated_at: 1606735667
+                  reasons:
+                  - This is a failing error example
+                  warnings: null
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/TerraformPlanInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TerraformPlanInput'
+        description: The project's attributes to check before to apply an infrastructure change.
+        required: true
+      summary: Validate project infra policies
+      x-summary-source: derived
+components:
+  schemas:
+    InfraPolicy:
+      description: The policy to control operations across infrastructure.
+      title: InfraPolicy
+      required:
+      - id
+      - created_at
+      - updated_at
+      - name
+      - canonical
+      - description
+      - body
+      - severity
+      - enabled
+      properties:
+        body:
+          description: The body field is the code in plain text that defines the rules for the policy.
+          type: string
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'Organization member that owns this InfraPolicy. When a user is the owner of an
+
+            InfraPolicy it has all the permissions on it.
+
+            In the event where the user has been deleted then it will be null.
+
+            '
+          $ref: '#/components/schemas/User'
+        severity:
+          description: 'It defines the enforcement level. It must be used from the caller of the InfraPolicy
+
+            validation endpoint to apply the specific logic in case of not respected InfraPolicies.
+
+            Uses critical to block the changes.
+
+            Uses warning to block the changes but allow to override manually.
+
+            Uses advisory to allow them but a notification must be send.
+
+            '
+          type: string
+          enum:
+          - critical
+          - warning
+          - advisory
+        updated_at:
+          type: integer
+          format: uint64
+    InfraPoliciesValidationResult:
+      description: The set of not respected rules for the checked policies.
+      title: Infra policies validation results.
+      properties:
+        advisories:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfraPoliciesValidationResultItem'
+        criticals:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfraPoliciesValidationResultItem'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfraPoliciesValidationResultItem'
+    UpdateInfraPolicy:
+      description: Update a policy to control operations across infrastructure.
+      title: Update InfraPolicy
+      required:
+      - name
+      - description
+      - owner
+      - body
+      - severity
+      - enabled
+      properties:
+        body:
+          description: The body field is the code in plain text that defines the rules for the policy.
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'User canonical that owns this InfraPolicy. When a user is the
+
+            owner of an InfraPolicy it has all the permissions on it.
+
+            In the event where the Owner has been deleted then a new one can be assigned
+
+            or an empty canonical is allowed to not reset it.
+
+            '
+          type: string
+          maxLength: 100
+        severity:
+          type: string
+          enum:
+          - critical
+          - warning
+          - advisory
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    NewInfraPolicy:
+      description: Create a new policy to control operations across infrastructure.
+      title: Create InfraPolicy
+      required:
+      - name
+      - owner
+      - body
+      - severity
+      properties:
+        body:
+          description: The body field is the code in plain text that defines the rules for the policy.
+          type: string
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        description:
+          type: string
+        enabled:
+          type: boolean
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'User canonical that owns this InfraPolicy. When a user is the
+
+            owner of an InfraPolicy it has all the permissions on it.
+
+            '
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        severity:
+          type: string
+          enum:
+          - critical
+          - warning
+          - advisory
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    TerraformPlanInput:
+      description: Input for endpoints that require a Terraform plan.
+      title: TerraformPlanInput
+      required:
+      - tfplan
+      properties:
+        tfplan:
+          description: 'Terraform plan file in escaped JSON format. See more: https://www.terraform.io/internals/json-format'
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    InfraPoliciesValidationResultItem:
+      description: 'InfraPoliciesValidationResultItem represents a checked rule
+
+        with a failed result generated from the validation process.
+
+        '
+      type: object
+      required:
+      - infra_policy
+      properties:
+        infra_policy:
+          $ref: '#/components/schemas/InfraPolicy'
+        reasons:
+          description: 'The messages about the reason of the validation failure
+
+            that''s written in the InfraPolicy''s Body of the failed rule.
+
+            '
+          type: array
+          items:
+            type: string
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+  parameters:
+    infra_policy_created_at_query:
+      description: Search by InfraPolicy's creation date
+      name: infra_policy_created_at
+      in: query
+      schema:
+        type: integer
+        format: uint64
+    order_by_query:
+      description: 'Allows to order the list of items. Example usage: field_name:asc. Multiple order_by parameters are allowed, applied in the order they are specified.
+
+        '
+      name: order_by
+      in: query
+      schema:
+        type: string
+    infra_policy_severity_query:
+      description: Search by InfraPolicy's severity
+      name: infra_policy_severity
+      in: query
+      schema:
+        type: string
+        enum:
+        - critical
+        - warning
+        - advisory
+    infra_policy_canonical_query:
+      description: Search by infra policy canonical
+      name: infra_policy_canonical
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    infra_policy_enabled_query:
+      description: Search by InfraPolicy's enabled
+      name: infra_policy_enabled
+      in: query
+      schema:
+        type: boolean
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    infra_policy_name_query:
+      description: Search by InfraPolicy's name
+      name: infra_policy_name
+      in: query
+      schema:
+        type: string
+    infra_policy_canonical:
+      description: The canonical of an InfraPolicy.
+      name: infra_policy_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

@@ -1,0 +1,1322 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Cloud Accounts API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Cloud Accounts
+paths:
+  /organizations/{organization_canonical}/cloud_accounts:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Return a list of Cloud Accounts which matches the scope specified by the filter.
+      tags:
+      - Organization Cloud Accounts
+      operationId: getCloudAccounts
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/order_by_query'
+      responses:
+        '200':
+          description: List of Cloud Accounts.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CloudAccountDetail'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: my-aws-account
+                  cloud_provider: aws
+                  created_at: 1503225026
+                  credential:
+                    canonical: my-aws-cred
+                    name: My AWS Credential
+                    type: aws
+                  id: 1
+                  name: My AWS Account
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get cloud accounts
+      x-summary-source: derived
+    post:
+      description: Create a new Cloud Account.
+      tags:
+      - Organization Cloud Accounts
+      operationId: createCloudAccount
+      responses:
+        '200':
+          description: The new Cloud Account created.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudAccount'
+              example:
+                data:
+                  canonical: my-aws-account
+                  cloud_provider: aws
+                  created_at: 1503225026
+                  credential:
+                    canonical: my-aws-cred
+                    name: My AWS Credential
+                    type: aws
+                  id: 1
+                  name: My AWS Account
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewCloudAccount'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewCloudAccount'
+        required: true
+      summary: Create cloud account
+      x-summary-source: derived
+  /organizations/{organization_canonical}/cloud_accounts/with_credentials:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Create a new Cloud Account together with its access credential. Requires both CreateCredential and CreateCloudAccount permissions. Optionally creates a Cloud Cost Management account when finops_enabled is true (requires CreateCloudCostManagementAccount permission).
+      tags:
+      - Organization Cloud Accounts
+      operationId: createCloudAccountWithCredentials
+      responses:
+        '200':
+          description: The new Cloud Account created with all associated resources.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudAccountDetail'
+              example:
+                data:
+                  canonical: my-aws-account
+                  cloud_provider: aws
+                  created_at: 1503225026
+                  credential:
+                    canonical: my-aws-account-access
+                    name: My AWS Credential
+                    type: aws
+                  finops_enabled: false
+                  id: 1
+                  name: My AWS Account
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewCloudAccountWithCredentials'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewCloudAccountWithCredentials'
+        required: true
+      summary: Create cloud account with credentials
+      x-summary-source: derived
+  /organizations/{organization_canonical}/cloud_accounts/{cloud_account_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/cloud_account_canonical'
+    get:
+      description: Get the information of the Cloud Account.
+      tags:
+      - Organization Cloud Accounts
+      operationId: getCloudAccount
+      responses:
+        '200':
+          description: The information of the Cloud Account which has the specified canonical.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudAccountDetail'
+              example:
+                data:
+                  canonical: my-aws-account
+                  cloud_provider: aws
+                  created_at: 1503225026
+                  credential:
+                    canonical: my-aws-cred
+                    name: My AWS Credential
+                    type: aws
+                  finops_enabled: true
+                  id: 1
+                  name: My AWS Account
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get cloud account
+      x-summary-source: derived
+    put:
+      description: Update an existing Cloud Account. You can provide a new credential canonical to re-link the account, otherwise the credential remains unchanged.
+      tags:
+      - Organization Cloud Accounts
+      operationId: updateCloudAccount
+      responses:
+        '200':
+          description: Cloud Account updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudAccount'
+              example:
+                data:
+                  canonical: my-aws-account
+                  cloud_provider: aws
+                  created_at: 1503225026
+                  credential:
+                    canonical: my-updated-aws-cred
+                    name: My Updated AWS Credential
+                    type: aws
+                  id: 1
+                  name: My AWS Account Updated
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateCloudAccount'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateCloudAccount'
+        description: The information of the Cloud Account to update.
+        required: true
+      summary: Update cloud account
+      x-summary-source: derived
+    delete:
+      description: Delete the Cloud Account.
+      tags:
+      - Organization Cloud Accounts
+      operationId: deleteCloudAccount
+      responses:
+        '204':
+          description: Cloud Account has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete cloud account
+      x-summary-source: derived
+  /organizations/{organization_canonical}/cloud_accounts/{cloud_account_canonical}/finops:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/cloud_account_canonical'
+    put:
+      description: 'Enable, disable, or update FinOps (Cloud Cost Management) for an existing Cloud Account. When enabling (FinOps not yet active), a CCM account is created and linked to the Cloud Account. When disabling, the linked CCM account and its dedicated credential (if any) are removed. When FinOps is already enabled and finops_enabled=true is sent again, finops_config is updated in place and finops_credential follows its full lifecycle: providing finops_credential creates a dedicated credential (when none existed) or replaces the current one; omitting it removes any dedicated credential and falls back to the Cloud Account access credential. account_id and cloud_provider are immutable. When replacing an existing dedicated finops_credential with one that has a different canonical, the request must specify an explicit path on finops_credential that differs from the path of the credential being replaced — the new credential is created before the old one is deleted, so both must momentarily coexist at distinct paths.'
+      tags:
+      - Organization Cloud Accounts
+      operationId: updateCloudAccountFinops
+      responses:
+        '200':
+          description: The Cloud Account with updated FinOps status.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudAccountDetail'
+              example:
+                data:
+                  canonical: my-aws-account
+                  cloud_provider: aws
+                  created_at: 1503225026
+                  credential:
+                    canonical: my-aws-cred
+                    name: My AWS Credential
+                    type: aws
+                  finops_enabled: true
+                  id: 1
+                  name: My AWS Account
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateCloudAccountFinops'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateCloudAccountFinops'
+        required: true
+      summary: Update cloud account finops
+      x-summary-source: derived
+  /organizations/{organization_canonical}/cloud_accounts/{cloud_account_canonical}/finops/ingest:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/cloud_account_canonical'
+    post:
+      description: Trigger an immediate cost ingestion for the FinOps account linked to a Cloud Account. Rate-limited to once per 24 hours. Returns an error if FinOps is paused, currently importing, or has already been ingested within the last 24 hours.
+      tags:
+      - Organization Cloud Accounts
+      operationId: ingestCloudAccountFinops
+      responses:
+        '204':
+          description: Ingestion successfully scheduled.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '409':
+          description: Ingestion cannot be triggered due to a conflict (FinOps paused, currently importing, or rate-limited).
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Ingest cloud account finops
+      x-summary-source: derived
+  /organizations/{organization_canonical}/cloud_accounts/{cloud_account_canonical}/finops/pause:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/cloud_account_canonical'
+    put:
+      description: Pause FinOps for a Cloud Account. Future cost ingestions will be disabled until FinOps is unpaused. Any ingestion currently in progress will be allowed to finish.
+      tags:
+      - Organization Cloud Accounts
+      operationId: pauseCloudAccountFinops
+      responses:
+        '200':
+          description: The Cloud Account with FinOps paused.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudAccountDetail'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Pause cloud account finops
+      x-summary-source: derived
+  /organizations/{organization_canonical}/cloud_accounts/{cloud_account_canonical}/finops/unpause:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/cloud_account_canonical'
+    put:
+      description: Unpause FinOps for a Cloud Account. Future cost ingestions will be re-enabled and an ingestion will be triggered immediately.
+      tags:
+      - Organization Cloud Accounts
+      operationId: unpauseCloudAccountFinops
+      responses:
+        '200':
+          description: The Cloud Account with FinOps unpaused.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudAccountDetail'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Unpause cloud account finops
+      x-summary-source: derived
+components:
+  schemas:
+    NewCloudCostManagementAccount:
+      description: 'Create a new Cloud Cost Management account to connect CP.
+
+        If a canonical is missing, the one from credential will be applied
+
+        '
+      title: Create CloudCostManagementAccount
+      required:
+      - external_backend
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        external_backend:
+          $ref: '#/components/schemas/NewExternalBackend'
+        name:
+          description: A user-defined name for the account
+          type: string
+    EnvironmentSimple:
+      description: A simplified environment representation used when embedding environments in other entities.
+      title: Environment Simple
+      required:
+      - id
+      - canonical
+      - name
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:[\da-zA-Z\-._]+[\da-zA-Z]|[\da-zA-Z])$
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: The display name of the environment
+          type: string
+          maxLength: 100
+          minLength: 1
+    CloudCostManagementAccount:
+      description: Object containing Cloud Cost Management account parameters
+      title: CloudCostManagementAccount
+      required:
+      - id
+      - canonical
+      - name
+      - account_id
+      - created_at
+      - updated_at
+      - enabled
+      - cloud_provider
+      - status
+      properties:
+        account_id:
+          description: The ID of an account on the CP
+          type: string
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_provider:
+          $ref: '#/components/schemas/CloudProvider'
+        created_at:
+          type: integer
+          format: uint64
+        enabled:
+          type: boolean
+        external_backend:
+          $ref: '#/components/schemas/ExternalBackend'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_ingestion_ended_at:
+          type: integer
+          format: uint64
+        last_ingestion_started_at:
+          type: integer
+          format: uint64
+        name:
+          description: A user-defined name for the account
+          type: string
+        phase:
+          type: string
+          enum:
+          - green
+          - blue
+        status:
+          type: string
+          enum:
+          - idle
+          - error
+          - import
+        status_message:
+          type: string
+        unfinalized_period:
+          type: string
+        updated_at:
+          type: integer
+          format: uint64
+    ExternalBackend:
+      description: An external backend contains the configuration needed in order to be plugged into the Cycloid system. A backend is a general purpose concept, but Cycloid specifies which ones are supported and the list of those which are supported for every concrete feature.
+      title: External backend
+      required:
+      - purpose
+      - default
+      properties:
+        component_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        configuration:
+          $ref: '#/components/schemas/ExternalBackendConfiguration'
+        created_at:
+          type: integer
+          format: uint64
+        credential_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        default:
+          description: Will mark this EB as default for the specific purpose
+          type: boolean
+        environment_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        jwt:
+          description: JWT is a credential identifying this EB for a public interaction right now it's only filled when the Purpose == RemoteTFState as we'll use it for the Inventory.
+          type: string
+        project_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        purpose:
+          type: string
+        updated_at:
+          type: integer
+          format: uint64
+    InUseEnvironment:
+      description: Represents an environment that's using credential
+      title: InUseEnvironment
+      required:
+      - canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+    InUseProject:
+      description: Represents a project that's using credential
+      title: InUseProject
+      required:
+      - name
+      - canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        name:
+          type: string
+    NewExternalBackend:
+      description: An external backend contains the configuration needed in order to be plugged into the Cycloid system. A backend is a general purpose concept, but Cycloid specifies which ones are supported and the list of those which are supported for every concrete feature.
+      title: New External backend
+      required:
+      - purpose
+      properties:
+        component_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        configuration:
+          $ref: '#/components/schemas/ExternalBackendConfiguration'
+        credential_canonical:
+          description: 'The type of the credential must be one of: ["aws", "azure_storage", "elasticsearch", "gcp", "swift", "vmware"]
+
+            '
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        default:
+          description: Will mark this EB as default for the specific purpose
+          type: boolean
+        environment_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        project_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        purpose:
+          type: string
+          enum:
+          - events
+          - logs
+          - remote_tfstate
+          - cost_explorer
+    UpdateCloudAccount:
+      description: Update an existing Cloud Account.
+      title: Update Cloud Account
+      required:
+      - name
+      - credential_canonical
+      properties:
+        credential_canonical:
+          description: Canonical of the credential to use. If omitted, the credential remains unchanged.
+          type: string
+          maxLength: 100
+          minLength: 2
+        description:
+          description: An optional description for the cloud account
+          type: string
+        name:
+          description: A user-defined name for the cloud account
+          type: string
+          maxLength: 255
+          minLength: 1
+        owner:
+          description: 'User canonical that owns this cloud account. If omitted, ownership
+
+            remains unchanged.
+
+            '
+          type: string
+    UpdateCloudAccountFinops:
+      description: Enable or disable FinOps (Cloud Cost Management) for a cloud account.
+      title: Update Cloud Account FinOps
+      required:
+      - finops_enabled
+      properties:
+        finops_config:
+          description: Required when finops_enabled is true. The CCM account configuration.
+          $ref: '#/components/schemas/NewCloudCostManagementAccount'
+        finops_credential:
+          description: Optional when finops_enabled is true. A dedicated credential for cost ingestion. When omitted, the cloud account's access credential is reused. Must be empty when finops_enabled is false.
+          $ref: '#/components/schemas/NewCloudAccountCredential'
+        finops_enabled:
+          description: Whether FinOps should be enabled for this cloud account
+          type: boolean
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    CredentialRaw:
+      description: All the possible fields inside it
+      title: Credential Raw
+      properties:
+        access_key:
+          type: string
+        account_name:
+          type: string
+        auth_url:
+          type: string
+        ca_cert:
+          type: string
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        domain_id:
+          type: string
+        environment:
+          type: string
+          enum:
+          - public
+          - usgovernment
+          - china
+          - german
+        json_key:
+          type: string
+        password:
+          type: string
+        raw:
+          type: object
+        secret_key:
+          type: string
+        ssh_key:
+          type: string
+        subscription_id:
+          type: string
+        tenant_id:
+          type: string
+        username:
+          type: string
+    CloudProvider:
+      description: CloudProvider represents a cloud provider. Those cloud providers are used to identify the scope of projects and/or stacks.
+      title: Cloud Provider
+      required:
+      - canonical
+      - name
+      properties:
+        abbreviation:
+          type: string
+          maxLength: 60
+          minLength: 2
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+          enum:
+          - aws
+          - google
+          - azurerm
+          - flexibleengine
+          - openstack
+          - scaleway
+          - vmware
+          - ovh
+          - alibaba
+          - oracle
+          - vsphere
+          - kubernetes
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 60
+          minLength: 2
+        regions:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: integer
+          format: uint64
+    InUseConfigRepository:
+      description: Represents a Config repository that's using credential
+      title: InUseConfigRepository
+      required:
+      - name
+      - canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        name:
+          type: string
+    ExternalBackendConfiguration:
+      type: object
+      required:
+      - engine
+      properties:
+        engine:
+          type: string
+      discriminator:
+        propertyName: engine
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    CredentialSimple:
+      description: Represents the Credential without the raw and owner
+      title: Credential Simple
+      required:
+      - id
+      - name
+      - canonical
+      - type
+      - path
+      - keys
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        in_use:
+          $ref: '#/components/schemas/CredentialInUse'
+        keys:
+          description: List of all the keys available for the Credential
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        owner:
+          description: 'Organization member that owns this credential. When a user is the owner of a
+
+            credential he has all the permissions on it.
+
+            In the event where the user has been deleted that field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        path:
+          type: string
+        type:
+          type: string
+          enum:
+          - ssh
+          - aws
+          - custom
+          - azure
+          - azure_storage
+          - gcp
+          - basic_auth
+          - elasticsearch
+          - swift
+          - vmware
+        updated_at:
+          type: integer
+          format: uint64
+    CredentialInUse:
+      description: 'InUse represents the resources that are using provided credential.
+
+        '
+      type: object
+      title: Credential in use
+      properties:
+        config_repositories:
+          type: array
+          items:
+            $ref: '#/components/schemas/InUseConfigRepository'
+        external_backends:
+          type: array
+          items:
+            $ref: '#/components/schemas/InUseExternalBackend'
+        service_catalog_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/InUseServiceCatalogSource'
+    NewCloudAccount:
+      description: Create a new Cloud Account to wrap cloud credentials. For built-in providers (canonicals aws, google, azurerm; aliases like gcp/microsoft azure are accepted and normalized) the credential type must match. For custom cloud providers, a 'custom' credential is required.
+      title: Create Cloud Account
+      required:
+      - name
+      - cloud_provider
+      - credential_canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_provider:
+          description: The canonical of the associated cloud provider. Can be a built-in provider canonical (aws, google, azurerm) or any free-form canonical representing a custom cloud provider for the organization.
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        credential_canonical:
+          description: Canonical of the credential to use
+          type: string
+          maxLength: 100
+          minLength: 2
+        description:
+          description: An optional description for the cloud account
+          type: string
+        name:
+          description: A user-defined name for the cloud account
+          type: string
+          maxLength: 255
+          minLength: 1
+        owner:
+          description: 'User canonical that owns this cloud account. If omitted, the
+
+            person creating this cloud account will be assigned as owner.
+
+            '
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    CloudAccount:
+      description: 'CloudAccount represents a cloud account entity that wraps cloud credentials and is organization-scoped. Supports built-in cloud providers (canonicals: aws, google, azurerm; aliases such as gcp/microsoft azure are accepted and normalized) and custom cloud providers.'
+      title: Cloud Account
+      required:
+      - id
+      - canonical
+      - name
+      - cloud_provider
+      - created_at
+      - updated_at
+      - credential
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_provider:
+          description: The canonical of the associated cloud provider. Can be a built-in provider canonical (aws, google, azurerm; aliases like gcp/microsoft azure are accepted and normalized) or an org-scoped custom cloud provider canonical.
+          type: string
+        created_at:
+          type: integer
+          format: uint64
+        credential:
+          $ref: '#/components/schemas/CredentialSimple'
+        description:
+          description: An optional description for the cloud account
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: A user-defined name for the cloud account
+          type: string
+          maxLength: 255
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this cloud account.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    InUseServiceCatalogSource:
+      description: Represents a Service catalog source that's using credential
+      title: InUseServiceCatalogSource
+      required:
+      - name
+      - canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        name:
+          type: string
+    InUseExternalBackend:
+      description: Represents a external backend that's using credential
+      title: InUseExternalBackend
+      required:
+      - engine
+      - purpose
+      properties:
+        component:
+          $ref: '#/components/schemas/InUseComponent'
+        engine:
+          type: string
+        environment:
+          $ref: '#/components/schemas/InUseEnvironment'
+        project:
+          $ref: '#/components/schemas/InUseProject'
+        purpose:
+          type: string
+    NewCloudAccountCredential:
+      description: Credential to create and associate with a cloud account. Unlike NewCredential, path is optional and defaults to a value derived from the cloud account canonical.
+      title: Cloud Account Credential
+      required:
+      - name
+      - type
+      - raw
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        description:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+          pattern: '[a-zA-z0-9_\-./]'
+        raw:
+          $ref: '#/components/schemas/CredentialRaw'
+        type:
+          type: string
+          enum:
+          - ssh
+          - aws
+          - custom
+          - azure
+          - azure_storage
+          - gcp
+          - basic_auth
+          - elasticsearch
+          - swift
+          - vmware
+    NewCloudAccountWithCredentials:
+      description: Create a new Cloud Account along with its access credential. Optionally creates a Cloud Cost Management account (not available for custom cloud providers). The credential path defaults to cloud-accounts/{canonical}-access if omitted.
+      title: Create Cloud Account With Credentials
+      required:
+      - name
+      - cloud_provider
+      - access_credential
+      properties:
+        access_credential:
+          description: Credential to create and associate with this cloud account. If path is omitted, defaults to cloud-accounts/{ca-canonical}-access.
+          $ref: '#/components/schemas/NewCloudAccountCredential'
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_provider:
+          description: The canonical of the associated cloud provider. Can be a built-in provider canonical (aws, google, azurerm) or any free-form canonical representing a custom cloud provider for the organization.
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        description:
+          description: An optional description for the cloud account
+          type: string
+        finops_config:
+          description: Configuration for the Cloud Cost Management account, required when finops_enabled is true
+          $ref: '#/components/schemas/NewCloudCostManagementAccount'
+        finops_credential:
+          description: Dedicated credential for the CCM account. If omitted, the access_credential is reused. If path is omitted, defaults to cloud-accounts/{ca-canonical}-finops.
+          $ref: '#/components/schemas/NewCloudAccountCredential'
+        finops_enabled:
+          description: When true, a Cloud Cost Management account is also created using finops_config
+          type: boolean
+        name:
+          description: A user-defined name for the cloud account
+          type: string
+          maxLength: 255
+          minLength: 1
+        owner:
+          description: 'User canonical that owns this cloud account. If omitted, the
+
+            person creating this cloud account will be assigned as owner.
+
+            '
+          type: string
+    CloudAccountDetail:
+      description: Full detail of a Cloud Account including its associated Cloud Cost Management account when finops is enabled, and the environments linked to this cloud account.
+      title: Cloud Account Detail
+      allOf:
+      - $ref: '#/components/schemas/CloudAccount'
+      - type: object
+        properties:
+          environments:
+            description: The environments linked to this cloud account
+            type: array
+            items:
+              $ref: '#/components/schemas/EnvironmentSimple'
+          finops_account:
+            description: The associated Cloud Cost Management account, present when finops_enabled is true
+            $ref: '#/components/schemas/CloudCostManagementAccount'
+          finops_enabled:
+            description: Whether a Cloud Cost Management account is associated with this cloud account
+            type: boolean
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    InUseComponent:
+      description: Represents a component that's using credential
+      title: InUseComponent
+      required:
+      - canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+  parameters:
+    cloud_account_canonical:
+      description: The canonical of a Cloud Account.
+      name: cloud_account_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    order_by_query:
+      description: 'Allows to order the list of items. Example usage: field_name:asc. Multiple order_by parameters are allowed, applied in the order they are specified.
+
+        '
+      name: order_by
+      in: query
+      schema:
+        type: string
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

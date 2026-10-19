@@ -1,0 +1,763 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Component Pipelines Jobs API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on the jobs of a pipeline in a component
+  name: Component Pipelines Jobs
+paths:
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    get:
+      description: Get the jobs of the pipeline that the authenticated user has access to.
+      tags:
+      - Component Pipelines Jobs
+      operationId: getJobs
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: List of the pipeline's jobs which authenticated user has access to.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Job'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - disable_manual_trigger: false
+                  finished_build:
+                    end_time: 1504185134
+                    id: 11405
+                    job_name: code-validation-preprod
+                    name: '33'
+                    pipeline_id: 1
+                    pipeline_name: fake-pipeline-0
+                    reap_time: 0
+                    start_time: 1504185102
+                    status: succeeded
+                    team_name: cycloid-products
+                  first_logged_build_id: 0
+                  groups:
+                  - all
+                  - preprod
+                  id: 1273
+                  inputs:
+                  - name: git-website-preprod
+                    passed: null
+                    resource: git-website-preprod
+                    tags: null
+                    trigger: true
+                  name: code-validation-preprod
+                  next_build:
+                    id: 11214
+                    name: some-build
+                    pipeline_id: 1
+                    pipeline_name: fake-pipeline-0
+                    status: running
+                    team_name: ieijcu
+                  outputs: null
+                  paused: false
+                  pipeline_id: 1
+                  pipeline_name: fake-pipeline-0
+                - disable_manual_trigger: false
+                  finished_build:
+                    end_time: 1504185344
+                    id: 11406
+                    job_name: build-container-preprod
+                    name: '82'
+                    pipeline_id: 1
+                    pipeline_name: fake-pipeline-0
+                    reap_time: 0
+                    start_time: 1504185240
+                    status: failed
+                    team_name: cycloid-products
+                  first_logged_build_id: 0
+                  groups:
+                  - all
+                  - preprod
+                  id: 1274
+                  inputs:
+                  - name: git-website-preprod
+                    passed:
+                    - code-validation-preprod
+                    resource: git-website-preprod
+                    tags: null
+                    trigger: true
+                  - name: vault-preprod
+                    passed: null
+                    resource: vault-preprod
+                    tags: null
+                    trigger: false
+                  name: build-container-preprod
+                  next_build:
+                    id: 11214
+                    name: some-build
+                    pipeline_id: 1
+                    pipeline_name: fake-pipeline-0
+                    status: running
+                    team_name: ieijcu
+                  outputs:
+                  - name: slack-alert-preprod
+                    resource: slack-alert-preprod
+                  - name: slack-alert-preprod
+                    resource: slack-alert-preprod
+                  - name: ecr-website-preprod
+                    resource: ecr-website-preprod
+                  paused: false
+                  pipeline_id: 1
+                  pipeline_name: fake-pipeline-0
+                - disable_manual_trigger: false
+                  finished_build:
+                    end_time: 1500471211
+                    id: 10793
+                    job_name: tag-container-image-preprod
+                    name: '16'
+                    pipeline_id: 1
+                    pipeline_name: fake-pipeline-0
+                    reap_time: 0
+                    start_time: 1500471046
+                    status: succeeded
+                    team_name: cycloid-products
+                  first_logged_build_id: 0
+                  groups:
+                  - all
+                  - preprod
+                  id: 1275
+                  inputs:
+                  - name: git-website-preprod
+                    passed:
+                    - build-container-preprod
+                    resource: git-website-preprod
+                    tags: null
+                    trigger: false
+                  - name: ecr-website-preprod
+                    passed:
+                    - build-container-preprod
+                    resource: ecr-website-preprod
+                    tags: null
+                    trigger: true
+                  name: tag-container-image-preprod
+                  next_build:
+                    id: 11214
+                    name: some-build
+                    pipeline_id: 1
+                    pipeline_name: fake-pipeline-0
+                    status: running
+                    team_name: ieijcu
+                  outputs:
+                  - name: ecr-website-preprod
+                    resource: ecr-website-preprod
+                  paused: false
+                  pipeline_id: 1
+                  pipeline_name: fake-pipeline-0
+                - disable_manual_trigger: false
+                  finished_build:
+                    end_time: 1500471305
+                    id: 10794
+                    job_name: clean-container-preprod
+                    name: '13'
+                    pipeline_id: 1
+                    pipeline_name: fake-pipeline-0
+                    reap_time: 0
+                    start_time: 1500471262
+                    status: succeeded
+                    team_name: cycloid-products
+                  first_logged_build_id: 0
+                  groups:
+                  - all
+                  - preprod
+                  id: 1276
+                  inputs:
+                  - name: ecr-website-preprod
+                    passed:
+                    - tag-container-image-preprod
+                    resource: ecr-website-preprod
+                    tags: null
+                    trigger: true
+                  name: clean-container-preprod
+                  next_build:
+                    id: 11214
+                    name: some-build
+                    pipeline_id: 1
+                    pipeline_name: fake-pipeline-0
+                    status: running
+                    team_name: ieijcu
+                  outputs: null
+                  paused: false
+                  pipeline_id: 1
+                  pipeline_name: fake-pipeline-0
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 4
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get jobs
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    get:
+      description: Get the information of the job.
+      tags:
+      - Component Pipelines Jobs
+      operationId: getJob
+      responses:
+        '200':
+          description: The configuration of the job which has the specified name.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Job'
+              example:
+                data:
+                  disable_manual_trigger: false
+                  finished_build:
+                    api_url: /api/v1/builds/11406
+                    end_time: 1504185344
+                    id: 11406
+                    job_name: build-container-preprod
+                    name: '82'
+                    pipeline_name: ci-website
+                    reap_time: 0
+                    start_time: 1504185240
+                    status: failed
+                    team_name: cycloid-products
+                  first_logged_build_id: 0
+                  groups:
+                  - all
+                  - preprod
+                  id: 1274
+                  inputs:
+                  - name: git-website-preprod
+                    passed:
+                    - code-validation-preprod
+                    resource: git-website-preprod
+                    tags: null
+                    trigger: true
+                  - name: vault-preprod
+                    passed: null
+                    resource: vault-preprod
+                    tags: null
+                    trigger: false
+                  name: build-container-preprod
+                  next_build:
+                    api_url: /api/v1/builds/11408
+                    id: 11214
+                    name: some-build
+                    status: running
+                    team_name: ieijcu
+                  outputs:
+                  - name: slack-alert-preprod
+                    resource: slack-alert-preprod
+                  - name: slack-alert-preprod
+                    resource: slack-alert-preprod
+                  - name: ecr-website-preprod
+                    resource: ecr-website-preprod
+                  paused: false
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get job
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}/pause
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    put:
+      description: Pause a job
+      tags:
+      - Component Pipelines Jobs
+      operationId: pauseJob
+      responses:
+        '204':
+          description: Job has been paused.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Pause job
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}/tasks/{step_name}/cache
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    - $ref: '#/components/parameters/step_name'
+    delete:
+      tags:
+      - Component Pipelines Jobs
+      operationId: clearTaskCache
+      parameters:
+      - $ref: '#/components/parameters/cache_path_query'
+      responses:
+        '200':
+          description: Cache has been cleared.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ClearTaskCache'
+              example:
+                data:
+                  caches_removed: 42
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Clear task cache
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}/unpause
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    put:
+      description: Unpause a job
+      tags:
+      - Component Pipelines Jobs
+      operationId: unpauseJob
+      responses:
+        '204':
+          description: Job has been unpause.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Unpause job
+      x-summary-source: derived
+components:
+  schemas:
+    Job:
+      description: The entity which represents a job output in the application.
+      type: object
+      title: Job
+      required:
+      - id
+      - name
+      properties:
+        disable_manual_trigger:
+          type: boolean
+        finished_build:
+          $ref: '#/components/schemas/Build'
+        first_logged_build_id:
+          type: integer
+          format: uint64
+        groups:
+          type: array
+          items:
+            type: string
+        has_new_inputs:
+          type: boolean
+        id:
+          type: integer
+          format: uint64
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobInput'
+        name:
+          type: string
+        next_build:
+          $ref: '#/components/schemas/Build'
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobOutput'
+        paused:
+          type: boolean
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        team_name:
+          type: string
+        transition_build:
+          $ref: '#/components/schemas/Build'
+    VersionConfig:
+      description: The entity which represents a version configuration in the application.
+      type: object
+      title: VersionConfig
+      properties:
+        every:
+          type: boolean
+        latest:
+          type: boolean
+        pinned:
+          type: object
+          additionalProperties:
+            type: string
+    ClearTaskCache:
+      description: The entity which represents number of cache cleared for a task.
+      type: object
+      title: ClearTaskCache
+      required:
+      - caches_removed
+      properties:
+        caches_removed:
+          type: integer
+    JobInput:
+      description: The entity which represents a job input in the application.
+      type: object
+      title: JobInput
+      required:
+      - name
+      - resource
+      - trigger
+      properties:
+        name:
+          type: string
+        passed:
+          type: array
+          items:
+            type: string
+        resource:
+          type: string
+        trigger:
+          type: boolean
+        version:
+          $ref: '#/components/schemas/VersionConfig'
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    Build:
+      description: The information relative to a build.
+      type: object
+      title: Build
+      required:
+      - id
+      - team_name
+      - name
+      - status
+      - api_url
+      properties:
+        api_url:
+          type: string
+        config_revision:
+          description: 'The revision of the component configuration this build was gated on, set when the build is created. The component configuration is mirrored to the config repository asynchronously; creating a build waits for the acknowledged revision to be visible to the CI, and reports it here so a caller can tie the build back to the configuration write it made. Absent on builds read back later, and on components with no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        end_time:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint64
+        job_name:
+          type: string
+        name:
+          type: string
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        reap_time:
+          type: integer
+          format: uint64
+        start_time:
+          type: integer
+          format: uint64
+        status:
+          type: string
+        team_name:
+          type: string
+    JobOutput:
+      description: The entity which represents a job output in the application.
+      type: object
+      title: JobOutput
+      required:
+      - name
+      - resource
+      properties:
+        name:
+          type: string
+        resource:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  parameters:
+    component_canonical:
+      description: A canonical of a component.
+      name: component_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    cache_path_query:
+      description: The cache path to use as part of a clearTaskCache request
+      name: cache_path
+      in: query
+      schema:
+        type: string
+        default: ''
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    job_name:
+      description: A job name
+      name: job_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
+        minLength: 1
+    step_name:
+      description: A step name from a job task
+      name: step_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
+        minLength: 1
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    pipeline_name:
+      description: A pipeline name
+      name: inpath_pipeline_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[a-z0-9]+[a-z0-9\-_.]+[a-z0-9]+$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

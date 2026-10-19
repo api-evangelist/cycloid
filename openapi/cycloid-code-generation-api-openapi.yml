@@ -1,0 +1,756 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Code Generation API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Code Generation
+paths:
+  /organizations/{organization_canonical}/code_generation/terraform/jsontohcl:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Transforms a JSON to a HCL
+      tags:
+      - Code Generation
+      operationId: terraformJSONToHCL
+      responses:
+        '200':
+          description: The HCL translation of the config
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TerraformHCLConfig'
+              example:
+                data:
+                  config: ' "data" "aws_ami" "debian_jessie_latest" { "most_recent" = true } "locals" = { "codecommit_repository_name" = "something" } "output" "sensitive" { "sensitive" = true
+
+                    "value" = "VALUE" } "provider" "aws" { "access_key" = "${var.access_key}" } "resource" "aws_elb" "front" { "name" = "${var.project}-front-${var.env}" "tags" = { "name" = "some name" } } "variable" "front_disk_size" { "default" = 60 } '
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/TerraformJSONConfig'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TerraformJSONConfig'
+        description: The Terraform JSON config
+        required: true
+      summary: Terraform JSONTo HCL
+      x-summary-source: derived
+  /organizations/{organization_canonical}/code_generation/terraform/providers:
+    get:
+      description: Return all the Providers
+      tags:
+      - Code Generation
+      operationId: getTerraformProviders
+      parameters:
+      - $ref: '#/components/parameters/organization_canonical'
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: List of the Providers
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TerraformProviderSimple'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - abbreviation: AWS
+                  canonical: aws
+                  cloud: true
+                  image: http://via.placeholder.com/150x150
+                  name: Amazon Web Service
+                - abbreviation: Template
+                  canonical: template
+                  cloud: false
+                  image: http://via.placeholder.com/150x150
+                  name: Terraform Template
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get terraform providers
+      x-summary-source: derived
+  /organizations/{organization_canonical}/code_generation/terraform/providers/{provider_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/provider_canonical'
+    get:
+      description: Get the information of the Provider
+      tags:
+      - Code Generation
+      operationId: getTerraformProvider
+      responses:
+        '200':
+          description: The information of the Provider
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TerraformProvider'
+              example:
+                data:
+                  abbreviation: AWS
+                  canonical: aws
+                  cloud: true
+                  image: http://via.placeholder.com/150x150
+                  name: Amazon Web Service
+                  schema:
+                    access_key:
+                      default: ''
+                      optional: true
+                      required: false
+                      type: TypeString
+                    secret_key:
+                      default: ''
+                      optional: true
+                      required: false
+                      type: TypeString
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get terraform provider
+      x-summary-source: derived
+  /organizations/{organization_canonical}/code_generation/terraform/providers/{provider_canonical}/data_sources:
+    get:
+      description: Return all the DataSources for the Provider
+      tags:
+      - Code Generation
+      operationId: getTerraformProviderDataSources
+      parameters:
+      - $ref: '#/components/parameters/organization_canonical'
+      - $ref: '#/components/parameters/provider_canonical'
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: List of the DataSources
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TerraformProviderResourceSimple'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: aws_instance
+                  category: SomeCategory
+                  description: detailed resource description
+                  image: http://via.placeholder.com/150x150
+                  is_edge: false
+                  is_node: true
+                  keywords: null
+                  short_description: resource description
+                - canonical: aws_elb
+                  category: SomeCategory
+                  description: detailed resource description
+                  image: http://via.placeholder.com/150x150
+                  is_edge: false
+                  is_node: true
+                  keywords: null
+                  short_description: resource description
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get terraform provider data sources
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/code_generation/terraform/providers/{provider_canonical}/data_sources/{resource_canonical}
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/provider_canonical'
+    - $ref: '#/components/parameters/resource_canonical'
+    get:
+      description: Get the information of the DataSource
+      tags:
+      - Code Generation
+      operationId: getTerraformProviderDataSource
+      responses:
+        '200':
+          description: The information of the DataSource
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TerraformProviderResource'
+              example:
+                data:
+                  canonical: aws_lb
+                  category: SomeCategory
+                  description: detailed resource description
+                  image: http://via.placeholder.com/150x150
+                  is_edge: false
+                  is_node: true
+                  keywords: null
+                  schema:
+                    dns_name:
+                      default: ''
+                      optional: false
+                      required: false
+                      type: TypeString
+                    internal:
+                      default: 'null'
+                      optional: true
+                      required: false
+                      type: TypeBool
+                  short_description: resource description
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get terraform provider data source
+      x-summary-source: derived
+  /organizations/{organization_canonical}/code_generation/terraform/providers/{provider_canonical}/resources:
+    get:
+      description: Return all the Resources for the Provider
+      tags:
+      - Code Generation
+      operationId: getTerraformProviderResources
+      parameters:
+      - $ref: '#/components/parameters/organization_canonical'
+      - $ref: '#/components/parameters/provider_canonical'
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: List of the Resources
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TerraformProviderResourceSimple'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: aws_instance
+                  category: SomeCategory
+                  description: detailed resource description
+                  image: http://via.placeholder.com/150x150
+                  is_edge: false
+                  is_node: true
+                  keywords: null
+                  short_description: resource description
+                - canonical: aws_elb
+                  category: SomeCategory
+                  description: detailed resource description
+                  image: http://via.placeholder.com/150x150
+                  is_edge: false
+                  is_node: true
+                  keywords: null
+                  short_description: resource description
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get terraform provider resources
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/code_generation/terraform/providers/{provider_canonical}/resources/{resource_canonical}
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/provider_canonical'
+    - $ref: '#/components/parameters/resource_canonical'
+    get:
+      description: Get the information of the Resource
+      tags:
+      - Code Generation
+      operationId: getTerraformProviderResource
+      responses:
+        '200':
+          description: The information of the Resource
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TerraformProviderResource'
+              example:
+                data:
+                  attributes:
+                    important:
+                    - count
+                    normalized_status:
+                      'on': running
+                    status: status
+                  canonical: aws_lb
+                  category: SomeCategory
+                  description: detailed resource description
+                  image: http://via.placeholder.com/150x150
+                  is_edge: false
+                  is_node: true
+                  keywords: null
+                  schema:
+                    dns_name:
+                      default: ''
+                      optional: false
+                      required: false
+                      type: TypeString
+                    internal:
+                      default: 'null'
+                      optional: true
+                      required: false
+                      type: TypeBool
+                  short_description: resource description
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get terraform provider resource
+      x-summary-source: derived
+  /organizations/{organization_canonical}/code_generation/terraform/validate:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Validates a TF configuration
+      tags:
+      - Code Generation
+      operationId: terraformValidate
+      responses:
+        '200':
+          description: The result of validating the provided configuration
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TerraformValidationResult'
+              example:
+                data:
+                  errors:
+                  - 'resource ''aws_elb.front'' config: unknown variable referenced: ''name''; define it with a ''variable'' block'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/TerraformJSONConfig'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TerraformJSONConfig'
+        description: The Terraform JSON config
+        required: true
+      summary: Terraform validate
+      x-summary-source: derived
+components:
+  parameters:
+    resource_canonical:
+      description: A canonical of a Resource
+      name: resource_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    provider_canonical:
+      description: A canonical of a Provider
+      name: provider_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  schemas:
+    TerraformHCLConfig:
+      description: The HCL config for Terraform
+      title: TerraformHCLConfig
+      required:
+      - config
+      properties:
+        config:
+          type: string
+    TerraformProviderResource:
+      description: A Resource of a Provider
+      title: Resource
+      required:
+      - canonical
+      - description
+      - short_description
+      - schema
+      - is_node
+      - is_edge
+      - keywords
+      - category
+      - attributes
+      properties:
+        attributes:
+          $ref: '#/components/schemas/TerraformProviderResourceAttributes'
+        canonical:
+          type: string
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        category:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          format: uri
+        is_edge:
+          type: boolean
+        is_node:
+          type: boolean
+        keywords:
+          type: array
+          items:
+            type: string
+        schema:
+          type: object
+        short_description:
+          type: string
+    TerraformProviderResourceSimple:
+      description: A Resource of a Provider without the config
+      title: ResourceSimple
+      required:
+      - canonical
+      - description
+      - short_description
+      - is_node
+      - is_edge
+      - keywords
+      - category
+      - attributes
+      properties:
+        attributes:
+          $ref: '#/components/schemas/TerraformProviderResourceAttributes'
+        canonical:
+          type: string
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        category:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          format: uri
+        is_edge:
+          type: boolean
+        is_node:
+          type: boolean
+        keywords:
+          type: array
+          items:
+            type: string
+        short_description:
+          type: string
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    TerraformProviderResourceAttributes:
+      description: Holds specific logic of some attributes
+      title: ResourceAttributes
+      properties:
+        important:
+          type: array
+          items:
+            type: string
+        normalized_status:
+          description: Is a KV where the K is the resource possible value and the Value is the normalized value of it. The current possible values are "unknown", "pending", "running", "stopping"
+          type: object
+        status:
+          type: string
+    TerraformProviderSimple:
+      description: Provider of infrastructure without the config
+      title: TerraformProviderSimple
+      required:
+      - name
+      - canonical
+      - abbreviation
+      - cloud
+      properties:
+        abbreviation:
+          type: string
+        canonical:
+          type: string
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud:
+          type: boolean
+        name:
+          type: string
+    TerraformJSONConfig:
+      description: The JSON config for Terraform
+      title: TerraformJSONConfig
+      required:
+      - config
+      properties:
+        config:
+          type: object
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    TerraformValidationResult:
+      description: The result of the validation, if errors is empty means that is correct
+      title: TerraformValidationResult
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+    TerraformProvider:
+      description: Provider of infrastructure
+      title: Provider
+      required:
+      - name
+      - canonical
+      - abbreviation
+      - schema
+      - cloud
+      properties:
+        abbreviation:
+          type: string
+        canonical:
+          type: string
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud:
+          type: boolean
+        name:
+          type: string
+        schema:
+          type: object
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

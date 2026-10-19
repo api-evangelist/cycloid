@@ -1,0 +1,957 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization members API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations for members of an organization.
+  name: Organization members
+paths:
+  /members/verify/{verification_token}:
+    parameters:
+    - $ref: '#/components/parameters/verification_token'
+    get:
+      security: []
+      description: Get the email address used for the pending member invitation
+      tags:
+      - Organization members
+      operationId: getPendingMemberInvitation
+      responses:
+        '200':
+          description: The email address used for the pending member invitation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PendingMemberInvitation'
+              example:
+                data:
+                  email: user@user.com
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get pending member invitation
+      x-summary-source: derived
+  /organizations/{organization_canonical}/members:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the members of an organization.
+      tags:
+      - Organization members
+      operationId: getOrgMembers
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/invitation_state_query'
+      - description: Search by the user's full name
+        name: user_full_name
+        in: query
+        schema:
+          type: string
+      - description: Search by the role's name
+        name: role_name
+        in: query
+        schema:
+          type: string
+      - description: Search by the user canonical
+        name: user_canonical
+        in: query
+        schema:
+          type: string
+      - description: Search by user creation date
+        name: user_created_at
+        in: query
+        schema:
+          type: integer
+          format: uint64
+      - description: Search by member joining date
+        name: member_created_at
+        in: query
+        schema:
+          type: integer
+          format: uint64
+      - $ref: '#/components/parameters/order_by_query'
+      responses:
+        '200':
+          description: List of the members of the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MemberOrg'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - created_at: 1503225026
+                  email: mariano.jimenez@fakeemail.com
+                  full_name: Mariano Jimenez
+                  id: 1
+                  invitation_email: jordi.capdevila@fakeemail.com
+                  invitation_state: accepted
+                  last_login_at: 1503225576
+                  picture_url: https://avatars2.githubusercontent.com/u/14579210
+                  role:
+                    canonical: role-can
+                    description: Organization existing role
+                    id: 17
+                    name: existing
+                    rules:
+                    - action: organization:delete
+                      effect: allow
+                      id: 1
+                      resources:
+                      - organization:org-can
+                      - organization:org-can2
+                    - action: organization:team:create
+                      effect: allow
+                      id: 20
+                      resources: null
+                    - action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  username: user-1
+                - created_at: 1503281026
+                  email: jordi.capdevila@fakeemail.com
+                  full_name: Jordi Capdevila
+                  id: 1
+                  invitation_email: jordi.capdevila@fakeemail.com
+                  invitation_state: accepted
+                  last_login_at: 1503225576
+                  picture_url: https://avatars2.githubusercontent.com/u/14579210
+                  role:
+                    canonical: role-can
+                    description: Organization existing role
+                    id: 17
+                    name: existing
+                    rules:
+                    - action: organization:delete
+                      effect: allow
+                      id: 1
+                      resources:
+                      - organization:org-can
+                      - organization:org-can2
+                    - action: organization:team:create
+                      effect: allow
+                      id: 20
+                      resources: null
+                    - action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  username: user2
+                - created_at: 1502225026
+                  email: ivan.drago@fakeemail.com
+                  full_name: Ivan Drago
+                  id: 1
+                  invitation_email: jordi.capdevila@fakeemail.com
+                  invitation_state: accepted
+                  last_login_at: 1503225576
+                  picture_url: https://avatars2.githubusercontent.com/u/14579210
+                  role:
+                    canonical: role-can
+                    description: Organization existing role
+                    id: 17
+                    name: existing
+                    rules:
+                    - action: organization:delete
+                      effect: allow
+                      id: 1
+                      resources:
+                      - organization:org-can
+                      - organization:org-can2
+                    - action: organization:team:create
+                      effect: allow
+                      id: 20
+                      resources: null
+                    - action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  username: user-3
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 3
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get org members
+      x-summary-source: derived
+    post:
+      description: Invite a user to be a member of the organization.
+      tags:
+      - Organization members
+      operationId: inviteUserToOrgMember
+      responses:
+        '200':
+          description: The information of the member of the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/MemberOrg'
+              example:
+                data:
+                  created_at: 1503281026
+                  email: jordi.capdevila@fakeemail.com
+                  full_name: Jordi Capdevila
+                  id: 1
+                  invitation_email: jordi.capdevila@fakeemail.com
+                  invitation_state: accepted
+                  picture_url: https://avatars2.githubusercontent.com/u/14579210
+                  role:
+                    description: A project manager
+                    id: 2
+                    name: project manager
+                    policies:
+                    - code: team:read
+                      description: Grant the access to read the teams of an organization
+                      entities: null
+                      id: 21
+                    - code: team:edit
+                      description: Grant the access to edit teams
+                      entities: null
+                      id: 22
+                    - code: project:read
+                      description: Grant the access to projects
+                      entities: null
+                      id: 60
+                    - code: project:create
+                      description: Grant the access to create a project in the organization
+                      entities: null
+                      id: 61
+                    - code: project:edit
+                      description: Grant the access to edit projects
+                      entities: null
+                      id: 62
+                  username: user2
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewMemberInvitation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewMemberInvitation'
+        description: The user's member invitation.
+        required: true
+      summary: Invite user to org member
+      x-summary-source: derived
+  /organizations/{organization_canonical}/members/{member_id}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/member_id'
+    get:
+      description: Get the information of a member of the organization.
+      tags:
+      - Organization members
+      operationId: getOrgMember
+      responses:
+        '200':
+          description: The information of the member of the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/MemberOrg'
+              example:
+                data:
+                  created_at: 1503281026
+                  email: jordi.capdevila@fakeemail.com
+                  full_name: Jordi Capdevila
+                  id: 1
+                  invitation_email: jordi.capdevila@fakeemail.com
+                  invitation_state: accepted
+                  picture_url: https://avatars2.githubusercontent.com/u/14579210
+                  role:
+                    description: A project manager
+                    id: 2
+                    name: project manager
+                    policies:
+                    - code: team:read
+                      description: Grant the access to read the teams of an organization
+                      entities: null
+                      id: 21
+                    - code: team:edit
+                      description: Grant the access to edit teams
+                      entities: null
+                      id: 22
+                    - code: project:read
+                      description: Grant the access to projects
+                      entities: null
+                      id: 60
+                    - code: project:create
+                      description: Grant the access to create a project in the organization
+                      entities: null
+                      id: 61
+                    - code: project:edit
+                      description: Grant the access to edit projects
+                      entities: null
+                      id: 62
+                  username: user2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get org member
+      x-summary-source: derived
+    put:
+      description: Update member of the organization.
+      tags:
+      - Organization members
+      operationId: updateOrgMember
+      responses:
+        '200':
+          description: The information of the member of the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/MemberOrg'
+              example:
+                data:
+                  created_at: 1503281026
+                  email: jordi.capdevila@fakeemail.com
+                  full_name: Jordi Capdevila
+                  id: 1
+                  invitation_email: jordi.capdevila@fakeemail.com
+                  invitation_state: accepted
+                  picture_url: https://avatars2.githubusercontent.com/u/14579210
+                  role:
+                    description: A project manager
+                    id: 2
+                    name: project manager
+                    policies:
+                    - code: team:read
+                      description: Grant the access to read the teams of an organization
+                      entities: null
+                      id: 21
+                    - code: team:edit
+                      description: Grant the access to edit teams
+                      entities: null
+                      id: 22
+                    - code: project:read
+                      description: Grant the access to projects
+                      entities: null
+                      id: 60
+                    - code: project:create
+                      description: Grant the access to create a project in the organization
+                      entities: null
+                      id: 61
+                    - code: project:edit
+                      description: Grant the access to edit projects
+                      entities: null
+                      id: 62
+                  username: user2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/MemberAssignation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberAssignation'
+        description: The member information to be updated.
+        required: true
+      summary: Update org member
+      x-summary-source: derived
+    delete:
+      description: Remove a member of the organization.
+      tags:
+      - Organization members
+      operationId: removeOrgMember
+      responses:
+        '204':
+          description: Member has been removed.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Remove org member
+      x-summary-source: derived
+  /organizations/{organization_canonical}/members/{member_id}/resend:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/member_id'
+    put:
+      security: []
+      description: Resend the email containing the verification token to accept the member Invitation.
+      tags:
+      - Organization members
+      operationId: resendMemberInvitation
+      responses:
+        '204':
+          description: The member Invitation has been resent.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Resend member invitation
+      x-summary-source: derived
+components:
+  parameters:
+    verification_token:
+      description: A token for verifying emails, invitations, etc.
+      name: verification_token
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 5
+    order_by_query:
+      description: 'Allows to order the list of items. Example usage: field_name:asc. Multiple order_by parameters are allowed, applied in the order they are specified.
+
+        '
+      name: order_by
+      in: query
+      schema:
+        type: string
+    member_id:
+      description: A member id
+      name: member_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    invitation_state_query:
+      description: Search by Invitation's state
+      name: invitation_state
+      in: query
+      schema:
+        type: string
+        enum:
+        - accepted
+        - pending
+        - declined
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  schemas:
+    MemberAssignation:
+      description: Member is a user who is associated to an entity of the system. The user is newly assigned or reassigned for updating is data.
+      title: Member assignation
+      required:
+      - role_canonical
+      properties:
+        role_canonical:
+          description: The role of the member.
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    Role:
+      description: Role represents the authorization level that an user has to access to a specific entity of the system. A role contains a list of rules to define the access control. Note not all the entities supports roles access control; see the API endpoints to know which entities support them.
+      title: Role access control
+      required:
+      - id
+      - name
+      - canonical
+      - description
+      - rules
+      - default
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        default:
+          type: boolean
+        description:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 100
+          minLength: 2
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        updated_at:
+          type: integer
+          format: uint64
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    MemberOrg:
+      description: Member is a user who is associated to an organization.
+      type: object
+      title: Member of an organization
+      required:
+      - id
+      - created_at
+      - role
+      properties:
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: user email
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        invitation_email:
+          description: The email address to which the invitation was sent. It's used to resend the invitation.
+          type: string
+          format: email
+        invitation_resent_at:
+          type: integer
+          format: uint64
+        invitation_state:
+          type: string
+          enum:
+          - pending
+          - accepted
+          - declined
+        invited_at:
+          description: When the user had been invited to join as a member. When not present, the user is already a member, so she/he has verified her/his invitation.
+          type: integer
+          format: uint64
+        invited_by:
+          description: Organization member who invited the current user.
+          $ref: '#/components/schemas/SimpleMemberOrg'
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: User's preferred language
+          type: string
+          enum:
+          - en
+          - fr
+          - es
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        role:
+          $ref: '#/components/schemas/Role'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleTeam'
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    SimpleMemberOrg:
+      description: Simplified model of a member of an organization. The member is 'accepted' and have an associated user account.
+      type: object
+      title: Simplified model of a member of an organization
+      required:
+      - id
+      - email
+      - created_at
+      properties:
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: Primary email
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          description: Member ID (different from the user ID)
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    Rule:
+      description: Rules define the specific access to the platform
+      title: Rule
+      required:
+      - id
+      - effect
+      - action
+      properties:
+        action:
+          description: It can be the normal Policy.Code or contain globs like `*` or `**`
+          type: string
+        effect:
+          type: string
+          enum:
+          - allow
+        id:
+          description: This is the id of the row from the database, but for blocking organizations we generate rules that are not in the database. When this happens the id is allowed to be 0.
+          type: integer
+          format: uint32
+        resources:
+          description: It is the list of resources in which this Rule applies to, the format of it is the one on the Policy.Code but with the `canonical` of the entities like `organization:org-can:team:team-can` for an action of `organization:team:read`
+          type: array
+          items:
+            type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    SimpleTeam:
+      description: The entity which represents the information of a team a bit simplified.
+      type: object
+      title: SimpleTeam
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'Organization member that owns this team. When a user is the owner of a
+
+            team it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    NewMemberInvitation:
+      description: Send an invitation to a user to something. Something can be to create an account, to join to an organization, to join to a team, etc. API operation determines the operation to perform.
+      title: Invite user
+      required:
+      - email
+      - role_canonical
+      properties:
+        email:
+          description: Invite user by email
+          type: string
+          format: email
+        role_canonical:
+          description: The role of the member.
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    PendingMemberInvitation:
+      description: Contains the email used for the member invitation
+      type: object
+      title: PendingMemberInvitation
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          format: email
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

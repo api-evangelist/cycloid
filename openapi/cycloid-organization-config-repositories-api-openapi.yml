@@ -1,0 +1,529 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Config Repositories API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Config Repositories
+paths:
+  /organizations/{organization_canonical}/config_repositories:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Return all the config repositories
+      tags:
+      - Organization Config Repositories
+      operationId: listConfigRepositories
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/default'
+      responses:
+        '200':
+          description: List of the config repositories.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ConfigRepository'
+              example:
+                data:
+                - branch: configs
+                  canonical: my-personal-repo
+                  created_at: 1503225026
+                  default: true
+                  id: 1
+                  name: My personal repo
+                  updated_at: 1503335026
+                  url: git@github.com:myuser/repository.git
+                - branch: configs
+                  canonical: my-personal-repo2
+                  created_at: 1503225026
+                  default: false
+                  id: 2
+                  name: My personal repo 2
+                  updated_at: 1503335026
+                  url: git@github.com:myuser/repository.git
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List config repositories
+      x-summary-source: derived
+    post:
+      description: Creates a config repository
+      tags:
+      - Organization Config Repositories
+      operationId: createConfigRepository
+      responses:
+        '200':
+          description: Success creation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ConfigRepository'
+              example:
+                data:
+                  branch: configs
+                  canonical: my-personal-repo
+                  created_at: 1503225026
+                  credential_id: 1
+                  default: true
+                  id: 1
+                  name: My personal repo
+                  updated_at: 1503335026
+                  url: git@github.com:myuser/repository.git
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewConfigRepository'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewConfigRepository'
+        description: The information of the config repository to create.
+        required: true
+      summary: Create config repository
+      x-summary-source: derived
+  /organizations/{organization_canonical}/config_repositories/{config_repository_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/config_repository_canonical'
+    get:
+      description: Return the Config Repository
+      tags:
+      - Organization Config Repositories
+      operationId: getConfigRepository
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: Organization Config Repository.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ConfigRepository'
+              example:
+                data:
+                  branch: configs
+                  canonical: my-personal-repo
+                  created_at: 1503225026
+                  default: true
+                  id: 1
+                  name: My personal repo
+                  updated_at: 1503335026
+                  url: git@github.com:myuser/repository.git
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get config repository
+      x-summary-source: derived
+    put:
+      description: Update a config repository
+      tags:
+      - Organization Config Repositories
+      operationId: updateConfigRepository
+      responses:
+        '200':
+          description: Success creation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ConfigRepository'
+              example:
+                data:
+                  branch: configs
+                  canonical: my-personal-repo
+                  created_at: 1503225026
+                  credential_id: 1
+                  default: true
+                  id: 1
+                  name: My personal repo
+                  updated_at: 1503335026
+                  url: git@github.com:myuser/repository.git
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateConfigRepository'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateConfigRepository'
+        description: The information of the config repository to create.
+        required: true
+      summary: Update config repository
+      x-summary-source: derived
+    delete:
+      description: delete a Config Repositories
+      tags:
+      - Organization Config Repositories
+      operationId: deleteConfigRepository
+      responses:
+        '204':
+          description: Organization Config repository has been deleted
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete config repository
+      x-summary-source: derived
+  /organizations/{organization_canonical}/config_repositories/{config_repository_canonical}/config:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/config_repository_canonical'
+    post:
+      description: Create Service Catalog config files in the Config Repository.
+      tags:
+      - Organization Config Repositories
+      operationId: createConfigRepositoryConfig
+      responses:
+        '204':
+          description: SC config files have been created successfully
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/SCConfig'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SCConfig'
+        description: 'The body contains Service Catalog''s config files and paths where they''ll be created in the Config Repository.
+
+          '
+        required: true
+      summary: Create config repository config
+      x-summary-source: derived
+components:
+  parameters:
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    default:
+      description: Value describing whether to return default
+      name: default
+      in: query
+      schema:
+        type: boolean
+        default: false
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+    config_repository_canonical:
+      description: Organization Config Repositories canonical
+      name: config_repository_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  schemas:
+    SCConfig:
+      description: This entity is being used for automatic creation of SC config
+      type: object
+      title: SC Config
+      required:
+      - configs
+      properties:
+        configs:
+          description: Config files that will be created
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigFile'
+    ConfigFile:
+      description: This object contains SC config file name and its content
+      type: object
+      title: SC config file
+      required:
+      - path
+      - content
+      properties:
+        content:
+          type: string
+          format: byte
+        path:
+          type: string
+    ConfigRepository:
+      title: ConfigRepository
+      required:
+      - id
+      - name
+      - canonical
+      - url
+      - default
+      properties:
+        branch:
+          type: string
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        credential_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        default:
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+        updated_at:
+          type: integer
+          format: uint64
+        url:
+          type: string
+          pattern: ^((/|~)[^/]*)+.(\.git)|(([\w\]+@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(/)?
+    UpdateConfigRepository:
+      title: UpdateConfigRepository
+      required:
+      - name
+      - url
+      - credential_canonical
+      - default
+      - branch
+      properties:
+        branch:
+          type: string
+        credential_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        default:
+          type: boolean
+        name:
+          type: string
+        url:
+          type: string
+          pattern: ^((/|~)[^/]*)+.(\.git)|(([\w\]+@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(/)?
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    NewConfigRepository:
+      title: NewConfigRepository
+      required:
+      - name
+      - url
+      - credential_canonical
+      - default
+      - branch
+      properties:
+        branch:
+          type: string
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        credential_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        default:
+          type: boolean
+        name:
+          type: string
+        url:
+          type: string
+          pattern: ^((/|~)[^/]*)+.(\.git)|(([\w\]+@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(/)?
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

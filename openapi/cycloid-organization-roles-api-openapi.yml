@@ -1,0 +1,550 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Roles API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Roles
+paths:
+  /organizations/{organization_canonical}/roles:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the list of roles available in the organization.
+      tags:
+      - Organization Roles
+      operationId: getRoles
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: List of roles which are available in the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Role'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: role-can
+                  description: Organization existing role
+                  id: 17
+                  name: existing
+                  rules:
+                  - action: organization:delete
+                    effect: allow
+                    id: 1
+                    resources:
+                    - organization:org-can
+                    - organization:org-can2
+                  - action: organization:team:create
+                    effect: allow
+                    id: 20
+                    resources: null
+                  - action: organization:team:read
+                    effect: allow
+                    id: 21
+                    resources:
+                    - organization:org-can:team:team-can
+                - canonical: role-can2
+                  description: A project manager
+                  id: 2
+                  name: project manager
+                  rules:
+                  - action: organization:team:create
+                    effect: allow
+                    id: 20
+                    resources: null
+                  - action: organization:team:read
+                    effect: allow
+                    id: 21
+                    resources:
+                    - organization:org-can:team:team-can
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get roles
+      x-summary-source: derived
+    post:
+      description: Create a new role available in the organization.
+      tags:
+      - Organization Roles
+      operationId: createRole
+      responses:
+        '200':
+          description: New role created in the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/NewRole'
+              example:
+                data:
+                  canonical: role-can
+                  description: Organization existing role
+                  id: 17
+                  name: existing
+                  rules:
+                  - action: organization:delete
+                    effect: allow
+                    id: 1
+                    resources:
+                    - organization:org-can
+                    - organization:org-can2
+                  - action: organization:team:create
+                    effect: allow
+                    id: 20
+                    resources: null
+                  - action: organization:team:read
+                    effect: allow
+                    id: 21
+                    resources:
+                    - organization:org-can:team:team-can
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewRole'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewRole'
+        description: The information of the organization's role to create.
+        required: true
+      summary: Create role
+      x-summary-source: derived
+  /organizations/{organization_canonical}/roles/{role_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/role_canonical'
+    get:
+      description: Get the role available in the organization with an canonical
+      tags:
+      - Organization Roles
+      operationId: getRole
+      responses:
+        '200':
+          description: Role available in the organization with such canonical.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Role'
+              example:
+                data:
+                  canonical: role-can
+                  description: Organization existing role
+                  id: 17
+                  name: existing
+                  rules:
+                  - action: organization:delete
+                    effect: allow
+                    id: 1
+                    resources:
+                    - organization:org-can
+                    - organization:org-can2
+                  - action: organization:team:create
+                    effect: allow
+                    id: 20
+                    resources: null
+                  - action: organization:team:read
+                    effect: allow
+                    id: 21
+                    resources:
+                    - organization:org-can:team:team-can
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get role
+      x-summary-source: derived
+    put:
+      description: Update an existing role in the organization.
+      tags:
+      - Organization Roles
+      operationId: updateRole
+      responses:
+        '200':
+          description: Updated role belonging to the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Role'
+              example:
+                data:
+                  canonical: role-can
+                  description: Organization existing role
+                  id: 17
+                  name: existing
+                  rules:
+                  - action: organization:delete
+                    effect: allow
+                    id: 1
+                    resources:
+                    - organization:org-can
+                    - organization:org-can2
+                  - action: organization:team:create
+                    effect: allow
+                    id: 20
+                    resources: null
+                  - action: organization:team:read
+                    effect: allow
+                    id: 21
+                    resources:
+                    - organization:org-can:team:team-can
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewRole'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewRole'
+        description: The information of the organization's role to update.
+        required: true
+      summary: Update role
+      x-summary-source: derived
+    delete:
+      description: Delete an existing role in the organization.
+      tags:
+      - Organization Roles
+      operationId: deleteRole
+      responses:
+        '204':
+          description: Organization role has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete role
+      x-summary-source: derived
+components:
+  parameters:
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    role_canonical:
+      description: Organization Role canonical
+      name: role_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  schemas:
+    NewRule:
+      description: NewRule represents an existing or new permission or constraint to access to an entity of the system. A Rule is aggregated into roles in order to be applied.
+      title: NewRule
+      required:
+      - action
+      - effect
+      properties:
+        action:
+          description: It can be the normal Policy.Code or contain globs like `*` or `**`
+          type: string
+        effect:
+          type: string
+          enum:
+          - allow
+        resources:
+          description: It is the list of resources in which this Rule applies to, the format of it is the one on the Policy.Code but with the `canonical` of the entities like `organization:org-can:team:team-can` for an action of `organization:team:read`
+          type: array
+          items:
+            type: string
+    Role:
+      description: Role represents the authorization level that an user has to access to a specific entity of the system. A role contains a list of rules to define the access control. Note not all the entities supports roles access control; see the API endpoints to know which entities support them.
+      title: Role access control
+      required:
+      - id
+      - name
+      - canonical
+      - description
+      - rules
+      - default
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        default:
+          type: boolean
+        description:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 100
+          minLength: 2
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        updated_at:
+          type: integer
+          format: uint64
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    NewRole:
+      description: New role represents the authorization level that a user has access to. A role contains a list of rules to define the access control. Note not all the entities supports roles access control; see the API endpoints to know which entities support them.
+      title: New role access control
+      required:
+      - name
+      - rules
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        description:
+          type: string
+        name:
+          type: string
+          maxLength: 100
+          minLength: 2
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewRule'
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    Rule:
+      description: Rules define the specific access to the platform
+      title: Rule
+      required:
+      - id
+      - effect
+      - action
+      properties:
+        action:
+          description: It can be the normal Policy.Code or contain globs like `*` or `**`
+          type: string
+        effect:
+          type: string
+          enum:
+          - allow
+        id:
+          description: This is the id of the row from the database, but for blocking organizations we generate rules that are not in the database. When this happens the id is allowed to be 0.
+          type: integer
+          format: uint32
+        resources:
+          description: It is the list of resources in which this Rule applies to, the format of it is the one on the Policy.Code but with the `canonical` of the entities like `organization:org-can:team:team-can` for an action of `organization:team:read`
+          type: array
+          items:
+            type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

@@ -1,0 +1,1273 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Service Catalog Sources API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Service Catalog Sources
+paths:
+  /organizations/{organization_canonical}/service_catalog_sources:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Return all the private service catalogs
+      tags:
+      - Organization Service Catalog Sources
+      operationId: getServiceCatalogSources
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: List of the private service catalogs.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceCatalogSource'
+              example:
+                data:
+                - branch: my-favourite-branch
+                  canonical: my-personal-repo
+                  created_at: 1503225026
+                  credential_id: 1
+                  id: 1
+                  name: My personal repo
+                  owner:
+                    created_at: 1503225026
+                    email: mariano.jimenez@fakeemail.com
+                    full_name: Mariano Jimenez
+                    id: 1
+                    picture_url: https://avatars2.githubusercontent.com/u/14579210
+                    role:
+                      description: A developer of the team
+                      id: 3
+                      name: developer
+                      policies:
+                      - code: team:read
+                        description: Grant the access to read the teams of an organization
+                        entities: null
+                        id: 21
+                      - code: member:read
+                        description: Grant the access to read the members
+                        entities: null
+                        id: 42
+                    username: user-1
+                  service_catalogs:
+                  - author: Cycloid CI
+                    canonical: stack-foo
+                    description: CI sample
+                    directory: /config
+                    id: 1
+                    keywords:
+                    - ci
+                    name: foo
+                    ref: cycloid:stack-foo
+                    service_catalog_source_id: 1
+                    trusted: true
+                  stack_count: 1
+                  updated_at: 1503335026
+                  url: git@github.com:myuser/repository.git
+                - branch: my-second-favourite-branch
+                  canonical: my-personal-repo-2
+                  created_at: 1503225026
+                  id: 2
+                  name: My personal repo 2
+                  owner:
+                    created_at: 1503225026
+                    email: mariano.jimenez@fakeemail.com
+                    full_name: Mariano Jimenez
+                    id: 1
+                    picture_url: https://avatars2.githubusercontent.com/u/14579210
+                    role:
+                      description: A developer of the team
+                      id: 3
+                      name: developer
+                      policies:
+                      - code: team:read
+                        description: Grant the access to read the teams of an organization
+                        entities: null
+                        id: 21
+                      - code: member:read
+                        description: Grant the access to read the members
+                        entities: null
+                        id: 42
+                      - code: project:read
+                        description: Grant the access to projects
+                        entities: null
+                        id: 60
+                    username: user-1
+                  service_catalogs:
+                  - author: Cycloid CI
+                    canonical: stack-bar
+                    description: CI sample
+                    directory: /cfg
+                    id: 2
+                    keywords:
+                    - ci
+                    name: bar
+                    ref: cycloid:stack-bar
+                    service_catalog_source_id: 2
+                    trusted: true
+                  stack_count: 4
+                  updated_at: 1503335026
+                  url: https://github.com/cycloid-community-catalog/stack-dummy.git
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get service catalog sources
+      x-summary-source: derived
+    post:
+      description: Creates a Service catalog source
+      tags:
+      - Organization Service Catalog Sources
+      operationId: createServiceCatalogSource
+      responses:
+        '200':
+          description: Success creation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ServiceCatalogSource'
+              example:
+                data:
+                  branch: my-scs-branch
+                  canonical: my-personal-repo
+                  created_at: 1503225026
+                  credential_id: 1
+                  id: 1
+                  name: My personal repo
+                  owner:
+                    created_at: 1503225026
+                    email: mariano.jimenez@fakeemail.com
+                    full_name: Mariano Jimenez
+                    id: 1
+                    picture_url: https://avatars2.githubusercontent.com/u/14579210
+                    role:
+                      description: A developer of the team
+                      id: 3
+                      name: developer
+                      policies:
+                      - code: team:read
+                        description: Grant the access to read the teams of an organization
+                        entities: null
+                        id: 21
+                      - code: member:read
+                        description: Grant the access to read the members
+                        entities: null
+                        id: 42
+                      - code: project:read
+                        description: Grant the access to projects
+                        entities: null
+                        id: 60
+                    username: user-1
+                  service_catalogs:
+                  - author: Cycloid CI
+                    canonical: stack-foo
+                    description: CI sample
+                    directory: /config
+                    id: 1
+                    keywords:
+                    - ci
+                    name: foo
+                    ref: cycloid:stack-foo
+                    service_catalog_source_id: 1
+                    trusted: true
+                  stack_count: 1
+                  updated_at: 1503335026
+                  url: git@github.com:myuser/repository.git
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewServiceCatalogSource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewServiceCatalogSource'
+        description: The information of the organization to create.
+        required: true
+      summary: Create service catalog source
+      x-summary-source: derived
+  /organizations/{organization_canonical}/service_catalog_sources/{service_catalog_source_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/service_catalog_source_canonical'
+    get:
+      description: Return the Service Catalog Source
+      tags:
+      - Organization Service Catalog Sources
+      operationId: getServiceCatalogSource
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: Organization Service Catalog Sources.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ServiceCatalogSource'
+              example:
+                data:
+                  branch: my-scs-branch
+                  canonical: my-personal-repo
+                  created_at: 1503225026
+                  credential_id: 1
+                  id: 1
+                  name: My personal repo
+                  owner:
+                    created_at: 1503225026
+                    email: mariano.jimenez@fakeemail.com
+                    full_name: Mariano Jimenez
+                    id: 1
+                    picture_url: https://avatars2.githubusercontent.com/u/14579210
+                    role:
+                      description: A developer of the team
+                      id: 3
+                      name: developer
+                      policies:
+                      - code: team:read
+                        description: Grant the access to read the teams of an organization
+                        entities: null
+                        id: 21
+                      - code: member:read
+                        description: Grant the access to read the members
+                        entities: null
+                        id: 42
+                    username: user-1
+                  service_catalogs:
+                  - author: Cycloid CI
+                    canonical: stack-foo
+                    description: CI sample
+                    directory: /config
+                    id: 1
+                    keywords:
+                    - ci
+                    name: foo
+                    ref: cycloid:stack-foo
+                    service_catalog_source_id: 1
+                    trusted: true
+                  stack_count: 1
+                  updated_at: 1503335026
+                  url: git@github.com:myuser/repository.git
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get service catalog source
+      x-summary-source: derived
+    put:
+      description: Update a Service catalog source
+      tags:
+      - Organization Service Catalog Sources
+      operationId: updateServiceCatalogSource
+      responses:
+        '200':
+          description: Success update
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ServiceCatalogSource'
+              example:
+                data:
+                  branch: my-favourite-branch
+                  canonical: my-personal-repo
+                  created_at: 1503225026
+                  credential_id: 1
+                  id: 1
+                  name: My personal repo
+                  owner:
+                    created_at: 1503225026
+                    email: mariano.jimenez@fakeemail.com
+                    full_name: Mariano Jimenez
+                    id: 1
+                    picture_url: https://avatars2.githubusercontent.com/u/14579210
+                    role:
+                      description: A developer of the team
+                      id: 3
+                      name: developer
+                      policies:
+                      - code: team:read
+                        description: Grant the access to read the teams of an organization
+                        entities: null
+                        id: 21
+                      - code: member:read
+                        description: Grant the access to read the members
+                        entities: null
+                        id: 42
+                    username: user-1
+                  service_catalogs:
+                    created:
+                    - author: Cycloid CI
+                      canonical: stack-foo
+                      description: CI sample
+                      directory: /config
+                      id: 1
+                      keywords:
+                      - ci
+                      name: foo
+                      ref: cycloid:stack-foo
+                      service_catalog_source_id: 1
+                      trusted: true
+                    deleted:
+                    - author: Cycloid CI
+                      canonical: stack-foo3
+                      description: CI sample
+                      directory: /
+                      id: 3
+                      keywords:
+                      - ci
+                      name: fo3
+                      ref: cycloid:stack-foo3
+                      service_catalog_source_id: 1
+                      trusted: true
+                    updated:
+                    - author: Cycloid CI
+                      canonical: stack-foo2
+                      description: CI sample
+                      directory: /config/prod
+                      id: 2
+                      keywords:
+                      - ci
+                      name: foo2
+                      ref: cycloid:stack-foo2
+                      service_catalog_source_id: 1
+                      trusted: true
+                  stack_count: 1
+                  updated_at: 1503335026
+                  url: git@github.com:myuser/repository.git
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateServiceCatalogSource'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateServiceCatalogSource'
+        description: The information of the organization to create.
+        required: true
+      summary: Update service catalog source
+      x-summary-source: derived
+    delete:
+      description: delete a Service catalog source
+      tags:
+      - Organization Service Catalog Sources
+      operationId: deleteServiceCatalogSource
+      responses:
+        '204':
+          description: Organization Service Catalog Sources has been deleted
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete service catalog source
+      x-summary-source: derived
+  /organizations/{organization_canonical}/service_catalog_sources/{service_catalog_source_canonical}/refresh:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/service_catalog_source_canonical'
+    post:
+      description: Refresh a Service catalog source. It compares changes between the remote repository and the local youdeploy database. The response contains stacks that have been successfully refreshed along with the stacks that errored.
+      tags:
+      - Organization Service Catalog Sources
+      operationId: refreshServiceCatalogSource
+      parameters:
+      - description: When true, compute per-branch stack presence synchronously before returning instead of enqueuing it as a background job
+        name: sync_presence
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: 'At least one stack has been successfully refreshed. Despite returning success code, some stacks might not have been refreshed.
+
+            The stacks that errored are returned in the response.'
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ServiceCatalogChanges'
+              example:
+                data:
+                  branch: my-favourite-branch
+                  canonical: my-personal-repo
+                  changes:
+                    created:
+                    - author: Cycloid CI
+                      canonical: stack-foo
+                      description: CI sample
+                      directory: /config
+                      id: 1
+                      keywords:
+                      - ci
+                      name: foo
+                      ref: cycloid:stack-foo
+                      service_catalog_source_id: 1
+                      trusted: true
+                    deleted:
+                    - author: Cycloid CI
+                      canonical: stack-foo3
+                      description: CI sample
+                      directory: /
+                      id: 3
+                      keywords:
+                      - ci
+                      name: fo3
+                      ref: cycloid:stack-foo3
+                      service_catalog_source_id: 1
+                      trusted: true
+                    errored:
+                    - code: Invalid
+                      message: stack cycloid:stack-foo4 has invalid configuration at line 1
+                    - code: Invalid
+                      message: stack cycloid:stack-foo5 has invalid configuration at line 2
+                    updated:
+                    - author: Cycloid CI
+                      canonical: stack-foo2
+                      description: CI sample
+                      directory: /config/prod
+                      id: 2
+                      keywords:
+                      - ci
+                      name: foo2
+                      ref: cycloid:stack-foo2
+                      service_catalog_source_id: 1
+                      trusted: true
+                  created_at: 1503225026
+                  credential_id: 1
+                  id: 1
+                  name: My personal repo
+                  updated_at: 1503335026
+                  url: git@github.com:cycloidio/youdeploy-http-api.git
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Refresh service catalog source
+      x-summary-source: derived
+  /organizations/{organization_canonical}/service_catalog_sources/{service_catalog_source_canonical}/validate:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/service_catalog_source_canonical'
+    post:
+      description: Validate a Service catalog source
+      tags:
+      - Organization Service Catalog Sources
+      operationId: validateServiceCatalogSource
+      responses:
+        '204':
+          description: The SCS has been validated
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Validate service catalog source
+      x-summary-source: derived
+  /organizations/{organization_canonical}/service_catalog_sources/{service_catalog_source_canonical}/versions:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/service_catalog_source_canonical'
+    get:
+      description: List Service catalog source versions
+      tags:
+      - Organization Service Catalog Sources
+      operationId: listServiceCatalogSourceVersions
+      responses:
+        '200':
+          description: List of the Service catalog source version
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceCatalogSourceVersion'
+              example:
+                data:
+                - commit_hash: 85b6ffb6d60ec97c4209ebcee154f97ed54de8d6
+                  id: 1
+                  name: develop
+                  status: active
+                  type: branch
+                - commit_hash: 85b6ffb6d60ec97c4209ebcee154f97ed54de8d7
+                  id: 2
+                  name: v1.0.0
+                  status: active
+                  type: tag
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List service catalog source versions
+      x-summary-source: derived
+  /organizations/{organization_canonical}/service_catalog_sources/{service_catalog_source_canonical}/versions/refresh:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/service_catalog_source_canonical'
+    get:
+      description: List Service catalog source versions
+      tags:
+      - Organization Service Catalog Sources
+      operationId: refreshServiceCatalogSourceVersions
+      parameters:
+      - description: When true, compute per-branch stack presence synchronously before returning instead of enqueuing it as a background job
+        name: sync_presence
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: List of the Service catalog source version
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceCatalogSourceVersion'
+              example:
+                data:
+                - commit_hash: 85b6ffb6d60ec97c4209ebcee154f97ed54de8d6
+                  id: 1
+                  name: develop
+                  status: active
+                  type: branch
+                - commit_hash: 85b6ffb6d60ec97c4209ebcee154f97ed54de8d7
+                  id: 2
+                  name: v1.0.0
+                  status: active
+                  type: tag
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Refresh service catalog source versions
+      x-summary-source: derived
+components:
+  parameters:
+    service_catalog_source_canonical:
+      description: Organization Service Catalog Sources canonical
+      name: service_catalog_source_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  schemas:
+    ServiceCatalogTechnology:
+      description: ServiceCatalogTechnology is a Technology of the Service Catalog
+      title: ServiceCatalogTechnology
+      properties:
+        technology:
+          type: string
+        version:
+          type: string
+    NewServiceCatalogSource:
+      title: NewServiceCatalogSource
+      required:
+      - name
+      - url
+      - branch
+      properties:
+        branch:
+          type: string
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        credential_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        name:
+          type: string
+        owner:
+          description: 'User canonical that owns this service catalog source. If omitted then the person
+
+            creating this service catalog source will be assigned as owner. When a user is the
+
+            owner of a service catalog source they has all the permissions on it.
+
+            '
+          type: string
+        team_canonical:
+          description: 'Team responsible for the maintenance of the underlying service catalogs
+
+            '
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        url:
+          type: string
+          pattern: ^((/|~)[^/]*)+.(\.git)|(([\w\]+@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(/)?
+        visibility:
+          description: 'The visibility setting allows to specify which visibility will be applied to stacks in this catalog repository.
+
+            This option is only applied during initial catalog repository creation, not for subsequent updates.
+
+            '
+          type: string
+    ServiceCatalog:
+      description: Represents the Service Catalog item
+      title: Service Catalog
+      required:
+      - id
+      - name
+      - canonical
+      - author
+      - keywords
+      - ref
+      - form_enabled
+      - trusted
+      - directory
+      - visibility
+      - organization_canonical
+      - version
+      - latest
+      properties:
+        author:
+          type: string
+        blueprint:
+          description: Determines if given stack is a blueprint
+          type: boolean
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_providers:
+          description: Cloud providers supported by the stack
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudProvider'
+        created_at:
+          type: integer
+          format: uint64
+        default_version_branch:
+          description: Default version of the stack, based on the Catalog Repository branch
+          type: string
+        dependencies:
+          description: 'Canonicals of the stacks that must be instantiated before this one. Read-only: dependencies can only be declared in the stack''s .cycloid.yml source file and are refreshed from it; they cannot be set or changed through the API.'
+          type: array
+          items:
+            type: string
+          readOnly: true
+        description:
+          type: string
+        directory:
+          description: Directory where the ServiceCatalog configuration is found.
+          type: string
+        form_enabled:
+          description: Indicates if this stack can be configured with form's or not. Based on the presence or not of a valid .forms.yaml file since it's creation or last refresh.
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        image:
+          type: string
+          format: uri
+        keywords:
+          type: array
+          items:
+            type: string
+        labels:
+          description: Structured key:value labels declared in the stack's .cycloid.yml
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogLabel'
+        latest:
+          description: Indicates if the stack uses the latest version
+          type: boolean
+        name:
+          type: string
+        organization_canonical:
+          description: Organization that the stack belongs to
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        readme:
+          description: Readme of the stack
+          type: string
+        ref:
+          type: string
+        service_catalog_source_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        team:
+          description: Team that maintains the stack
+          $ref: '#/components/schemas/SimpleTeam'
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogTechnology'
+        trusted:
+          description: If 'true' the ServiceCatalog is from the main organization and can be trusted.
+          type: boolean
+        unique:
+          description: Determines if the stack can be instantiated only once per organization, project and environment
+          type: boolean
+        updated_at:
+          type: integer
+          format: uint64
+        version:
+          description: Version of the stack
+          type: string
+        visibility:
+          type: string
+    ServiceCatalogChanges:
+      description: Represents list of service catalogs changes during the refresh of a service catalog source. Errored stacks are included in the corresponding field. The "details" field of the ErrorDetailsItem contains the stack canonical, if any.
+      title: ServiceCatalogChanges
+      required:
+      - created
+      - updated
+      - deleted
+      properties:
+        created:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalog'
+        deleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalog'
+        errored:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        updated:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalog'
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogSourceVersion'
+    ServiceCatalogLabel:
+      description: A structured key:value label declared on a stack
+      title: Service Catalog Label
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        value:
+          type: string
+          maxLength: 255
+          minLength: 1
+    CloudProvider:
+      description: CloudProvider represents a cloud provider. Those cloud providers are used to identify the scope of projects and/or stacks.
+      title: Cloud Provider
+      required:
+      - canonical
+      - name
+      properties:
+        abbreviation:
+          type: string
+          maxLength: 60
+          minLength: 2
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+          enum:
+          - aws
+          - google
+          - azurerm
+          - flexibleengine
+          - openstack
+          - scaleway
+          - vmware
+          - ovh
+          - alibaba
+          - oracle
+          - vsphere
+          - kubernetes
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 60
+          minLength: 2
+        regions:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: integer
+          format: uint64
+    ServiceCatalogSourceVersion:
+      description: Version of a SCS for the Stacks
+      type: object
+      title: Version
+      required:
+      - id
+      - name
+      - commit_hash
+      - status
+      - type
+      - usage
+      - is_latest
+      properties:
+        commit_hash:
+          description: Last commit hash that references it
+          type: string
+          minLength: 1
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_latest:
+          description: If it's the latest
+          type: boolean
+        name:
+          description: Name of the version
+          type: string
+        status:
+          description: Status of the version
+          type: string
+          enum:
+          - no_status
+          - active
+          - deleted
+          - outdated
+        type:
+          description: Type of the version
+          type: string
+          enum:
+          - tag
+          - branch
+        usage:
+          description: How many stacks use it
+          type: integer
+    ServiceCatalogSource:
+      title: ServiceCatalogSource
+      required:
+      - id
+      - name
+      - canonical
+      - url
+      - owner
+      - stack_count
+      properties:
+        branch:
+          type: string
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        changes:
+          description: Represents map of service catalogs changes during the update of a service catalog source. Used only for update action on a service catalog source.
+          $ref: '#/components/schemas/ServiceCatalogChanges'
+        created_at:
+          type: integer
+          format: uint64
+        credential_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+        owner:
+          description: 'Organization member that owns this service catalog source. When a user is the owner of a
+
+            service catalog source they has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        refreshed_at:
+          description: The last time the Service Catalog Source was (successfully) refreshed.
+          type: integer
+          format: uint64
+        service_catalogs:
+          description: Represents list of service catalogs in the service catalog source. Not used during update action on a service catalog source.
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalog'
+        stack_count:
+          type: integer
+          format: uint32
+        updated_at:
+          type: integer
+          format: uint64
+        url:
+          type: string
+          pattern: ^((/|~)[^/]*)+.(\.git)|(([\w\]+@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(/)?
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    SimpleTeam:
+      description: The entity which represents the information of a team a bit simplified.
+      type: object
+      title: SimpleTeam
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'Organization member that owns this team. When a user is the owner of a
+
+            team it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    UpdateServiceCatalogSource:
+      title: UpdateServiceCatalogSource
+      required:
+      - name
+      - url
+      properties:
+        branch:
+          type: string
+        credential_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        name:
+          type: string
+        owner:
+          description: 'User canonical that owns this service catalog source. If omitted then the person
+
+            creating this service catalog source will be assigned as owner. When a user is the
+
+            owner of a service catalog source they has all the permissions on it.
+
+            '
+          type: string
+        url:
+          type: string
+          pattern: ^((/|~)[^/]*)+.(\.git)|(([\w\]+@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(/)?
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

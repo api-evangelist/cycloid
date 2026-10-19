@@ -1,0 +1,1669 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Project KPIs API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on KPIs of an organization
+  name: Project KPIs
+paths:
+  /organizations/{organization_canonical}/projects/{project_canonical}/kpis:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical_query'
+    - $ref: '#/components/parameters/component_canonical_query'
+    - $ref: '#/components/parameters/timestamp_range_begin_query'
+    - $ref: '#/components/parameters/timestamp_range_end_query'
+    - $ref: '#/components/parameters/kpi_retrieve_data'
+    - $ref: '#/components/parameters/page_index'
+    - $ref: '#/components/parameters/page_size'
+    - $ref: '#/components/parameters/favorite'
+    get:
+      description: Get the list of configured KPIs
+      tags:
+      - Project KPIs
+      operationId: getKpis
+      responses:
+        '200':
+          description: The list of the KPIs
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KPI'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: my-kpi-1
+                  created_at: 1503224026
+                  data_set:
+                  - - date
+                    - time
+                  - - 1607904000
+                    - 39
+                  - - 1607817600
+                    - 140
+                  description: This KPI shows the code coverage of your code on an environment
+                  error: Something went wrong while importing
+                  favorite: true
+                  id: 1
+                  job_name: job1
+                  name: My KPI 1
+                  pipeline_name: pipeline1
+                  project:
+                    canonical: proj-1
+                    created_at: 1503225026
+                    description: my-description1
+                    environments:
+                    - dev
+                    - staging
+                    - production
+                    favorite: true
+                    id: 1
+                    name: Project 1
+                    owner:
+                      created_at: 1503225026
+                      email: mariano.jimenez@fakeemail.com
+                      full_name: Mariano Jimenez
+                      id: 1
+                      picture_url: https://avatars2.githubusercontent.com/u/14579210
+                      role:
+                        canonical: role-can
+                        description: Organization existing role
+                        id: 17
+                        name: existing
+                        rules:
+                        - action: organization:delete
+                          effect: allow
+                          id: 1
+                          resources:
+                          - organization:org-can
+                          - organization:org-can2
+                        - action: organization:team:create
+                          effect: allow
+                          id: 20
+                          resources: null
+                        - action: organization:team:read
+                          effect: allow
+                          id: 21
+                          resources:
+                          - organization:org-can:team:team-can
+                      username: user-1
+                    updated_at: 1503335026
+                  type: buildavgtime
+                  updated_at: 1503224526
+                  widget: doughnut
+                - canonical: my-kpi-2
+                  conf:
+                    envs:
+                    - staging
+                    - preprod
+                    - prod
+                  created_at: 1503227026
+                  data_set:
+                  - - date
+                    - env
+                    - version
+                    - duration
+                    - final
+                    - released
+                  - - 1592100100
+                    - dev
+                    - v1
+                    - 50
+                    - false
+                    - true
+                  - - 1592100280
+                    - dev
+                    - v2
+                    - 95
+                    - false
+                    - true
+                  - - 1592100500
+                    - dev
+                    - v3
+                    - 160
+                    - false
+                    - true
+                  - - 1592101700
+                    - dev
+                    - v4
+                    - 0
+                    - false
+                    - false
+                  - - 1592100150
+                    - staging
+                    - v1
+                    - 850
+                    - false
+                    - true
+                  - - 1592100375
+                    - staging
+                    - v2
+                    - 625
+                    - false
+                    - true
+                  - - 1592100660
+                    - staging
+                    - v3
+                    - 340
+                    - false
+                    - true
+                  - - 1592101000
+                    - prod
+                    - v3
+                    - 0
+                    - true
+                    - false
+                  description: This KPI shows how long time passes between deployment on your different environment
+                  error: ''
+                  favorite: true
+                  id: 2
+                  name: My KPI 2
+                  project_canonical: project2
+                  type: timetorelease
+                  updated_at: 1503227526
+                  widget: line
+                - canonical: my-kpi-10
+                  created_at: 1503225026
+                  data_set:
+                  - - date
+                    - coverage
+                  - - 1592100100
+                    - 13.4
+                  - - 1592100150
+                    - 28
+                  - - 1592100280
+                    - 85.2
+                  - - 1592100375
+                    - 83.9
+                  description: This KPI shows the code coverage of your code on an environment
+                  environment_canonical: env2
+                  error: ''
+                  favorite: false
+                  id: 10
+                  job_name: ''
+                  name: My KPI 10
+                  pipeline_name: ''
+                  project_canonical: project2
+                  type: codecoverage
+                  updated_at: 1503225526
+                  widget: doughnut
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get kpis
+      x-summary-source: derived
+    post:
+      description: Save information about the KPI
+      tags:
+      - Project KPIs
+      operationId: createKpi
+      responses:
+        '200':
+          description: KPI has been configured
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/KPI'
+              example:
+                data:
+                  canonical: my-kpi-1
+                  created_at: 1503224026
+                  description: This KPI shows the code coverage of your code on an environment
+                  error: Something went wrong while importing
+                  id: 1
+                  job_name: job1
+                  name: My KPI 1
+                  pipeline_name: pipeline1
+                  project:
+                    canonical: proj-1
+                    created_at: 1503225026
+                    description: my-description1
+                    environments:
+                    - dev
+                    - staging
+                    - production
+                    favorite: true
+                    id: 1
+                    name: Project 1
+                    owner:
+                      created_at: 1503225026
+                      email: mariano.jimenez@fakeemail.com
+                      full_name: Mariano Jimenez
+                      id: 1
+                      picture_url: https://avatars2.githubusercontent.com/u/14579210
+                      role:
+                        canonical: role-can
+                        description: Organization existing role
+                        id: 17
+                        name: existing
+                        rules:
+                        - action: organization:delete
+                          effect: allow
+                          id: 1
+                          resources:
+                          - organization:org-can
+                          - organization:org-can2
+                        - action: organization:team:create
+                          effect: allow
+                          id: 20
+                          resources: null
+                        - action: organization:team:read
+                          effect: allow
+                          id: 21
+                          resources:
+                          - organization:org-can:team:team-can
+                      username: user-1
+                    updated_at: 1503335026
+                  type: buildavgtime
+                  updated_at: 1503224526
+                  widget: doughnut
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewKPI'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewKPI'
+        description: The information of the KPI
+        required: true
+      summary: Create kpi
+      x-summary-source: derived
+  /organizations/{organization_canonical}/projects/{project_canonical}/kpis/{kpi_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/kpi_canonical'
+    - $ref: '#/components/parameters/timestamp_range_begin_query'
+    - $ref: '#/components/parameters/timestamp_range_end_query'
+    - $ref: '#/components/parameters/kpi_retrieve_data'
+    get:
+      description: Get the KPI
+      tags:
+      - Project KPIs
+      operationId: getKpi
+      responses:
+        '200':
+          description: The KPI
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/KPI'
+              example:
+                data:
+                  canonical: my-kpi-1
+                  created_at: 1503224026
+                  data_set:
+                  - - date
+                    - time
+                  - - 1607904000
+                    - 39
+                  - - 1607817600
+                    - 140
+                  description: This KPI shows the code coverage of your code on an environment
+                  error: ''
+                  id: 1
+                  job_name: job1
+                  name: My KPI 1
+                  pipeline_name: pipeline1
+                  project:
+                    canonical: proj-1
+                    created_at: 1503225026
+                    description: my-description1
+                    environments:
+                    - dev
+                    - staging
+                    - production
+                    favorite: true
+                    id: 1
+                    name: Project 1
+                    owner:
+                      created_at: 1503225026
+                      email: mariano.jimenez@fakeemail.com
+                      full_name: Mariano Jimenez
+                      id: 1
+                      picture_url: https://avatars2.githubusercontent.com/u/14579210
+                      role:
+                        canonical: role-can
+                        description: Organization existing role
+                        id: 17
+                        name: existing
+                        rules:
+                        - action: organization:delete
+                          effect: allow
+                          id: 1
+                          resources:
+                          - organization:org-can
+                          - organization:org-can2
+                        - action: organization:team:create
+                          effect: allow
+                          id: 20
+                          resources: null
+                        - action: organization:team:read
+                          effect: allow
+                          id: 21
+                          resources:
+                          - organization:org-can:team:team-can
+                      username: user-1
+                    updated_at: 1503335026
+                  type: buildavgtime
+                  updated_at: 1503224526
+                  widget: doughnut
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get kpi
+      x-summary-source: derived
+    put:
+      description: Update a KPI
+      tags:
+      - Project KPIs
+      operationId: updateKpi
+      responses:
+        '200':
+          description: Success update
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/KPI'
+              example:
+                data:
+                  canonical: my-kpi-11
+                  created_at: 1503224026
+                  description: This KPI shows the code coverage of your code on an environment
+                  error: ''
+                  id: 11
+                  job_name: job1
+                  name: My KPI 11
+                  pipeline_name: pipeline1
+                  project:
+                    canonical: proj-1
+                    created_at: 1503225026
+                    description: my-description1
+                    environments:
+                    - dev
+                    - staging
+                    - production
+                    favorite: true
+                    id: 1
+                    name: Project 1
+                    owner:
+                      created_at: 1503225026
+                      email: mariano.jimenez@fakeemail.com
+                      full_name: Mariano Jimenez
+                      id: 1
+                      picture_url: https://avatars2.githubusercontent.com/u/14579210
+                      role:
+                        canonical: role-can
+                        description: Organization existing role
+                        id: 17
+                        name: existing
+                        rules:
+                        - action: organization:delete
+                          effect: allow
+                          id: 1
+                          resources:
+                          - organization:org-can
+                          - organization:org-can2
+                        - action: organization:team:create
+                          effect: allow
+                          id: 20
+                          resources: null
+                        - action: organization:team:read
+                          effect: allow
+                          id: 21
+                          resources:
+                          - organization:org-can:team:team-can
+                      username: user-1
+                    updated_at: 1503335026
+                  type: buildavgtime
+                  updated_at: 1503224526
+                  widget: doughnut
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewKPI'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewKPI'
+        description: The information of the KPI new data
+        required: true
+      summary: Update kpi
+      x-summary-source: derived
+    delete:
+      description: delete a KPI
+      tags:
+      - Project KPIs
+      operationId: deleteKpi
+      responses:
+        '204':
+          description: Organization's KPI has been deleted
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete kpi
+      x-summary-source: derived
+  /organizations/{organization_canonical}/projects/{project_canonical}/kpis/{kpi_canonical}/favorites:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/kpi_canonical'
+    post:
+      description: Add a kpi in the user favorites list.
+      tags:
+      - Project KPIs
+      operationId: createKPIFavorite
+      responses:
+        '204':
+          description: The kpi has been added to user favorites list.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Create KPI favorite
+      x-summary-source: derived
+    delete:
+      description: Remove a kpi from the user favorites list.
+      tags:
+      - Project KPIs
+      operationId: deleteKPIFavorite
+      responses:
+        '204':
+          description: The kpi has been removed from user favorites list.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete KPI favorite
+      x-summary-source: derived
+components:
+  parameters:
+    timestamp_range_begin_query:
+      description: The unix timestamp in milliseconds, which indicate the start of the time range.
+      name: begin
+      in: query
+      schema:
+        type: integer
+        format: uint64
+    kpi_retrieve_data:
+      description: 'Flag to retrieve KPIs'' data upon retrieving KPIs themselves
+
+        '
+      name: fetch_data
+      in: query
+      schema:
+        type: boolean
+    favorite:
+      description: 'Flag to retrieve favorite data from the members favorite list.
+
+        '
+      name: favorite
+      in: query
+      schema:
+        type: boolean
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    kpi_canonical:
+      description: A canonical of a kpi.
+      name: kpi_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    environment_canonical_query:
+      description: A list of environments' canonical to filter from
+      name: environment_canonical
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    component_canonical_query:
+      description: A canonical of a component.
+      name: component_canonical
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    timestamp_range_end_query:
+      description: The unix timestamp in milliseconds, which indicate the end of the time range.
+      name: end
+      in: query
+      schema:
+        type: integer
+        format: uint64
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  schemas:
+    ConfigRepositorySyncStatus:
+      description: Derived health of a config repository's asynchronous git projection, computed from the pending commit-outbox entries. Surfaced so the UI can tell the user their saved configuration is failing to sync (and is being retried automatically) without implying the configuration was lost.
+      type: object
+      title: ConfigRepositorySyncStatus
+      required:
+      - state
+      properties:
+        last_error:
+          description: The most recent sync failure message (present when state is error).
+          type: string
+        oldest_pending_at:
+          description: Unix timestamp in milliseconds of the oldest change still pending projection to git.
+          type: integer
+          format: uint64
+        pending_count:
+          description: Number of buffered changes not yet mirrored to git.
+          type: integer
+          format: uint64
+        state:
+          description: 'synced: nothing pending, git mirror up to date. syncing: pending entries, no recorded error (normal catch-up). error: pending entries are failing to sync and are being retried.'
+          type: string
+          enum:
+          - synced
+          - syncing
+          - error
+    KPI:
+      description: A KPI
+      title: KPI
+      required:
+      - id
+      - name
+      - canonical
+      - type
+      - config
+      - widget
+      - description
+      - created_at
+      - updated_at
+      - error
+      - project
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        component_canonical:
+          type: string
+        config:
+          description: 'The config represent some extra parameters which are required for the configuration of certain KPIs. Please refer to the documentation for more details.
+
+            '
+          type: object
+        created_at:
+          type: integer
+          format: uint64
+        data_set:
+          description: The data is represented in CSV format. Depending on the widget configured for the KPI, the format may vary. For more information please refer to our product documentation.
+          type: array
+          items:
+            type: object
+        description:
+          type: string
+        environment_canonical:
+          type: string
+        error:
+          description: If an error occurred in the last import, that field will be filled with the message of the error
+          type: string
+        favorite:
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        job_name:
+          type: string
+        name:
+          type: string
+          minLength: 2
+        pipeline_name:
+          type: string
+        project:
+          $ref: '#/components/schemas/Project'
+        type:
+          type: string
+          enum:
+          - build_avg_time
+          - build_frequency
+          - build_history
+          - code_coverage
+          - time_to_release
+        updated_at:
+          type: integer
+          format: uint64
+        widget:
+          type: string
+          enum:
+          - bars
+          - stackbars
+          - doughnut
+          - history
+          - line
+          - pie
+          - summary
+    ServiceCatalogTechnology:
+      description: ServiceCatalogTechnology is a Technology of the Service Catalog
+      title: ServiceCatalogTechnology
+      properties:
+        technology:
+          type: string
+        version:
+          type: string
+    ServiceCatalog:
+      description: Represents the Service Catalog item
+      title: Service Catalog
+      required:
+      - id
+      - name
+      - canonical
+      - author
+      - keywords
+      - ref
+      - form_enabled
+      - trusted
+      - directory
+      - visibility
+      - organization_canonical
+      - version
+      - latest
+      properties:
+        author:
+          type: string
+        blueprint:
+          description: Determines if given stack is a blueprint
+          type: boolean
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_providers:
+          description: Cloud providers supported by the stack
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudProvider'
+        created_at:
+          type: integer
+          format: uint64
+        default_version_branch:
+          description: Default version of the stack, based on the Catalog Repository branch
+          type: string
+        dependencies:
+          description: 'Canonicals of the stacks that must be instantiated before this one. Read-only: dependencies can only be declared in the stack''s .cycloid.yml source file and are refreshed from it; they cannot be set or changed through the API.'
+          type: array
+          items:
+            type: string
+          readOnly: true
+        description:
+          type: string
+        directory:
+          description: Directory where the ServiceCatalog configuration is found.
+          type: string
+        form_enabled:
+          description: Indicates if this stack can be configured with form's or not. Based on the presence or not of a valid .forms.yaml file since it's creation or last refresh.
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        image:
+          type: string
+          format: uri
+        keywords:
+          type: array
+          items:
+            type: string
+        labels:
+          description: Structured key:value labels declared in the stack's .cycloid.yml
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogLabel'
+        latest:
+          description: Indicates if the stack uses the latest version
+          type: boolean
+        name:
+          type: string
+        organization_canonical:
+          description: Organization that the stack belongs to
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        readme:
+          description: Readme of the stack
+          type: string
+        ref:
+          type: string
+        service_catalog_source_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        team:
+          description: Team that maintains the stack
+          $ref: '#/components/schemas/SimpleTeam'
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogTechnology'
+        trusted:
+          description: If 'true' the ServiceCatalog is from the main organization and can be trusted.
+          type: boolean
+        unique:
+          description: Determines if the stack can be instantiated only once per organization, project and environment
+          type: boolean
+        updated_at:
+          type: integer
+          format: uint64
+        version:
+          description: Version of the stack
+          type: string
+        visibility:
+          type: string
+    EnvironmentType:
+      description: Represent an environment type that belongs to an organization. Environment types are used to categorize environments (e.g., production, staging, development).
+      title: Environment Type
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - is_default
+      - color
+      - environments_count
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-z]+(?:[\da-z\-._]+[\da-z]|[\da-z])$
+        color:
+          description: Color associated with this environment type
+          type: string
+          maxLength: 64
+        created_at:
+          type: integer
+          format: uint64
+        environments_count:
+          description: The total count of environments using this environment type
+          type: integer
+          format: uint32
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_default:
+          description: Indicates if this is a system-provided default environment type that cannot be deleted or renamed
+          type: boolean
+        label_selector:
+          description: Optional label selector constraining which stacks are offered in environments of this type. Absent means no constraint.
+          $ref: '#/components/schemas/LabelSelector'
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+        updated_at:
+          type: integer
+          format: uint64
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    ServiceCatalogLabel:
+      description: A structured key:value label declared on a stack
+      title: Service Catalog Label
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        value:
+          type: string
+          maxLength: 255
+          minLength: 1
+    NewKPI:
+      description: A KPI's configuration that needs to be saved
+      title: New KPI
+      required:
+      - name
+      - type
+      - widget
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        config:
+          description: 'The config represent some extra parameters which are required for the configuration of certain KPIs. Please refer to the documentation for more details.
+
+            '
+          type: object
+        description:
+          type: string
+        job_name:
+          type: string
+        name:
+          type: string
+          minLength: 2
+        pipeline_name:
+          type: string
+        type:
+          type: string
+          enum:
+          - build_avg_time
+          - build_frequency
+          - build_history
+          - code_coverage
+          - time_to_release
+        widget:
+          type: string
+          enum:
+          - bars
+          - stackbars
+          - doughnut
+          - history
+          - line
+          - pie
+          - summary
+    CloudProvider:
+      description: CloudProvider represents a cloud provider. Those cloud providers are used to identify the scope of projects and/or stacks.
+      title: Cloud Provider
+      required:
+      - canonical
+      - name
+      properties:
+        abbreviation:
+          type: string
+          maxLength: 60
+          minLength: 2
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+          enum:
+          - aws
+          - google
+          - azurerm
+          - flexibleengine
+          - openstack
+          - scaleway
+          - vmware
+          - ovh
+          - alibaba
+          - oracle
+          - vsphere
+          - kubernetes
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 60
+          minLength: 2
+        regions:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: integer
+          format: uint64
+    CloudAccountSimple:
+      description: A simplified cloud account representation without credentials, used when embedding a cloud account in other entities.
+      title: Cloud Account Simple
+      required:
+      - id
+      - canonical
+      - name
+      - cloud_provider
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_provider:
+          description: The canonical of the associated cloud provider. Can be a built-in provider canonical (aws, google, azurerm; aliases like gcp/microsoft azure are accepted and normalized) or an org-scoped custom cloud provider canonical.
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: A user-defined name for the cloud account
+          type: string
+          maxLength: 255
+          minLength: 1
+    ServiceCatalogSourceVersion:
+      description: Version of a SCS for the Stacks
+      type: object
+      title: Version
+      required:
+      - id
+      - name
+      - commit_hash
+      - status
+      - type
+      - usage
+      - is_latest
+      properties:
+        commit_hash:
+          description: Last commit hash that references it
+          type: string
+          minLength: 1
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_latest:
+          description: If it's the latest
+          type: boolean
+        name:
+          description: Name of the version
+          type: string
+        status:
+          description: Status of the version
+          type: string
+          enum:
+          - no_status
+          - active
+          - deleted
+          - outdated
+        type:
+          description: Type of the version
+          type: string
+          enum:
+          - tag
+          - branch
+        usage:
+          description: How many stacks use it
+          type: integer
+    Project:
+      description: The entity which represents the information of a project.
+      type: object
+      title: Project
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - environments
+      - color
+      - icon
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        color:
+          type: string
+          maxLength: 64
+        config_repository_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        environments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Environment'
+        favorite:
+          type: boolean
+        icon:
+          type: string
+          maxLength: 64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this project. When a user is the owner of a
+
+            project it has all the permissions on it.
+
+            In the event where the user has been deleted that field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+        version_status:
+          description: Aggregated value of the Environments Components Version.Status
+          type: array
+          items:
+            type: string
+            enum:
+            - no_status
+            - latest
+            - active
+            - deleted
+            - outdated
+    EnvironmentVariableItem:
+      description: A single key/value pair attached to an Environment. The value is surfaced to interpolation contexts (StackForms, value_ref, pipelines, Terraform templates) under the `.environment.variables` template path.
+      title: Environment Variable Item
+      required:
+      - key
+      - type
+      - value
+      properties:
+        created_at:
+          description: The date and time (unix timestamp) the variable was created.
+          type: integer
+          format: uint64
+          readOnly: true
+        description:
+          description: Optional free-form description of the variable.
+          type: string
+          maxLength: 1000
+        key:
+          description: Identifier used to reference the variable in templates (e.g. `($ .environment.variables.my_key $)`). Must not contain dots and must include at least one alphanumeric character.
+          type: string
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^.]*[A-Za-z0-9][^.]*$
+        sensitive:
+          description: Display hint for the UI to mask this value. The API returns the value in plaintext regardless.
+          type: boolean
+          default: false
+        type:
+          description: Declared shape of the value. Names mirror stackforms widget types so the two APIs stay consistent.
+          type: string
+          enum:
+          - string
+          - boolean
+          - integer
+          - float
+          - array
+          - map
+        updated_at:
+          description: The date and time (unix timestamp) the variable was last updated.
+          type: integer
+          format: uint64
+          readOnly: true
+        value:
+          description: 'The variable value. Its shape must match the `type` field: a JSON string, boolean, integer, float, array or object respectively.'
+          type: object
+    ProjectSimple:
+      description: The entity which represents minimal information of a project.
+      type: object
+      title: ProjectSimple
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - color
+      - icon
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        color:
+          type: string
+          maxLength: 64
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        favorite:
+          type: boolean
+        icon:
+          type: string
+          maxLength: 64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this project. When a user is the owner of a
+
+            project it has all the permissions on it.
+
+            In the event where the user has been deleted that field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    Environment:
+      description: Represent an environment that belongs to an organization. This is the base environment entity without project-specific relations.
+      title: Environment
+      required:
+      - id
+      - canonical
+      - created_at
+      - updated_at
+      - resources_count
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:[\da-zA-Z\-._]+[\da-zA-Z]|[\da-zA-Z])$
+        cloud_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudAccountSimple'
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/Component'
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          description: Optional description of the environment
+          type: string
+          maxLength: 1000
+        environment_type:
+          $ref: '#/components/schemas/EnvironmentType'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: The display name of the environment
+          type: string
+          maxLength: 100
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this environment. When a user is the owner of an
+
+            environment it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        resources_count:
+          description: The total count of resources attributed to this environment
+          type: integer
+          format: uint32
+        updated_at:
+          type: integer
+          format: uint64
+        variables:
+          description: Full set of environment variables attached to this environment, available under the `.environment.variables` template path during interpolation.
+          type: array
+          items:
+            $ref: '#/components/schemas/EnvironmentVariableItem'
+        version_status:
+          description: Aggregated value of the Components Version.Status in this environment. Only populated when the environment is returned alongside a Project.
+          type: array
+          items:
+            type: string
+            enum:
+            - no_status
+            - latest
+            - active
+            - deleted
+            - outdated
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    LabelSelector:
+      description: Constrains which stacks are offered in environments of a given type, based on the stack's labels. Every requirement must be satisfied for a stack to match.
+      title: Label Selector
+      required:
+      - requirements
+      properties:
+        enforcement:
+          description: '''soft'' only filters the available-stacks list; ''hard'' also rejects creating a component from a non-matching stack.'
+          type: string
+          default: soft
+          enum:
+          - soft
+          - hard
+        requirements:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LabelSelectorRequirement'
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    SimpleTeam:
+      description: The entity which represents the information of a team a bit simplified.
+      type: object
+      title: SimpleTeam
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'Organization member that owns this team. When a user is the owner of a
+
+            team it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    Component:
+      description: The entity which represents the information of a component.
+      type: object
+      title: Component
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - service_catalog
+      - environment
+      - project
+      - version
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        cloud_provider:
+          description: 'The cloud provider object that this environment is using.
+
+            In the event where the cloud provider is not yet defined/supported
+
+            that field might be empty.
+
+            '
+          $ref: '#/components/schemas/CloudProvider'
+        config_repository_sync_status:
+          description: Status of the asynchronous projection of this component's saved StackForms configuration to its project's config git repository. The configuration is always persisted (DB source of truth); this reports whether the git mirror is up to date, catching up, or failing. Absent when there is nothing pending to mirror.
+          $ref: '#/components/schemas/ConfigRepositorySyncStatus'
+        config_revision:
+          description: 'The revision of this component''s StackForms configuration currently mirrored to the config git repository, and therefore the one a build started now would plan against. Unlike config_repository_sync_status it is reported even when the mirror is up to date, so an automation that wrote a configuration can confirm the revision a build will read is its own, and match it against the config_revision reported when creating a build. Absent when the component has no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        environment:
+          description: The environment object that this component is using.
+          $ref: '#/components/schemas/Environment'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_configured:
+          description: The status of the component.
+          type: boolean
+        name:
+          type: string
+          minLength: 1
+        project:
+          description: The project object that this component is using.
+          $ref: '#/components/schemas/ProjectSimple'
+        service_catalog:
+          description: The Service Catalog that was used to create project.
+          $ref: '#/components/schemas/ServiceCatalog'
+        stackform_updated_at:
+          description: Unix timestamp in milliseconds of when the component was last configured via StackForms. Absent if the component has never been configured or the information is unavailable.
+          type: integer
+          format: uint64
+        updated_at:
+          type: integer
+          format: uint64
+        use_case:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        version:
+          description: The version used by the Component
+          $ref: '#/components/schemas/ServiceCatalogSourceVersion'
+    LabelSelectorRequirement:
+      description: A single label constraint applied to a stack's labels
+      title: Label Selector Requirement
+      required:
+      - key
+      - operator
+      - values
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        operator:
+          description: The matching operator. 'eq' requires the label to carry the single value; 'in' requires the label to carry at least one of the values.
+          type: string
+          enum:
+          - eq
+          - in
+        values:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            maxLength: 255
+            minLength: 1
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

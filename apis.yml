@@ -67,72 +67,6 @@ tags:
   - StackForms
   - Terraform
 apis:
-- aid: cycloid:cycloid-cloudcost-api
-  name: Cycloid CloudCost API
-  description: Cloud cost provider accounts, dashboards, and tag mappings.
-  humanURL: https://docs.cycloid.io/
-  baseURL: https://http-api.cycloid.io
-  tags:
-  - Cloud Cost
-  tags_raw:
-  - CloudCost
-  properties:
-  - type: OpenAPI
-    url: openapi/cycloid-cloudcost-api-openapi.yml
-  - type: Documentation
-    url: https://docs.cycloid.io/
-  - type: GettingStarted
-    url: https://docs.cycloid.io/getting-started
-  - type: Rules
-    url: rules/cycloid-api-rules.yml
-- aid: cycloid:cycloid-configrepositories-api
-  name: Cycloid ConfigRepositories API
-  description: Git config repositories used by stacks and pipelines.
-  humanURL: https://docs.cycloid.io/
-  baseURL: https://http-api.cycloid.io
-  tags:
-  - ConfigRepositories
-  properties:
-  - type: OpenAPI
-    url: openapi/cycloid-configrepositories-api-openapi.yml
-  - type: Documentation
-    url: https://docs.cycloid.io/
-  - type: GettingStarted
-    url: https://docs.cycloid.io/getting-started
-  - type: Rules
-    url: rules/cycloid-api-rules.yml
-- aid: cycloid:cycloid-credentials-api
-  name: Cycloid Credentials API
-  description: Credential storage and rotation.
-  humanURL: https://docs.cycloid.io/
-  baseURL: https://http-api.cycloid.io
-  tags:
-  - Credentials
-  properties:
-  - type: OpenAPI
-    url: openapi/cycloid-credentials-api-openapi.yml
-  - type: Documentation
-    url: https://docs.cycloid.io/
-  - type: GettingStarted
-    url: https://docs.cycloid.io/getting-started
-  - type: Rules
-    url: rules/cycloid-api-rules.yml
-- aid: cycloid:cycloid-inventory-api
-  name: Cycloid Inventory API
-  description: Inventory of cloud resources and state locking.
-  humanURL: https://docs.cycloid.io/
-  baseURL: https://http-api.cycloid.io
-  tags:
-  - Inventory
-  properties:
-  - type: OpenAPI
-    url: openapi/cycloid-inventory-api-openapi.yml
-  - type: Documentation
-    url: https://docs.cycloid.io/
-  - type: GettingStarted
-    url: https://docs.cycloid.io/getting-started
-  - type: Rules
-    url: rules/cycloid-api-rules.yml
 - aid: cycloid:cycloid-organizations-api
   name: Cycloid Organizations API
   description: Manage organizations, members, teams, and events.
@@ -151,50 +85,975 @@ apis:
     url: https://docs.cycloid.io/getting-started
   - type: Rules
     url: rules/cycloid-api-rules.yml
-- aid: cycloid:cycloid-pipelines-api
-  name: Cycloid Pipelines API
-  description: CI/CD pipelines, components, and build tracking.
+- aid: cycloid:cycloid-admin-api
+  name: Cycloid Admin API
+  description: Instance administration, available on the root organization to its admins only.
   humanURL: https://docs.cycloid.io/
   baseURL: https://http-api.cycloid.io
   tags:
-  - Pipelines
+  - Admin
   properties:
   - type: OpenAPI
-    url: openapi/cycloid-pipelines-api-openapi.yml
+    url: openapi/cycloid-admin-api-openapi.yml
   - type: Documentation
     url: https://docs.cycloid.io/
   - type: GettingStarted
     url: https://docs.cycloid.io/getting-started
   - type: Rules
     url: rules/cycloid-api-rules.yml
-- aid: cycloid:cycloid-projects-api
-  name: Cycloid Projects API
-  description: Projects and environments inside an organization.
+- aid: cycloid:cycloid-appearance-api
+  name: Cycloid Appearance API
+  description: The Appearance API from Cycloid — 2 operation(s) for appearance.
   humanURL: https://docs.cycloid.io/
   baseURL: https://http-api.cycloid.io
   tags:
-  - Project
-  tags_raw:
-  - Projects
+  - Appearance
   properties:
   - type: OpenAPI
-    url: openapi/cycloid-projects-api-openapi.yml
+    url: openapi/cycloid-appearance-api-openapi.yml
   - type: Documentation
     url: https://docs.cycloid.io/
   - type: GettingStarted
     url: https://docs.cycloid.io/getting-started
   - type: Rules
     url: rules/cycloid-api-rules.yml
-- aid: cycloid:cycloid-servicecatalogs-api
-  name: Cycloid ServiceCatalogs API
-  description: Stacks (Service Catalog) and StackForms.
+- aid: cycloid:cycloid-authentications-api
+  name: Cycloid Authentications API
+  description: The Authentications API from Cycloid — 2 operation(s) for authentications.
   humanURL: https://docs.cycloid.io/
   baseURL: https://http-api.cycloid.io
   tags:
-  - ServiceCatalogs
+  - Authentications
   properties:
   - type: OpenAPI
-    url: openapi/cycloid-servicecatalogs-api-openapi.yml
+    url: openapi/cycloid-authentications-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-cloud-providers-api
+  name: Cycloid Cloud providers API
+  description: The Cloud providers API from Cycloid — 1 operation(s) for cloud providers.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Cloud providers
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-cloud-providers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-code-generation-api
+  name: Cycloid Code Generation API
+  description: The Code Generation API from Cycloid — 8 operation(s) for code generation.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Code Generation
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-code-generation-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-component-pipeline-resources-api
+  name: Cycloid Component Pipeline Resources API
+  description: Operations on the resources of a pipeline in a component
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Component Pipeline Resources
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-component-pipeline-resources-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-component-pipeline-resources-versions-api
+  name: Cycloid Component Pipeline Resources Versions API
+  description: Operations on the versions of a resource in a pipeline
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Component Pipeline Resources Versions
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-component-pipeline-resources-versions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-component-pipelines-api
+  name: Cycloid Component pipelines API
+  description: Operations on the pipelines of a component
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Component pipelines
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-component-pipelines-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-component-pipelines-jobs-api
+  name: Cycloid Component Pipelines Jobs API
+  description: Operations on the jobs of a pipeline in a component
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Component Pipelines Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-component-pipelines-jobs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-component-pipelines-jobs-builds-api
+  name: Cycloid Component Pipelines Jobs Builds API
+  description: Operations on the builds of a job in a pipeline
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Component Pipelines Jobs Builds
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-component-pipelines-jobs-builds-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-cost-estimation-api
+  name: Cycloid Cost Estimation API
+  description: Operations related to estimating cost of infrastructure.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Cost Estimation
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-cost-estimation-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-cycloid-api
+  name: Cycloid Cycloid API
+  description: Operation related to Cycloid's application.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Cycloid
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-cycloid-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-environment-pipelines-api
+  name: Cycloid Environment pipelines API
+  description: The Environment pipelines API from Cycloid — 1 operation(s) for environment pipelines.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Environment pipelines
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-environment-pipelines-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-api-keys-api
+  name: Cycloid Organization API keys API
+  description: The Organization API keys API from Cycloid — 2 operation(s) for organization api keys.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization API keys
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-api-keys-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-appearances-api
+  name: Cycloid Organization Appearances API
+  description: >-
+    The Organization Appearances API from Cycloid — 2 operation(s) for organization appearances.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Appearances
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-appearances-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-authentications-api
+  name: Cycloid Organization Authentications API
+  description: >-
+    The Organization Authentications API from Cycloid — 2 operation(s) for organization authentications.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Authentications
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-authentications-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-children-api
+  name: Cycloid Organization Children API
+  description: Operations on the children of an organization
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Children
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-children-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-cloud-accounts-api
+  name: Cycloid Organization Cloud Accounts API
+  description: >-
+    The Organization Cloud Accounts API from Cycloid — 7 operation(s) for organization cloud accounts.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Cloud Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-cloud-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-cloud-cost-management-accounts-api
+  name: Cycloid Organization Cloud Cost Management Accounts API
+  description: >-
+    The Organization Cloud Cost Management Accounts API from Cycloid — 2 operation(s) for organization
+    cloud cost management accounts.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Cloud Cost Management Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-cloud-cost-management-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-cloud-cost-management-api
+  name: Cycloid Organization Cloud Cost Management API
+  description: >-
+    The Organization Cloud Cost Management API from Cycloid — 1 operation(s) for organization cloud cost
+    management.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Cloud Cost Management
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-cloud-cost-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-cloud-cost-management-dashboard-api
+  name: Cycloid Organization Cloud Cost Management Dashboard API
+  description: >-
+    The Organization Cloud Cost Management Dashboard API from Cycloid — 1 operation(s) for organization
+    cloud cost management dashboard.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Cloud Cost Management Dashboard
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-cloud-cost-management-dashboard-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-cloud-cost-management-filter-vaules-api
+  name: Cycloid Organization Cloud Cost Management filter vaules API
+  description: >-
+    The Organization Cloud Cost Management filter vaules API from Cycloid — 1 operation(s) for organization
+    cloud cost management filter vaules.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Cloud Cost Management filter vaules
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-cloud-cost-management-filter-vaules-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-cloud-cost-management-projects-dashboard-api
+  name: Cycloid Organization Cloud Cost Management Projects Dashboard API
+  description: >-
+    The Organization Cloud Cost Management Projects Dashboard API from Cycloid — 1 operation(s) for organization
+    cloud cost management projects dashboard.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Cloud Cost Management Projects Dashboard
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-cloud-cost-management-projects-dashboard-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-cloud-cost-management-provider-details-api
+  name: Cycloid Organization Cloud Cost Management Provider Details API
+  description: >-
+    The Organization Cloud Cost Management Provider Details API from Cycloid — 1 operation(s) for organization
+    cloud cost management provider details.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Cloud Cost Management Provider Details
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-cloud-cost-management-provider-details-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-cloud-cost-management-provider-histograms-api
+  name: Cycloid Organization Cloud Cost Management Provider Histograms API
+  description: >-
+    The Organization Cloud Cost Management Provider Histograms API from Cycloid — 2 operation(s) for organization
+    cloud cost management provider histograms.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Cloud Cost Management Provider Histograms
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-cloud-cost-management-provider-histograms-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-cloud-cost-management-tag-mappings-api
+  name: Cycloid Organization Cloud Cost Management Tag Mappings API
+  description: >-
+    The Organization Cloud Cost Management Tag Mappings API from Cycloid — 1 operation(s) for organization
+    cloud cost management tag mappings.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Cloud Cost Management Tag Mappings
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-cloud-cost-management-tag-mappings-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-components-api
+  name: Cycloid Organization components API
+  description: Operations on the components of an organization
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization components
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-components-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-config-repositories-api
+  name: Cycloid Organization Config Repositories API
+  description: >-
+    The Organization Config Repositories API from Cycloid — 3 operation(s) for organization config repositories.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Config Repositories
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-config-repositories-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-credentials-api
+  name: Cycloid Organization Credentials API
+  description: >-
+    The Organization Credentials API from Cycloid — 4 operation(s) for organization credentials.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Credentials
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-credentials-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-environment-types-api
+  name: Cycloid Organization Environment Types API
+  description: >-
+    The Organization Environment Types API from Cycloid — 3 operation(s) for organization environment
+    types.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Environment Types
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-environment-types-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-environments-api
+  name: Cycloid Organization Environments API
+  description: Operations to perform on an environment associated to a project of an organization.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Environments
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-environments-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-external-backends-api
+  name: Cycloid Organization External Backends API
+  description: >-
+    The Organization External Backends API from Cycloid — 3 operation(s) for organization external backends.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization External Backends
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-external-backends-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-forms-api
+  name: Cycloid Organization Forms API
+  description: The Organization Forms API from Cycloid — 3 operation(s) for organization forms.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Forms
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-forms-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-infrastructure-api
+  name: Cycloid Organization Infrastructure API
+  description: Operations on the infrastructure of an organization
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Infrastructure
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-infrastructure-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-infrastructure-policies-api
+  name: Cycloid Organization Infrastructure Policies API
+  description: Operations on the infrastructure policies of an organization
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Infrastructure Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-infrastructure-policies-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-inventory-api
+  name: Cycloid Organization Inventory API
+  description: >-
+    The Organization Inventory API from Cycloid — 10 operation(s) for organization inventory.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-inventory-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-inventory-plan-api
+  name: Cycloid Organization Inventory Plan API
+  description: >-
+    The Organization Inventory Plan API from Cycloid — 1 operation(s) for organization inventory plan.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Inventory Plan
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-inventory-plan-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-kpis-api
+  name: Cycloid Organization KPIs API
+  description: Operations on KPIs of an organization
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization KPIs
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-kpis-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-licence-api
+  name: Cycloid Organization licence API
+  description: The Organization licence API from Cycloid — 1 operation(s) for organization licence.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization licence
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-licence-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-logs-api
+  name: Cycloid Organization Logs API
+  description: Operations on the logs of a project
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Logs
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-logs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-members-api
+  name: Cycloid Organization members API
+  description: Operations for members of an organization.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization members
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-members-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-naming-rules-api
+  name: Cycloid Organization naming rules API
+  description: >-
+    The Organization naming rules API from Cycloid — 1 operation(s) for organization naming rules.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization naming rules
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-naming-rules-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-oidc-group-mappings-api
+  name: Cycloid Organization OIDC Group Mappings API
+  description: Operations for OIDC group mappings of an organization.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization OIDC Group Mappings
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-oidc-group-mappings-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-pipelines-api
+  name: Cycloid Organization pipelines API
+  description: The Organization pipelines API from Cycloid — 1 operation(s) for organization pipelines.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization pipelines
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-pipelines-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-plugin-managers-api
+  name: Cycloid Organization Plugin Managers API
+  description: >-
+    The Organization Plugin Managers API from Cycloid — 2 operation(s) for organization plugin managers.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Plugin Managers
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-plugin-managers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-plugins-api
+  name: Cycloid Organization Plugins API
+  description: The Organization Plugins API from Cycloid — 21 operation(s) for organization plugins.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Plugins
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-plugins-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-projects-api
+  name: Cycloid Organization projects API
+  description: Operations for projects which belong to an organization.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization projects
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-projects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-roles-api
+  name: Cycloid Organization Roles API
+  description: The Organization Roles API from Cycloid — 2 operation(s) for organization roles.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Roles
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-roles-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-service-catalog-sources-api
+  name: Cycloid Organization Service Catalog Sources API
+  description: >-
+    The Organization Service Catalog Sources API from Cycloid — 6 operation(s) for organization service
+    catalog sources.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Service Catalog Sources
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-service-catalog-sources-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-subscriptions-api
+  name: Cycloid Organization Subscriptions API
+  description: Operations on the subscriptions
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-subscriptions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-team-members-api
+  name: Cycloid Organization team members API
+  description: >-
+    The Organization team members API from Cycloid — 2 operation(s) for organization team members.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization team members
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-team-members-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-teams-api
+  name: Cycloid Organization teams API
+  description: Operations for teams which belong to an organization.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization teams
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-teams-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-organization-workers-api
+  name: Cycloid Organization workers API
+  description: The Organization workers API from Cycloid — 1 operation(s) for organization workers.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Organization workers
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-organization-workers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-policies-api
+  name: Cycloid Policies API
+  description: The Policies API from Cycloid — 1 operation(s) for policies.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-policies-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-project-kpis-api
+  name: Cycloid Project KPIs API
+  description: Operations on KPIs of an organization
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Project KPIs
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-project-kpis-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-project-pipelines-api
+  name: Cycloid Project pipelines API
+  description: The Project pipelines API from Cycloid — 1 operation(s) for project pipelines.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Project pipelines
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-project-pipelines-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-saml2-api
+  name: Cycloid SAML2 API
+  description: The SAML2 API from Cycloid — 2 operation(s) for saml2.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - SAML2
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-saml2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-service-catalogs-api
+  name: Cycloid Service catalogs API
+  description: The Service catalogs API from Cycloid — 10 operation(s) for service catalogs.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - Service catalogs
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-service-catalogs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cycloid.io/
+  - type: GettingStarted
+    url: https://docs.cycloid.io/getting-started
+  - type: Rules
+    url: rules/cycloid-api-rules.yml
+- aid: cycloid:cycloid-user-api
+  name: Cycloid User API
+  description: Operations for the authenticated user.
+  humanURL: https://docs.cycloid.io/
+  baseURL: https://http-api.cycloid.io
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/cycloid-user-api-openapi.yml
   - type: Documentation
     url: https://docs.cycloid.io/
   - type: GettingStarted

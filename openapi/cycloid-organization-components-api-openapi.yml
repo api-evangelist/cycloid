@@ -1,0 +1,3222 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization components API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on the components of an organization
+  name: Organization components
+paths:
+  /organizations/{organization_canonical}/components:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Fetch the components within the organization. Components can also be filtered by canonical, name, or `component_search` (matches either) using LHS query filters, e.g. `?component_search[rlike]=my-component`.
+      tags:
+      - Organization components
+      operationId: getOrganizationComponents
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/component_canonical_query'
+      - $ref: '#/components/parameters/component_name_query'
+      - $ref: '#/components/parameters/component_search_query'
+      responses:
+        '200':
+          description: List of the Components
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Component'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: component-1
+                  created_at: 1503225026
+                  id: 1
+                  name: Component 1
+                  updated_at: 1503335026
+                  use_case: default
+                - canonical: component-2
+                  created_at: 1503225026
+                  id: 2
+                  name: Component 2
+                  updated_at: 1503335026
+                  use_case: default
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get organization components
+      x-summary-source: derived
+  /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    get:
+      description: Fetch the components that are part of the environment. Components can also be filtered by canonical, name, or `component_search` (matches either) using LHS query filters, e.g. `?component_search[rlike]=my-component`.
+      tags:
+      - Organization components
+      operationId: getComponents
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/component_canonical_query'
+      - $ref: '#/components/parameters/component_name_query'
+      - $ref: '#/components/parameters/component_search_query'
+      responses:
+        '200':
+          description: List of the Components
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Component'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - canonical: component-1
+                  created_at: 1503225026
+                  id: 1
+                  name: Component 1
+                  updated_at: 1503335026
+                  use_case: default
+                - canonical: component-2
+                  created_at: 1503225026
+                  id: 2
+                  name: Component 2
+                  updated_at: 1503335026
+                  use_case: default
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get components
+      x-summary-source: derived
+    put:
+      description: Create and configure a new Component in one step
+      tags:
+      - Organization components
+      operationId: createAndConfigureComponent
+      responses:
+        '200':
+          description: Component created and configured. The body contains the information of the new created Component.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Component'
+              example:
+                data:
+                  canonical: name-key
+                  created_at: 1503225026
+                  id: 3
+                  name: name-key
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewAndConfiguredComponent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewAndConfiguredComponent'
+        description: The information of the component to create and configure.
+        required: true
+      summary: Create and configure component
+      x-summary-source: derived
+    post:
+      description: Create a new Component
+      tags:
+      - Organization components
+      operationId: createComponent
+      responses:
+        '200':
+          description: Component created. The body contains the information of the new created Component.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Component'
+              example:
+                data:
+                  canonical: name-key
+                  created_at: 1503225026
+                  id: 2
+                  name: name-key
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewComponent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewComponent'
+        description: The information of the component to create.
+        required: true
+      summary: Create component
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    get:
+      description: Fetch the component that's part of the environment
+      tags:
+      - Organization components
+      operationId: getComponent
+      responses:
+        '200':
+          description: Component
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Component'
+              example:
+                data:
+                  canonical: component-1
+                  created_at: 1503225026
+                  id: 1
+                  name: Component 1
+                  updated_at: 1503335026
+                  use_case: default
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get component
+      x-summary-source: derived
+    put:
+      description: Update the component that's part of the environment
+      tags:
+      - Organization components
+      operationId: updateComponent
+      responses:
+        '200':
+          description: Component
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Component'
+              example:
+                data:
+                  canonical: component-1
+                  created_at: 1503225026
+                  id: 1
+                  name: Component 1
+                  updated_at: 1503335026
+                  use_case: default
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateComponent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateComponent'
+        description: Component object that needs to be updated
+        required: true
+      summary: Update component
+      x-summary-source: derived
+    delete:
+      description: Delete a component of the environment.
+      tags:
+      - Organization components
+      operationId: deleteComponent
+      parameters:
+      - $ref: '#/components/parameters/ignore_config_files_err'
+      - $ref: '#/components/parameters/skip_hooks'
+      responses:
+        '200':
+          description: 'This status code is returned when the component has on_delete hooks defined.
+
+            The hooks have been triggered but the component still exists.
+
+            Use skip_hooks=true to delete the component skipping the hooks.'
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Build'
+        '204':
+          description: Component has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete component
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/config
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    get:
+      description: Fetch the current component configuration variables.
+      tags:
+      - Organization components
+      operationId: getComponentConfig
+      parameters:
+      - $ref: '#/components/parameters/service_catalog_source_version_id'
+      responses:
+        '200':
+          description: Config that's used by the component
+          headers:
+            Content-Length:
+              description: The length of the response body in octets (8-bit bytes).
+              schema:
+                type: integer
+                format: uint64
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/FormVariables'
+              example:
+                data:
+                  section1:
+                    group1:
+                      var1: value
+                      var2: value
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get component config
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/infrastructure
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    get:
+      description: Get the infrastructure of the Component
+      tags:
+      - Organization components
+      operationId: getComponentInfrastructure
+      responses:
+        '200':
+          description: The infrastructure of the Component
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Infrastructure'
+              example:
+                data:
+                  config:
+                    resource:
+                      aws_instance:
+                        front:
+                          ami: ami-0211a849817dcceca
+                          arn: arn:aws:ec2:eu-west-1:99999992:instance/i-08ffccfdf54168280
+                          associate_public_ip_address: false
+                          availability_zone: eu-west-1a
+                          cpu_core_count: 1
+                          cpu_threads_per_core: 2
+                          credit_specification:
+                          - cpu_credits: unlimited
+                          disable_api_termination: false
+                          ebs_block_device: null
+                          ebs_optimized: false
+                          ephemeral_block_device: null
+                          get_password_data: false
+                          host_id: null
+                          iam_instance_profile: cycloid_profile-front-sample-magento-prod
+                          id: i-08ffccfdf54168280
+                          instance_initiated_shutdown_behavior: null
+                          instance_state: running
+                          instance_type: t3.small
+                          ipv6_address_count: 0
+                          ipv6_addresses: null
+                          key_name: cycloid
+                          monitoring: false
+                          network_interface: null
+                          network_interface_id: null
+                          password_data: ''
+                          placement_group: ''
+                          primary_network_interface_id: eni-01eac7f767b723514
+                          private_dns: ip-10-4-0-3.eu-west-1.compute.internal
+                          private_ip: 10.4.0.3
+                          public_dns: ''
+                          public_ip: ''
+                          root_block_device:
+                          - delete_on_termination: true
+                            encrypted: false
+                            iops: 180
+                            kms_key_id: ''
+                            volume_id: vol-0a0da4a72f6548eb0
+                            volume_size: 60
+                            volume_type: gp2
+                          security_groups: null
+                          source_dest_check: true
+                          subnet_id: subnet-7e131c1a
+                          tags:
+                            Name: sample-magento-front0-eu-we1-prod
+                            bar: bla
+                            client: cycloid
+                            cycloid.io: 'true'
+                            env: prod
+                            foo: test
+                            monitoring_discovery: 'false'
+                            project: sample-magento
+                            role: front
+                          tenancy: default
+                          timeouts: null
+                          user_data: null
+                          user_data_base64: null
+                          volume_tags:
+                            Name: sample-magento-front0-eu-we1-prod
+                            bar: bla
+                            client: cycloid
+                            cycloid.io: 'true'
+                            env: prod
+                            foo: test
+                            monitoring_discovery: 'false'
+                            project: sample-magento
+                            role: front
+                          vpc_security_group_ids:
+                          - sg-0d6e0e07fbc6ec626
+                          - sg-ddeee6bb
+                      aws_lb:
+                        front:
+                          access_logs.#: '1'
+                          access_logs.0.bucket: ''
+                          access_logs.0.enabled: 'false'
+                          access_logs.0.prefix: ''
+                          arn: arn:aws:elasticloadbalancing:eu-west-1:99999994:loadbalancer/app/amazon-front-prod/fa8c187e287baaf1
+                          arn_suffix: app/amazon-front-prod/fa8c187e287baaf1
+                          dns_name: amazon-front-prod-1234567890.eu-west-1.elb.amazonaws.com
+                          enable_deletion_protection: 'false'
+                          enable_http2: 'true'
+                          id: arn:aws:elasticloadbalancing:eu-west-1:99999994:loadbalancer/app/amazon-front-prod/fa8c187e287baaf1
+                          idle_timeout: '600'
+                          internal: 'false'
+                          ip_address_type: ipv4
+                          load_balancer_type: application
+                          name: amazon-front-prod
+                          security_groups.#: '1'
+                          security_groups.3982542233: sg-815549fb
+                          subnet_mapping.#: '3'
+                          subnet_mapping.1243641484.allocation_id: ''
+                          subnet_mapping.1243641484.subnet_id: subnet-e8f5368e
+                          subnet_mapping.1617803526.allocation_id: ''
+                          subnet_mapping.1617803526.subnet_id: subnet-4caca117
+                          subnet_mapping.707871693.allocation_id: ''
+                          subnet_mapping.707871693.subnet_id: subnet-08c11040
+                          subnets.#: '3'
+                          subnets.1359096304: subnet-08c11040
+                          subnets.3529352084: subnet-4caca117
+                          subnets.4038704495: subnet-e8f5368e
+                          tags.%: '6'
+                          tags.Name: amazon-front-eu-we1-prod
+                          tags.client: amazon
+                          tags.cycloid.io: 'true'
+                          tags.env: prod
+                          tags.project: amazon
+                          tags.role: front
+                          vpc_id: vpc-5972c43f
+                          zone_id: Z32O12XQLNTSW2
+                      aws_security_group:
+                        front:
+                          cidr_blocks:
+                          - 0.0.0.0/0
+                          description: ''
+                          from_port: 443
+                          id: sgrule-3405156902
+                          ipv6_cidr_blocks: null
+                          prefix_list_ids: null
+                          protocol: tcp
+                          security_group_id: sg-0f4d72e0081ca0c09
+                          self: false
+                          source_security_group_id: null
+                          to_port: 443
+                          type: ingress
+                  graph:
+                    edges:
+                    - canonicals:
+                      - aws_security_group.front
+                      id: UUID-edge-1
+                      source: UUID-node-1
+                      target: UUID-node-2
+                    nodes:
+                    - canonical: aws_lb.front
+                      id: UUID-node-1
+                      position:
+                      - 0
+                      - 0
+                      resource:
+                        canonical: aws_lb
+                        category: some category
+                        description: description of the resource
+                        image: http://via.placeholder.com/150x150
+                        is_edge: false
+                        is_node: true
+                        keywords:
+                        - some
+                        - key
+                        short_description: resource
+                    - canonical: aws_instance.front
+                      id: UUID-node-2
+                      position:
+                      - 0
+                      - 0
+                      resource:
+                        canonical: aws_instance
+                        category: some category
+                        description: description of the resource
+                        image: http://via.placeholder.com/150x150
+                        is_edge: false
+                        is_node: true
+                        keywords:
+                        - some
+                        - key
+                        short_description: resource
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get component infrastructure
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/migrate
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    put:
+      description: Migrate the component that's part of the environment
+      tags:
+      - Organization components
+      operationId: migrateComponent
+      responses:
+        '200':
+          description: Component
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Component'
+              example:
+                data:
+                  canonical: component-1
+                  created_at: 1503225026
+                  id: 1
+                  name: Component 1
+                  updated_at: 1503335026
+                  use_case: default
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/MigrateComponent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MigrateComponent'
+        description: Component object that needs to be migrated
+        required: true
+      summary: Migrate component
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/plugin_widgets
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    get:
+      description: Fetch the widgets of all enabled plugins for the component
+      tags:
+      - Organization components
+      operationId: listComponentPluginWidgets
+      responses:
+        '200':
+          description: Plugin widgets
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PluginWidget'
+              example:
+                data:
+                - id: 1
+                  is_default: true
+                  placement:
+                    config:
+                      tab_name: Monitoring
+                    type: tab
+                  type: table
+                  widget:
+                    columns: null
+                    query: SELECT * FROM metrics
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List component plugin widgets
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/plugin_widgets/{widget_id}/query
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/widget_id'
+    get:
+      description: Query the data for a Plugin Widget.
+      tags:
+      - Organization components
+      operationId: getComponentPluginWidgetData
+      responses:
+        '200':
+          description: Component Plugin Widget query response data
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PluginWidgetData'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get component plugin widget data
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/plugin_widgets/{widget_id}/{api_key}/iframe
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/widget_id'
+    - $ref: '#/components/parameters/api_key'
+    - description: Sub-path to proxy to the plugin
+      name: path
+      in: query
+      schema:
+        type: string
+    get:
+      description: Proxy a GET request to the plugin for a widget iframe.
+      tags:
+      - Organization components
+      operationId: getComponentPluginWidgetIframeProxy
+      responses:
+        '200':
+          description: Proxied response from Plugin Manager
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get component plugin widget iframe proxy
+      x-summary-source: derived
+    put:
+      description: Proxy a PUT request to the plugin for a widget iframe.
+      tags:
+      - Organization components
+      operationId: putComponentPluginWidgetIframeProxy
+      responses:
+        '200':
+          description: Proxied response from Plugin Manager
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Put component plugin widget iframe proxy
+      x-summary-source: derived
+    post:
+      description: Proxy a POST request to the plugin for a widget iframe.
+      tags:
+      - Organization components
+      operationId: postComponentPluginWidgetIframeProxy
+      responses:
+        '200':
+          description: Proxied response from Plugin Manager
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Post component plugin widget iframe proxy
+      x-summary-source: derived
+    delete:
+      description: Proxy a DELETE request to the plugin for a widget iframe.
+      tags:
+      - Organization components
+      operationId: deleteComponentPluginWidgetIframeProxy
+      responses:
+        '200':
+          description: Proxied response from Plugin Manager
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete component plugin widget iframe proxy
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/plugins
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    get:
+      description: Fetch the plugins of the component
+      tags:
+      - Organization components
+      operationId: listComponentPlugins
+      responses:
+        '200':
+          description: Plugin
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Plugin'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: 1
+                  name: P1
+                  registry:
+                    access: false
+                    created_at: 1503225026
+                    id: 1
+                    name: PR1
+                    status: connected
+                    updated_at: 1503335026
+                    url: http://pr1.com
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List component plugins
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/plugins/{plugin_id}/relation
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/plugin_id'
+    put:
+      description: Update the component plugin relation
+      tags:
+      - Organization components
+      operationId: updateComponentPluginRelation
+      responses:
+        '200':
+          description: Plugin relation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginRelation'
+              example:
+                data:
+                  enabled: true
+                  relations:
+                    project.slug: project-1
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/PluginRelation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PluginRelation'
+        description: Update the component plugin relation
+        required: true
+      summary: Update component plugin relation
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/stack_config
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/use_case_query'
+    get:
+      description: 'Get the configuration of the service catalog for a specific use case in component.
+
+        If no use case is specified, all the use cases will be returned.
+
+        If an use case is specified, only the configuration for that use case will be returned.'
+      tags:
+      - Organization components
+      operationId: getComponentStackConfiguration
+      parameters:
+      - $ref: '#/components/parameters/service_catalog_source_version_id'
+      responses:
+        '200':
+          description: The config of the service catalog.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/ServiceCatalogConfigs'
+              example:
+                data:
+                  first-usecase:
+                    ansible:
+                      magento:
+                        content: '# In this file you could override any variables present in default_front.yaml file
+
+
+                          # Usually you might want to override those variables :
+
+                          # magento_backend_frontname: admin
+
+                          # magento_admin_firstname: admin
+
+                          # magento_admin_lastname: admin
+
+                          # magento_admin_email: root@localhost.local
+
+                          # magento_admin_user: admin
+
+
+                          # magento_admin_password: 4Bigs3cr3t
+
+
+                          # In case you want to use vault to encrypt this password use the following command to generate the ansible vault var :
+
+                          # echo -n "4Bigs3cr3t" | ansible-vault encrypt_string --stdin-name=magento_admin_password
+
+                          #>> magento_admin_password: !vault |
+
+                          #>>           $ANSIBLE_VAULT;1.1;AES256
+
+                          #>>           37363232383334316164366337366430316535636130376134323366313565356365363662653539
+
+                          #>>           3161303331303565643831383839626263653362636466660a316530613935393464366536383839
+
+                          #>>           30303836326138306339623431356234333239343435623333343333623938633761636132303662
+
+                          #>>           3135343861383531660a393934316237363961663865393939313966373838653339326565353263
+
+                          #>>           6238
+
+                          '
+                        destination: ansible/environments/($ environment $)-front.yml
+                        path: ansible/environments/front.yml.sample
+                    custom:
+                      templates:
+                      - config:
+                          destination_is_file: true
+                        destination: custom/destination_file.txt
+                        paths:
+                        - source_templates/file1.txt.tmpl
+                        - source_templates/dir1
+                      - destination: custom/destination_dir
+                        paths:
+                        - source_templates/file2.txt.tmpl
+                        - source_templates/dir2
+                      var_path: custom/vars.json
+                    forms:
+                      custom:
+                        group3:
+                        - description: Public network ID
+                          key: public_subnet_id
+                          name: Public network
+                          type: string
+                          widget: simple_text
+                      pipeline:
+                        group1:
+                        - default: nobucket
+                          description: Bucket used to store magento code
+                          key: magento_deploy_bucket_name
+                          name: The bucket used
+                          type: string
+                          widget: text_area
+                        - description: Doesn't matter
+                          key: no-exist
+                          name: Some imaginary var
+                          type: string
+                          widget: text_area
+                      terraform:
+                        group2:
+                        - description: List of public network IDs
+                          key: public_subnets_ids
+                          name: Pub nets
+                          type: array
+                          widget: simple_text
+                        - description: The VPC ID to run the project
+                          key: vpc_id
+                          name: VPC ID
+                          type: string
+                          widget: text_area
+                    pipeline:
+                      pipeline:
+                        content: "groups:\n\n- name: magento-((env))\n  jobs:\n  - magento-((env))-build\n  - full-deploy-front-magento-((env))\n  - app-deploy-front-magento-((env))\n  - terraform-plan-magento-((env))\n  - terraform-apply-magento-((env))\n  - magento-((env))-unittests\n  - magento-((env))-functional-tests\n\nresource_types:\n\n- name: terraform\n  type: docker-image\n  source:\n    repository: ljfranklin/terraform-resource\n\nresources:\n\n- name: terraform-magento-((env))\n  type: terraform\n  source:\n    storage:\n      bucket: ((terraform_storage_bucket_name))\n      bucket_path: ((terraform_storage_bucket_path))\n      region_name: ((aws_default_region))\n      access_key_id: \"((terraform_storage_access_key))\"\n      secret_access_key: \"((terraform_storage_secret_key))\"\n    vars:\n      access_key: ((aws_access_key))\n      secret_key: ((aws_secret_key))\n    env:\n      AWS_ACCESS_KEY_ID: ((aws_access_key))\n      AWS_DEFAULT_REGION: ((aws_default_region))\n      AWS_SECRET_ACCESS_KEY: ((aws_secret_key))\n"
+                        path: pipeline/magento.yml
+                      variables:
+                        content: "env: ($ environment $)\nmagento_deploy_bucket_name: magento-deploy\nmagento_deploy_bucket_object_path: /catalog-magento/($ environment $)/magento.tar.gz\nmagento_deploy_bucket_region: eu-west-1\nmagento_deploy_bucket_access_key: ...\nmagento_deploy_bucket_secret_access_key: ...\nterraform_storage_access_key: ...\nterraform_storage_secret_key: ...\nterraform_storage_bucket_name: magento-terraform-remote-state\nterraform_storage_bucket_path: magento/($ environment $)\naws_access_key: ...\naws_secret_key: ...\naws_default_region: eu-west-1\n\nansible_vault_password: ...\nbastion_url: admin@bastion.server.com\nbastion_private_key_pair: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n\ncatalog_magento_git_private_key: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n\nmagento_git_repository: git@github.com:myuser/code-magento.git\nmagento_git_branch: master\nmagento_git_private_key: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n\n\nmagento_config_git_repository: git@github.com:myuser/config-magento.git\nmagento_config_git_branch: master\nmagento_config_git_private_key: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n"
+                        destination: pipeline/($ environment $)-variables.yml
+                        path: pipeline/variables.sample.yml
+                    terraform:
+                      magento:
+                        content: "variable \"rds_password\" {\n    default = \"ChangeMePls\"\n}\n\nmodule \"magento\" {\n  source = \"module-magento\"\n\n  env                      = \"($ environment $)\"\n  vpc_id                   = \"<vpc-id>\"\n  private_subnets_ids      = [\"private-subnets\"]\n  magento_ssl_cert         = \"<ssl-cert-arn>\"\n  bastion_sg_allow         = \"<bastion-sg>\"\n  public_subnets_ids       = [\"<public-subnets>\"]\n\n  rds_password             = \"${var.rds_password}\"\n\n  # project = \"magento\"\n\n  # FIXME optimized false : should be changes with the instance type ?\n\n  # rds_database         = \"magento\"\n  # rds_disk_size        = 10\n  # rds_multiaz          = false\n  # rds_storage_type     = \"gp2\"\n  # rds_subnet           = \"<rds-subnet-id>\"\n  # rds_type             = \"db.t2.small\"\n  # rds_username         = \"magento\"\n  # rds_engine           = \"\"mysql\"\n  # rds_engine_version   = \"5.7.16\"\n  # rds_backup_retention = 7\n  # rds_parameters       = \"\"\n\n  # cache_subnet                     = \"cache-subnet-id\"\n  # elasticache_type                 = \"cache.t2.micro\"\n  # elasticache_nodes                = \"1\n  # elasticache_parameter_group_name = \"default.redis3.2\"\n  # elasticache_engine               = \"redis\"\n  # elasticache_port                 = \"6379\"\n  # front_count           = \"1\"\n  # front_disk_size       = \"60\"\n  # front_disk_type       = \"gp2\"\n  # front_type            = \"t2.small\"\n\n}\n"
+                        destination: terraform/magento/($ environment $)/magento.tf
+                        path: terraform/magento.tf.sample
+                  second-usecase:
+                    ansible:
+                      magento:
+                        content: '# In this file you could override any variables present in default_front.yaml file
+
+
+                          # Usually you might want to override those variables :
+
+                          # magento_backend_frontname: admin
+
+                          # magento_admin_firstname: admin
+
+                          # magento_admin_lastname: admin
+
+                          # magento_admin_email: root@localhost.local
+
+                          # magento_admin_user: admin
+
+
+                          # magento_admin_password: 4Bigs3cr3t
+
+
+                          # In case you want to use vault to encrypt this password use the following command to generate the ansible vault var :
+
+                          # echo -n "4Bigs3cr3t" | ansible-vault encrypt_string --stdin-name=magento_admin_password
+
+                          #>> magento_admin_password: !vault |
+
+                          #>>           $ANSIBLE_VAULT;1.1;AES256
+
+                          #>>           37363232383334316164366337366430316535636130376134323366313565356365363662653539
+
+                          #>>           3161303331303565643831383839626263653362636466660a316530613935393464366536383839
+
+                          #>>           30303836326138306339623431356234333239343435623333343333623938633761636132303662
+
+                          #>>           3135343861383531660a393934316237363961663865393939313966373838653339326565353263
+
+                          #>>           6238
+
+                          '
+                        destination: ansible/environments/($ environment $)-front.yml
+                        path: ansible/environments/front.yml.sample
+                    forms:
+                      pipeline:
+                        group1:
+                        - default: nobucket
+                          description: Bucket used to store magento code
+                          key: magento_deploy_bucket_name
+                          name: The bucket used
+                          type: string
+                          widget: text_area
+                        - description: Doesn't matter
+                          key: no-exist
+                          name: Some imaginary var
+                          type: string
+                          widget: text_area
+                      terraform:
+                        group2:
+                        - description: List of public network IDs
+                          key: public_subnets_ids
+                          name: Pub nets
+                          type: array
+                          widget: simple_text
+                        - description: The VPC ID to run the project
+                          key: vpc_id
+                          name: VPC ID
+                          type: string
+                          widget: text_area
+                    pipeline:
+                      pipeline:
+                        content: "groups:\n\n- name: magento-((env))\n  jobs:\n  - magento-((env))-build\n  - full-deploy-front-magento-((env))\n  - app-deploy-front-magento-((env))\n  - terraform-plan-magento-((env))\n  - terraform-apply-magento-((env))\n  - magento-((env))-unittests\n  - magento-((env))-functional-tests\n\nresource_types:\n\n- name: terraform\n  type: docker-image\n  source:\n    repository: ljfranklin/terraform-resource\n\nresources:\n\n- name: terraform-magento-((env))\n  type: terraform\n  source:\n    storage:\n      bucket: ((terraform_storage_bucket_name))\n      bucket_path: ((terraform_storage_bucket_path))\n      region_name: ((aws_default_region))\n      access_key_id: \"((terraform_storage_access_key))\"\n      secret_access_key: \"((terraform_storage_secret_key))\"\n    vars:\n      access_key: ((aws_access_key))\n      secret_key: ((aws_secret_key))\n    env:\n      AWS_ACCESS_KEY_ID: ((aws_access_key))\n      AWS_DEFAULT_REGION: ((aws_default_region))\n      AWS_SECRET_ACCESS_KEY: ((aws_secret_key))\n"
+                        path: pipeline/magento.yml
+                      variables:
+                        content: "env: ($ environment $)\nmagento_deploy_bucket_name: magento-deploy\nmagento_deploy_bucket_object_path: /catalog-magento/($ environment $)/magento.tar.gz\nmagento_deploy_bucket_region: eu-west-1\nmagento_deploy_bucket_access_key: ...\nmagento_deploy_bucket_secret_access_key: ...\nterraform_storage_access_key: ...\nterraform_storage_secret_key: ...\nterraform_storage_bucket_name: magento-terraform-remote-state\nterraform_storage_bucket_path: magento/($ environment $)\naws_access_key: ...\naws_secret_key: ...\naws_default_region: eu-west-1\n\nansible_vault_password: ...\nbastion_url: admin@bastion.server.com\nbastion_private_key_pair: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n\ncatalog_magento_git_private_key: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n\nmagento_git_repository: git@github.com:myuser/code-magento.git\nmagento_git_branch: master\nmagento_git_private_key: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n\n\nmagento_config_git_repository: git@github.com:myuser/config-magento.git\nmagento_config_git_branch: master\nmagento_config_git_private_key: |-\n  -----BEGIN RSA PRIVATE KEY-----\n  -----END RSA PRIVATE KEY-----\n"
+                        destination: pipeline/($ environment $)-variables.yml
+                        path: pipeline/variables.sample.yml
+                    terraform:
+                      magento:
+                        content: "variable \"rds_password\" {\n    default = \"ChangeMePls\"\n}\n\nmodule \"magento\" {\n  source = \"module-magento\"\n\n  env                      = \"($ environment $)\"\n  vpc_id                   = \"<vpc-id>\"\n  private_subnets_ids      = [\"private-subnets\"]\n  magento_ssl_cert         = \"<ssl-cert-arn>\"\n  bastion_sg_allow         = \"<bastion-sg>\"\n  public_subnets_ids       = [\"<public-subnets>\"]\n\n  rds_password             = \"${var.rds_password}\"\n\n  # project = \"magento\"\n\n  # FIXME optimized false : should be changes with the instance type ?\n\n  # rds_database         = \"magento\"\n  # rds_disk_size        = 10\n  # rds_multiaz          = false\n  # rds_storage_type     = \"gp2\"\n  # rds_subnet           = \"<rds-subnet-id>\"\n  # rds_type             = \"db.t2.small\"\n  # rds_username         = \"magento\"\n  # rds_engine           = \"\"mysql\"\n  # rds_engine_version   = \"5.7.16\"\n  # rds_backup_retention = 7\n  # rds_parameters       = \"\"\n\n  # cache_subnet                     = \"cache-subnet-id\"\n  # elasticache_type                 = \"cache.t2.micro\"\n  # elasticache_nodes                = \"1\n  # elasticache_parameter_group_name = \"default.redis3.2\"\n  # elasticache_engine               = \"redis\"\n  # elasticache_port                 = \"6379\"\n  # front_count           = \"1\"\n  # front_disk_size       = \"60\"\n  # front_disk_type       = \"gp2\"\n  # front_type            = \"t2.small\"\n\n}\n"
+                        destination: terraform/magento/($ environment $)/magento.tf
+                        path: terraform/magento.tf.sample
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get component stack configuration
+      x-summary-source: derived
+    put:
+      description: Configure the component
+      tags:
+      - Organization components
+      operationId: configureComponent
+      responses:
+        '204':
+          description: Component configuration updated successfully
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/ConfigureComponent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConfigureComponent'
+        description: Configuration object for the component
+        required: true
+      summary: Configure component
+      x-summary-source: derived
+components:
+  schemas:
+    UpdateComponent:
+      description: The entity which represents the information of a component to update.
+      type: object
+      title: Update Component
+      required:
+      - name
+      properties:
+        description:
+          type: string
+        name:
+          type: string
+          minLength: 1
+    FormsValuesRefTLS:
+      description: TLS verification for a values_ref HTTPS call, for remotes whose certificate the platform cannot verify out of the box.
+      type: object
+      title: Forms values ref TLS
+      properties:
+        ca_cert:
+          description: PEM certificate of a CA to trust in addition to the system roots, either the PEM itself or a ${cred:canonical.field} reference resolved server-side. Cannot be combined with insecure_skip_verify.
+          type: string
+        insecure_skip_verify:
+          description: Accept any certificate the remote presents. Leaves the call open to interception, so ca_cert is always preferred.
+          type: boolean
+        server_name:
+          description: Name verified against the certificate and sent as SNI, for remotes addressed by IP or by a name their certificate does not carry.
+          type: string
+    InfrastructureGraphEdge:
+      description: Holds the information of an Edge of the Graph
+      type: object
+      title: Infrastructure
+      required:
+      - id
+      - source
+      - target
+      - canonicals
+      properties:
+        canonicals:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+        source:
+          type: string
+        target:
+          type: string
+    ConfigRepositorySyncStatus:
+      description: Derived health of a config repository's asynchronous git projection, computed from the pending commit-outbox entries. Surfaced so the UI can tell the user their saved configuration is failing to sync (and is being retried automatically) without implying the configuration was lost.
+      type: object
+      title: ConfigRepositorySyncStatus
+      required:
+      - state
+      properties:
+        last_error:
+          description: The most recent sync failure message (present when state is error).
+          type: string
+        oldest_pending_at:
+          description: Unix timestamp in milliseconds of the oldest change still pending projection to git.
+          type: integer
+          format: uint64
+        pending_count:
+          description: Number of buffered changes not yet mirrored to git.
+          type: integer
+          format: uint64
+        state:
+          description: 'synced: nothing pending, git mirror up to date. syncing: pending entries, no recorded error (normal catch-up). error: pending entries are failing to sync and are being retried.'
+          type: string
+          enum:
+          - synced
+          - syncing
+          - error
+    PluginInstall:
+      description: The Plugin Install data
+      type: object
+      title: Plugin Install
+      required:
+      - id
+      - uuid
+      - configuration
+      - status
+      - pm_secret
+      - created_at
+      - updated_at
+      properties:
+        configuration:
+          description: Stack Forms syntax configuration
+          type: object
+          additionalProperties:
+            type: string
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        inherited:
+          description: Whether the install is inherited from a parent organization
+          type: boolean
+        owner_organization_canonical:
+          description: Canonical of the organization that owns the plugin install
+          type: string
+        pm_secret:
+          description: Secret used by the frontend to generate webhooks for the Plugin
+          type: string
+        read_only:
+          description: Whether the install is read-only (inherited from parent org)
+          type: boolean
+        setup:
+          description: Per-install runtime setup overrides
+          type:
+          - object
+          - 'null'
+          properties:
+            max_cpu:
+              description: K8s resource limit for CPU
+              type: string
+            max_memory:
+              description: K8s resource limit for memory
+              type: string
+            max_replicas:
+              description: HPA maximum replicas (mutually exclusive with replicas)
+              type: integer
+              format: int32
+            min_cpu:
+              description: K8s resource request for CPU
+              type: string
+            min_memory:
+              description: K8s resource request for memory
+              type: string
+            min_replicas:
+              description: HPA minimum replicas (mutually exclusive with replicas)
+              type: integer
+              format: int32
+            replicas:
+              description: Static replica count (mutually exclusive with min/max_replicas)
+              type: integer
+              format: int32
+        status:
+          description: Status of the Plugin deployment process on Plugin Manager
+          type: string
+          enum:
+          - pending
+          - running
+          - failed
+        updated_at:
+          type: integer
+          format: uint64
+        url_slug:
+          description: URL-friendly slug for the plugin install, unique per organization
+          type: string
+        uuid:
+          description: Unique identifier of the Plugin Install
+          type: string
+          format: uuid
+        version:
+          $ref: '#/components/schemas/PluginVersion'
+        visibility:
+          description: Visibility scope of the plugin install
+          type: string
+          enum:
+          - local
+          - shared
+    PluginVersion:
+      description: The Plugin that holds all the Versions
+      type: object
+      title: Plugin
+      required:
+      - id
+      - name
+      - url
+      - status
+      properties:
+        configuration:
+          description: Stack Forms syntax configuration
+          type: array
+          items:
+            type: object
+        description:
+          description: The Description of the Plugin Version
+          type: string
+        error:
+          description: If an error happen on the creation of the Version this will hold the info
+          type: string
+        icon:
+          description: Icon of the Plugin Version
+          type: string
+          format: uri
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        images:
+          description: Images to show the Plugin Version
+          type: array
+          items:
+            type: string
+            format: uri
+        name:
+          description: Name assigned to the Plugin
+          type: string
+        schema:
+          description: Schema of the SQLite schema
+          type: object
+        scope:
+          description: Policies in which the Plugin Version is scoped
+          type: array
+          items:
+            type: string
+        setup:
+          description: Runtime setup declared in the plugin manifest
+          type: object
+          properties:
+            max_cpu:
+              description: K8s resource limit for CPU
+              type: string
+            max_memory:
+              description: K8s resource limit for memory
+              type: string
+            min_cpu:
+              description: K8s resource request for CPU
+              type: string
+            min_memory:
+              description: K8s resource request for memory
+              type: string
+            readiness_path:
+              description: HTTP path for K8s readiness probe
+              type: string
+        status:
+          description: Status of the current Plugin Version creation process
+          type: string
+          enum:
+          - pending
+          - processing
+          - failed
+          - success
+        url:
+          description: URL of the Plugin Version
+          type: string
+          format: uri
+        widgets:
+          description: List of default Widgets configuration
+          type: array
+          items:
+            type: object
+    ServiceCatalog:
+      description: Represents the Service Catalog item
+      title: Service Catalog
+      required:
+      - id
+      - name
+      - canonical
+      - author
+      - keywords
+      - ref
+      - form_enabled
+      - trusted
+      - directory
+      - visibility
+      - organization_canonical
+      - version
+      - latest
+      properties:
+        author:
+          type: string
+        blueprint:
+          description: Determines if given stack is a blueprint
+          type: boolean
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_providers:
+          description: Cloud providers supported by the stack
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudProvider'
+        created_at:
+          type: integer
+          format: uint64
+        default_version_branch:
+          description: Default version of the stack, based on the Catalog Repository branch
+          type: string
+        dependencies:
+          description: 'Canonicals of the stacks that must be instantiated before this one. Read-only: dependencies can only be declared in the stack''s .cycloid.yml source file and are refreshed from it; they cannot be set or changed through the API.'
+          type: array
+          items:
+            type: string
+          readOnly: true
+        description:
+          type: string
+        directory:
+          description: Directory where the ServiceCatalog configuration is found.
+          type: string
+        form_enabled:
+          description: Indicates if this stack can be configured with form's or not. Based on the presence or not of a valid .forms.yaml file since it's creation or last refresh.
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        image:
+          type: string
+          format: uri
+        keywords:
+          type: array
+          items:
+            type: string
+        labels:
+          description: Structured key:value labels declared in the stack's .cycloid.yml
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogLabel'
+        latest:
+          description: Indicates if the stack uses the latest version
+          type: boolean
+        name:
+          type: string
+        organization_canonical:
+          description: Organization that the stack belongs to
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        readme:
+          description: Readme of the stack
+          type: string
+        ref:
+          type: string
+        service_catalog_source_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        team:
+          description: Team that maintains the stack
+          $ref: '#/components/schemas/SimpleTeam'
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogTechnology'
+        trusted:
+          description: If 'true' the ServiceCatalog is from the main organization and can be trusted.
+          type: boolean
+        unique:
+          description: Determines if the stack can be instantiated only once per organization, project and environment
+          type: boolean
+        updated_at:
+          type: integer
+          format: uint64
+        version:
+          description: Version of the stack
+          type: string
+        visibility:
+          type: string
+    CloudAccountSimple:
+      description: A simplified cloud account representation without credentials, used when embedding a cloud account in other entities.
+      title: Cloud Account Simple
+      required:
+      - id
+      - canonical
+      - name
+      - cloud_provider
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_provider:
+          description: The canonical of the associated cloud provider. Can be a built-in provider canonical (aws, google, azurerm; aliases like gcp/microsoft azure are accepted and normalized) or an org-scoped custom cloud provider canonical.
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: A user-defined name for the cloud account
+          type: string
+          maxLength: 255
+          minLength: 1
+    SCConfigPathConfig:
+      description: Represents a Configuration which holds Path and Content
+      title: Path Configuration
+      required:
+      - path
+      - content
+      properties:
+        content:
+          type: string
+        path:
+          type: string
+    Infrastructure:
+      description: Holds all the Infrastructure of the component
+      type: object
+      title: Infrastructure
+      required:
+      - graph
+      - config
+      properties:
+        config:
+          $ref: '#/components/schemas/InfrastructureConfig'
+        graph:
+          $ref: '#/components/schemas/InfrastructureGraph'
+    Build:
+      description: The information relative to a build.
+      type: object
+      title: Build
+      required:
+      - id
+      - team_name
+      - name
+      - status
+      - api_url
+      properties:
+        api_url:
+          type: string
+        config_revision:
+          description: 'The revision of the component configuration this build was gated on, set when the build is created. The component configuration is mirrored to the config repository asynchronously; creating a build waits for the acknowledged revision to be visible to the CI, and reports it here so a caller can tie the build back to the configuration write it made. Absent on builds read back later, and on components with no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        end_time:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint64
+        job_name:
+          type: string
+        name:
+          type: string
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        reap_time:
+          type: integer
+          format: uint64
+        start_time:
+          type: integer
+          format: uint64
+        status:
+          type: string
+        team_name:
+          type: string
+    SimpleTeam:
+      description: The entity which represents the information of a team a bit simplified.
+      type: object
+      title: SimpleTeam
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'Organization member that owns this team. When a user is the owner of a
+
+            team it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    SCOptionalTemplateConfig:
+      description: Represents an optional configuration of a single template (defined by a Custom technology)
+      type: object
+      title: An optional configuration of a single template
+      properties:
+        destination_is_file:
+          description: 'Informs whether the destination path is a file. If set to true, the input templates will be contatenated after the template execution and saved in the destination as a single file.
+
+            It''s false by default.'
+          type: boolean
+    NewAndConfiguredComponent:
+      description: The entity which is used to create and configure a new component in one step.
+      type: object
+      title: New And Configured Component
+      required:
+      - name
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:[\da-zA-Z\-._]+[\da-zA-Z]|[\da-zA-Z])$
+        cloud_provider_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        confirm_credential_overwrite:
+          description: 'Credential canonicals this submit confirms it is replacing the secret of. A pinned `cy_cred` field whose credential already exists, and which this component''s saved configuration did not previously reference, is refused unless its canonical is listed here: the write replaces the whole secret and Vault keeps no history. Naming a canonical that is not in that situation is ignored.'
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        name:
+          type: string
+          minLength: 1
+        service_catalog_ref:
+          description: It's the ref of the Stack, like 'cycloidio:stack-magento'
+          type: string
+        service_catalog_source_version_id:
+          description: Is the ID of the new SCS Version used
+          type: integer
+          format: uint32
+          minimum: 1
+        use_case:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        vars:
+          $ref: '#/components/schemas/FormVariables'
+    FormsValuesRefAuth:
+      description: Authentication for a values_ref HTTP call. Each credential field holds either a static value or a ${cred:canonical.field} reference resolved server-side from the organization's Vault.
+      type: object
+      title: Forms values ref auth
+      required:
+      - type
+      properties:
+        header:
+          description: Name of the header carrying the key (type api_key)
+          type: string
+        key:
+          description: API key value (type api_key)
+          type: string
+        password:
+          description: Password (type basic)
+          type: string
+        token:
+          description: Bearer token (type bearer)
+          type: string
+        type:
+          description: The authentication scheme
+          type: string
+          enum:
+          - bearer
+          - basic
+          - api_key
+        username:
+          description: Username (type basic)
+          type: string
+    TerraformProviderResourceSimple:
+      description: A Resource of a Provider without the config
+      title: ResourceSimple
+      required:
+      - canonical
+      - description
+      - short_description
+      - is_node
+      - is_edge
+      - keywords
+      - category
+      - attributes
+      properties:
+        attributes:
+          $ref: '#/components/schemas/TerraformProviderResourceAttributes'
+        canonical:
+          type: string
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        category:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          format: uri
+        is_edge:
+          type: boolean
+        is_node:
+          type: boolean
+        keywords:
+          type: array
+          items:
+            type: string
+        short_description:
+          type: string
+    EnvironmentType:
+      description: Represent an environment type that belongs to an organization. Environment types are used to categorize environments (e.g., production, staging, development).
+      title: Environment Type
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - is_default
+      - color
+      - environments_count
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-z]+(?:[\da-z\-._]+[\da-z]|[\da-z])$
+        color:
+          description: Color associated with this environment type
+          type: string
+          maxLength: 64
+        created_at:
+          type: integer
+          format: uint64
+        environments_count:
+          description: The total count of environments using this environment type
+          type: integer
+          format: uint32
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_default:
+          description: Indicates if this is a system-provided default environment type that cannot be deleted or renamed
+          type: boolean
+        label_selector:
+          description: Optional label selector constraining which stacks are offered in environments of this type. Absent means no constraint.
+          $ref: '#/components/schemas/LabelSelector'
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+        updated_at:
+          type: integer
+          format: uint64
+    SCConfigPathDestConfig:
+      description: Represents a Configuration which holds Path, Destination and Content
+      title: Path and Destination Configuration
+      required:
+      - path
+      - destination
+      - content
+      properties:
+        content:
+          type: string
+        destination:
+          type: string
+        path:
+          type: string
+    FormEntity:
+      description: This describes all the attributes possible to configure a form's variable
+      type: object
+      title: Forms file's Entity
+      required:
+      - name
+      - widget
+      properties:
+        condition:
+          description: Optional condition expression that gates whether this widget is displayed. Same V2 syntax as Group.condition (e.g. "$other_field == 'aws'"). Variables prefixed with "ctx_" are runtime-injected and bypass the entity-existence validation.
+          type: string
+        current:
+          description: The current value that was previously configured for this variable upon creation or update. In case of shared variables having different values, it will be empty, and 'mismatch_values' will be filled instead.
+          type: object
+        current_invalid:
+          description: True when 'current' is non-empty but could not be resolved to any of the widget's available options, e.g. the option was removed from the form. 'current' still holds the raw stored value in this case. Never true for an empty 'current' -- that's an unfilled optional field, not a removed option.
+          type: boolean
+        default:
+          description: "Default can take 2 kinds of definition.\nThe first one is simply the variable to assign if nothing is given by the user and that the variable is required.\nThe second one is dynamic default, meaning default that can vary based on conditions. The format is as follows:\n  options:\n    - name: \"Name of set (can be omitted)\"\n      condition: \"$env == 'dev'\"\n      default: t2.micro\n    - condition: \"$env == 'prod'\"\n      default: t2.large"
+          type: object
+        depends_on:
+          description: List of keys that are required to use this entity
+          type: array
+          items:
+            type: string
+        description:
+          description: The description helping users understand the interest/impact of such variable/change
+          type: string
+        folded:
+          description: Whether or not the entity should be displayed to the user. This entity must be usable as such (not required, or with a default if required)
+          type: boolean
+        hidden:
+          description: 'Whether or not the entity should be hidden from the user. When true the widget is not displayed regardless of its widget type. This is an independent attribute; set it on any widget type. The legacy widget: hidden form is still supported for backward compatibility.'
+          type: boolean
+        items:
+          description: Sub-entity definitions for the repeatable widget. Each item defines a field that users can fill N times. Only valid when widget is 'repeatable'.
+          type: array
+          items:
+            $ref: '#/components/schemas/FormEntity'
+        key:
+          description: 'The key is the name of variables for the ansible/pipeline/terraform technologies. If this is a first level variable then: keyX. If you have multiple terraform modules then use: module.Y.keyX to help identify the unique variable. Required for every widget except ''info'': an info block carries no value, so it needs no addressing key, and any key given is ignored.'
+          type: string
+        mismatch_values:
+          description: This is filled only when a shared variable does not have the same values anymore. e.g. a variable 'foo' was shared between 'ansible' and 'pipeline', was set to 'bar', but now the value found for 'ansible' is 'bus', while it's still 'bar' for the pipeline. In such situation, the Forms don't know anymore which is the correct data and will return both, while unsetting the 'Current' field.
+          type: array
+          items:
+            type: object
+        name:
+          description: The name of the variable displayed to the user
+          type: string
+        read_only:
+          description: Whether or not the entity is displayed to the user but cannot be modified. Useful for showing computed or immutable values.
+          type: boolean
+        read_only_on_update:
+          description: Whether or not the entity can be set at creation but is locked on every subsequent update. Once a value has been stored it cannot be modified anymore.
+          type: boolean
+        required:
+          description: Whether or not the field is required - that helps distinguish "optional" variables and allows to set default if necessary and present
+          type: boolean
+        resolve_values:
+          description: Enables ${variable_name} interpolation inside the values and default fields. When true, ${key} tokens matching sibling entity keys in the same use_case are resolved at render time using the referenced field's current value. Supports concatenation and escape syntax ($${key} produces literal ${key}).
+          type: boolean
+        source:
+          description: 'The source is only used for the branch widget to reference the key of the SCS or CR that the branches have to be read from. Because a branch in itself cannot exist, the user has to indicate from which SCS or CR he wants to retrieve branches. The source has to reference the key of an entity of a widget: ''CyCRS'' or ''CySCS'''
+          type: string
+        transform:
+          description: Ordered pipeline of steps applied to the resolved values (from static values, values_ref or dynamic options) before they are validated, mapped and rendered. Steps apply in the declared order.
+          type: array
+          items:
+            $ref: '#/components/schemas/FormsTransformStep'
+        type:
+          description: The type of data handled - used to manipulate/validate the input, and also validate default/values. Required for every widget except 'info' - it carries no value, so its type is not applicable and ignored if set.
+          type: string
+          enum:
+          - integer
+          - float
+          - string
+          - array
+          - boolean
+          - map
+        unit:
+          description: 'The unit to be displayed for the variable, helping to know what''s being manipulated: amount of servers, Go, users, etc.'
+          type: string
+        validations:
+          description: "An array of validations and relative errors for this entitiy. For example:\n  validations:\n    - regexp: \"^proj_.*$\"\n      error_message: \"the value must have 'proj_' as prefix\"\n    - regexp: \"^.*_awesome$\"\n      error_message: \"the value must have '_awesome' as suffix\"\nAt the moment only regexp validations are implemented but we can expect objects with a 'type', and 'error_message' field. The type field can hold the constraint, as in the case of regexp or hipotetically a moe complex object."
+          type: array
+          items:
+            type: object
+        values:
+          description: "Values can take 2 kinds of definition.\nFirst one is a list of object, such as list of integer, maps, etc. Values allowed, e.g. [1, 10, 20, 50]. Note: In case of SliderRange only 2 values should be provided: [min, max], in case of providing them the other way around some validation test will fail.\nSecond one is dynamic values, meaning values that can vary based on conditions. The format is as follows:\n  options:\n    - name: \"Name of set (can be omitted)\"\n      condition: \"$env == 'dev'\"\n      values: [dev-ami1, dev-ami2, dev-ami3]\n    - condition: \"$env == 'prod'\"\n      values: [prod-ami1, prod-ami2, prod-ami3]"
+          type: object
+        values_ref:
+          description: It's a URL in which the values have to be fetched from
+          type: string
+        values_ref_config:
+          $ref: '#/components/schemas/FormsValuesRefConfig'
+        widget:
+          description: The widget used to display the data in the most suitable way
+          type: string
+          enum:
+          - auto_complete
+          - dropdown
+          - radios
+          - slider_list
+          - slider_range
+          - number
+          - simple_text
+          - switch
+          - text_area
+          - cy_cred
+          - cy_scs
+          - cy_crs
+          - cy_branch
+          - cy_inventory_resource
+          - cy_inventory_output
+          - date_time
+          - hidden
+          - repeatable
+          - info
+        widget_config:
+          description: "Some specific configuration that could be applied to that widget. Currently only a few widgets can be configured:\n  * cy_cred\n    * 'cred_types' (list): reduce the types of credentials retrieved to that list. See supported types of credentials\n    * 'display_keys' (bool): to specify if the path + key have to be written or only the path\n    * 'format' (enum): credential format, one of: 'path' | 'uri'. Defaults to path. Only credentials in URI format can be shared between technologies.\n    * 'uri_parameters' (map): optional query parameters that should be encoded and added to the resulting credential URI by the client. For example, they may be used to specify the output format (e.g., JSON). Applies only if format='uri'.\n    * 'cred_name' (string): pin the widget to a single credential canonical, so the end user only provides the secret value. The value is slugified by the API and must be consumed as returned. Mutually exclusive with 'cred_name_prefix'.\n    * 'cred_name_prefix' (string): pin the beginning of the credential canonical, the end user provides only the suffix. Slugified by the API, a trailing '-' or '_' separator is preserved. Mutually exclusive with 'cred_name'.\n    * 'cred_key' (string): the key inside the credential that holds the value, used when the credential is created inline.\n  * radio\n    * 'orientation' (string): whether you want to display it in an 'horizontal' or 'vertical' way\n  * cy_inventory_resource\n    * 'attribute' (string): REQUIRED The path to the attribute to actually use as value\n    * 'filters': (object): The filters to apply, selected from the list below:\n      * 'provider' (string): The provider like '\"provider[\\\"registry.terraform.io/hashicorp/aws\\\"]\"'\n      * 'type'  (string): The type of the resource like 'aws_vpc'\n      * 'name' (string): The name of the resource like 'front'\n      * 'module' (string): The module name like 'module.lemp'\n      * 'label' (string): The label of the resource, this only applies for resources created directly from the API/FE\n      * 'attributes' (string): The query string to filter the attributes like 'ingress[0].protocol[eq]=tcp'\n      * 'custom_attributes' (string): The query string to filter the custom_attributes like 'ingress[0].protocol[eq]=tcp'\n      * 'project' (string): Linked project canonical\n      * 'environment' (string): Linked environment canonical\n      * 'component' (string): Linked component canonical\n  * date_time\n    * 'format' (string): the date/time format string for storage, display and typing, using date-fns tokens (e.g. \"yyyy-MM-dd\", \"yyyy-MM-dd HH:mm\", \"yyyy-MM-dd'T'HH:mm:ss'Z'\"). Defaults to \"yyyy-MM-dd'T'HH:mm:ss'Z'\" (RFC 3339 UTC) if not specified. A value with a time of day is stored in UTC whatever the format; the user picks, types and sees local time. Formats without an hour token and date_only values are stored as picked; formats with an offset token (X, x, O, z) store the local time with its offset.\n    * 'block_weekends' (bool): prevents selection of Saturday and Sunday dates (local calendar day). Defaults to false.\n    * 'date_only' (bool): restricts picker to date selection only (no time inputs). When true, format defaults to \"yyyy-MM-dd\". Defaults to false.\n    * 'min_future_distance' (string): minimum selectable future offset from today (e.g. '1d'). A future window also rules out every past day.\n    * 'max_future_distance' (string): maximum selectable future offset from today (e.g. '30d'). A future window also rules out every past day.\n    * 'min_past_distance' (string): minimum selectable past offset from today (e.g. '0d'). A past window also rules out every future day.\n    * 'max_past_distance' (string): maximum selectable past offset from today (e.g. '90d'). A past window also rules out every future day.\n    * 'allowed_time_start' (string): earliest selectable time of day in UTC (local time for formats with an offset token), as HH:mm (e.g. '09:00'); shown to the user in local time. Also the default time of a freshly picked day.\n    * 'allowed_time_end' (string): latest selectable time of day in UTC (local time for formats with an offset token), as HH:mm (e.g. '18:00'); shown to the user in local time. A start later than the end is a window that wraps past midnight.\n    * 'block_past_dates' (bool): prevents selection of dates in the past.\n    * 'max_date' (string): latest selectable date as YYYY-MM-DD (e.g. '2030-01-01').\n  * cy_inventory_output\n    * 'attribute' (string): Path to the output's attribute, which value will be used\n    * 'filters': (object): The filters to apply, selected from the list below:\n      * 'attributes' (string): The query string to filter the attributes like 'ingress[0].protocol[eq]=tcp'\n      * 'keys' (list(string)): List of output keys to select from\n      * 'project' (string): Linked project canonical\n      * 'environment' (string): Linked environment canonical\n      * 'component' (string): Linked component canonical\n      * 'service_catalogs' (list(string)): Linked service catalog (stack) canonicals\n  * repeatable\n    * 'min_items' (int): minimum number of repeatable instances (0 = no minimum)\n    * 'max_items' (int): maximum number of repeatable instances (0 = no maximum)\n    * 'item_label' (string): label template for each instance\n  * simple_text\n    * 'sensitive' (bool): render the input masked, with a show/hide toggle, instead of plain text. Display only -- the value is stored and submitted exactly as any other value. See the widget documentation for the \"not a secrets store\" warning."
+          type: object
+    CloudProvider:
+      description: CloudProvider represents a cloud provider. Those cloud providers are used to identify the scope of projects and/or stacks.
+      title: Cloud Provider
+      required:
+      - canonical
+      - name
+      properties:
+        abbreviation:
+          type: string
+          maxLength: 60
+          minLength: 2
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+          enum:
+          - aws
+          - google
+          - azurerm
+          - flexibleengine
+          - openstack
+          - scaleway
+          - vmware
+          - ovh
+          - alibaba
+          - oracle
+          - vsphere
+          - kubernetes
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 60
+          minLength: 2
+        regions:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: integer
+          format: uint64
+    ServiceCatalogConfig:
+      description: Represents the Service Catalog Configuration for a given Use Case
+      title: Use Case Configuration
+      required:
+      - name
+      - description
+      - cloud_provider
+      - pipeline
+      properties:
+        ansible:
+          $ref: '#/components/schemas/SCConfigTechConfig'
+        cloud_provider:
+          type: string
+        custom:
+          $ref: '#/components/schemas/SCConfigCustomConfig'
+        description:
+          type: string
+        forms:
+          $ref: '#/components/schemas/FormUseCase'
+        name:
+          type: string
+        pipeline:
+          $ref: '#/components/schemas/SCConfigPipelineConfig'
+        terraform:
+          $ref: '#/components/schemas/SCConfigTechConfig'
+    SCTemplateConfig:
+      description: Represents a Configuration of a single template (defined by a Custom technology)
+      title: A configuration of a single template
+      required:
+      - paths
+      - destination
+      properties:
+        config:
+          $ref: '#/components/schemas/SCOptionalTemplateConfig'
+        content:
+          description: 'Holds the content of input files found in the Paths.
+
+            The key is an input file and the value is the content of the file.'
+          type: object
+          additionalProperties:
+            description: File content
+            type: string
+        destination:
+          description: 'Destination path. By default, it''s a directory, where the input files will be recreated maintaining the original file tree.
+
+            This behavior can be changed by setting `destination_is_file` in optional configs to `true`.
+
+            By doing that, the destination path will be treated as a file, not a directory.
+
+            '
+          type: string
+        helpers:
+          description: Paths where common template helpers (parts) are located
+          type: array
+          items:
+            type: string
+        helpers_content:
+          description: 'Holds the content of the helpers found in Helpers paths.
+
+            The key is a helper file path and the value is the content of the file.'
+          type: object
+          additionalProperties:
+            description: File content
+            type: string
+        paths:
+          description: Input Paths where the teplate files will be found
+          type: array
+          items:
+            type: string
+    PluginRegistry:
+      description: The Plugin Registry that holds all the available Plugins
+      type: object
+      title: Plugin Registry
+      required:
+      - id
+      - name
+      - url
+      - access
+      - status
+      - created_at
+      - updated_at
+      properties:
+        access:
+          description: If you have access to create Plugins
+          type: boolean
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: Name assigned to the Repository
+          type: string
+        status:
+          description: Status of the Plugin Registry
+          type: string
+          enum:
+          - offline
+          - connected
+        updated_at:
+          type: integer
+          format: uint64
+        url:
+          description: URL of the Plugin Registry
+          type: string
+          format: uri
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    LabelSelector:
+      description: Constrains which stacks are offered in environments of a given type, based on the stack's labels. Every requirement must be satisfied for a stack to match.
+      title: Label Selector
+      required:
+      - requirements
+      properties:
+        enforcement:
+          description: '''soft'' only filters the available-stacks list; ''hard'' also rejects creating a component from a non-matching stack.'
+          type: string
+          default: soft
+          enum:
+          - soft
+          - hard
+        requirements:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LabelSelectorRequirement'
+    InfrastructureConfig:
+      description: Holds all the Infrastructure config of the TFState
+      type: object
+      title: InfrastructureConfig
+    NewComponent:
+      description: The entity which represents the information of a new component.
+      type: object
+      title: New Component
+      required:
+      - name
+      - service_catalog_ref
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:[\da-zA-Z\-._]+[\da-zA-Z]|[\da-zA-Z])$
+        cloud_provider_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        description:
+          type: string
+        name:
+          type: string
+          minLength: 1
+        service_catalog_ref:
+          description: It's the ref of the Stack, like 'cycloidio:stack-magento'
+          type: string
+        service_catalog_source_version_id:
+          type: integer
+          format: uint32
+          minimum: 1
+    FormsTransformStep:
+      description: A single step of a widget's transform pipeline. Exactly one of extract, map, cast or math must be set; steps apply in the declared order to the resolved values.
+      type: object
+      title: Forms transform step
+      properties:
+        cast:
+          description: The type to cast each value to
+          type: string
+          enum:
+          - integer
+          - number
+          - string
+          - bool
+        extract:
+          description: jq-compatible expression selecting or flattening the values
+          type: string
+        map:
+          description: Projects each element into a label/value pair using a jq-compatible expression per key
+          type: object
+          additionalProperties:
+            type: string
+        math:
+          $ref: '#/components/schemas/FormsTransformMath'
+    Plugin:
+      description: The Plugin that holds all the Versions
+      type: object
+      title: Plugin
+      required:
+      - id
+      - name
+      - registry
+      - owned
+      properties:
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        install:
+          $ref: '#/components/schemas/PluginInstall'
+        latest:
+          $ref: '#/components/schemas/PluginVersion'
+        name:
+          description: Name assigned to the Plugin
+          type: string
+        orphaned:
+          description: 'True when the local install has no corresponding registry plugin
+
+            (e.g. the registry plugin was deleted out-of-band, or the registry is
+
+            unreachable). When true, Latest/Version fields may be zero-valued and
+
+            update operations will be rejected. Defaults to false.
+
+            '
+          type: boolean
+        owned:
+          description: If the plugin is owned
+          type: boolean
+        registry:
+          $ref: '#/components/schemas/PluginRegistry'
+        relation:
+          description: The relation of the Plugin with the current component, if any
+          $ref: '#/components/schemas/PluginRelation'
+    PluginWidgetData:
+      description: The Plugin Widget query response data
+      type: object
+      title: Plugin Widget Data
+      required:
+      - data
+      properties:
+        data:
+          description: Data returned from executing query on the plugin
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    Component:
+      description: The entity which represents the information of a component.
+      type: object
+      title: Component
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - service_catalog
+      - environment
+      - project
+      - version
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        cloud_provider:
+          description: 'The cloud provider object that this environment is using.
+
+            In the event where the cloud provider is not yet defined/supported
+
+            that field might be empty.
+
+            '
+          $ref: '#/components/schemas/CloudProvider'
+        config_repository_sync_status:
+          description: Status of the asynchronous projection of this component's saved StackForms configuration to its project's config git repository. The configuration is always persisted (DB source of truth); this reports whether the git mirror is up to date, catching up, or failing. Absent when there is nothing pending to mirror.
+          $ref: '#/components/schemas/ConfigRepositorySyncStatus'
+        config_revision:
+          description: 'The revision of this component''s StackForms configuration currently mirrored to the config git repository, and therefore the one a build started now would plan against. Unlike config_repository_sync_status it is reported even when the mirror is up to date, so an automation that wrote a configuration can confirm the revision a build will read is its own, and match it against the config_revision reported when creating a build. Absent when the component has no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        environment:
+          description: The environment object that this component is using.
+          $ref: '#/components/schemas/Environment'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_configured:
+          description: The status of the component.
+          type: boolean
+        name:
+          type: string
+          minLength: 1
+        project:
+          description: The project object that this component is using.
+          $ref: '#/components/schemas/ProjectSimple'
+        service_catalog:
+          description: The Service Catalog that was used to create project.
+          $ref: '#/components/schemas/ServiceCatalog'
+        stackform_updated_at:
+          description: Unix timestamp in milliseconds of when the component was last configured via StackForms. Absent if the component has never been configured or the information is unavailable.
+          type: integer
+          format: uint64
+        updated_at:
+          type: integer
+          format: uint64
+        use_case:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        version:
+          description: The version used by the Component
+          $ref: '#/components/schemas/ServiceCatalogSourceVersion'
+    PluginWidget:
+      description: A widget associated with an installed Plugin
+      type: object
+      title: Plugin Widget
+      required:
+      - type
+      - placement
+      - widget
+      - is_default
+      properties:
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_default:
+          description: Whether this is a default widget
+          type: boolean
+        placement:
+          description: 'Placement configuration of the widget. When type is "component", requires "tab_name" in config. When type is "sideMenuPage", requires "title" and "description" in config.
+
+            '
+          type: object
+        relation:
+          $ref: '#/components/schemas/PluginRelation'
+        type:
+          description: Type of the widget
+          type: string
+          enum:
+          - table
+          - iframe
+        url_slug:
+          description: URL-friendly slug derived from the widget title
+          type: string
+        widget:
+          description: Widget configuration
+          type: object
+        widget_key:
+          description: 'Stable key declared for the widget in the plugin''s widgets.yaml, used to match it across plugin version upgrades. Empty when the widget declares none.
+
+            '
+          type: string
+    FormsValuesRefConfig:
+      description: 'Optional configuration for a values_ref HTTP call: the request method and body, authentication, extra request headers, a timeout and TLS verification.'
+      type: object
+      title: Forms values ref config
+      properties:
+        auth:
+          $ref: '#/components/schemas/FormsValuesRefAuth'
+        body:
+          description: Request payload, sent as application/json. An object or array is serialized to JSON; a string is sent verbatim, so a payload written as raw JSON keeps its shape. Every string it holds may embed a ${cred:canonical.field} reference resolved server-side.
+        headers:
+          description: Additional request headers. Values may be static or a ${cred:canonical.field} reference resolved server-side.
+          type: object
+          additionalProperties:
+            type: string
+        method:
+          description: HTTP method of the request. Defaults to GET, the only method that cannot carry a body.
+          type: string
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+        timeout:
+          description: Request timeout as a Go duration string (e.g. "30s", "1m"). Defaults to 10s, capped at 60s.
+          type: string
+        tls:
+          $ref: '#/components/schemas/FormsValuesRefTLS'
+    FormGroup:
+      type: object
+      title: Forms File Group
+      required:
+      - name
+      - technologies
+      - vars
+      properties:
+        condition:
+          description: Condition required to be respected to be able to configure that group.
+          type: string
+        description:
+          description: An optional description to display for this group
+          type: string
+        folded:
+          description: Whether or not the group should be displayed to the user. Variables within this group must be usable as such (not required, or with a default if required)
+          type: boolean
+        name:
+          type: string
+        read_only:
+          description: Whether or not the variables of the group are displayed to the user but cannot be modified. Useful for showing computed or immutable values.
+          type: boolean
+        read_only_on_update:
+          description: Whether or not the variables of the group can be set at creation but are locked on every subsequent update. Once a value has been stored it cannot be modified anymore.
+          type: boolean
+        technologies:
+          type: array
+          items:
+            type: string
+        vars:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormEntity'
+    ServiceCatalogLabel:
+      description: A structured key:value label declared on a stack
+      title: Service Catalog Label
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        value:
+          type: string
+          maxLength: 255
+          minLength: 1
+    TerraformProviderResourceAttributes:
+      description: Holds specific logic of some attributes
+      title: ResourceAttributes
+      properties:
+        important:
+          type: array
+          items:
+            type: string
+        normalized_status:
+          description: Is a KV where the K is the resource possible value and the Value is the normalized value of it. The current possible values are "unknown", "pending", "running", "stopping"
+          type: object
+        status:
+          type: string
+    ServiceCatalogSourceVersion:
+      description: Version of a SCS for the Stacks
+      type: object
+      title: Version
+      required:
+      - id
+      - name
+      - commit_hash
+      - status
+      - type
+      - usage
+      - is_latest
+      properties:
+        commit_hash:
+          description: Last commit hash that references it
+          type: string
+          minLength: 1
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_latest:
+          description: If it's the latest
+          type: boolean
+        name:
+          description: Name of the version
+          type: string
+        status:
+          description: Status of the version
+          type: string
+          enum:
+          - no_status
+          - active
+          - deleted
+          - outdated
+        type:
+          description: Type of the version
+          type: string
+          enum:
+          - tag
+          - branch
+        usage:
+          description: How many stacks use it
+          type: integer
+    MigrateComponent:
+      description: The entity which represents the information of a component to migrate.
+      type: object
+      title: Migrate Component
+      properties:
+        destination_component_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:[\da-zA-Z\-._]+[\da-zA-Z]|[\da-zA-Z])$
+        destination_component_name:
+          type: string
+        destination_environment_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:[\da-zA-Z\-._]+[\da-zA-Z]|[\da-zA-Z])$
+        destination_project_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+    PluginRelation:
+      description: The relation between a Plugin and a Component
+      type: object
+      title: Plugin Relation
+      required:
+      - relations
+      - enabled
+      properties:
+        enabled:
+          description: If the Plugin is enabled for the Component
+          type: boolean
+        relations:
+          description: List of relations between a Plugin and a Component
+          type: object
+    Environment:
+      description: Represent an environment that belongs to an organization. This is the base environment entity without project-specific relations.
+      title: Environment
+      required:
+      - id
+      - canonical
+      - created_at
+      - updated_at
+      - resources_count
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:[\da-zA-Z\-._]+[\da-zA-Z]|[\da-zA-Z])$
+        cloud_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudAccountSimple'
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/Component'
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          description: Optional description of the environment
+          type: string
+          maxLength: 1000
+        environment_type:
+          $ref: '#/components/schemas/EnvironmentType'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: The display name of the environment
+          type: string
+          maxLength: 100
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this environment. When a user is the owner of an
+
+            environment it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        resources_count:
+          description: The total count of resources attributed to this environment
+          type: integer
+          format: uint32
+        updated_at:
+          type: integer
+          format: uint64
+        variables:
+          description: Full set of environment variables attached to this environment, available under the `.environment.variables` template path during interpolation.
+          type: array
+          items:
+            $ref: '#/components/schemas/EnvironmentVariableItem'
+        version_status:
+          description: Aggregated value of the Components Version.Status in this environment. Only populated when the environment is returned alongside a Project.
+          type: array
+          items:
+            type: string
+            enum:
+            - no_status
+            - latest
+            - active
+            - deleted
+            - outdated
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    SCConfigTechConfig:
+      description: Represents the Service Catalog Configuration for a Technology of a given Use Case
+      type: object
+      title: Tech Configuration
+      additionalProperties:
+        $ref: '#/components/schemas/SCConfigPathDestConfig'
+    SCConfigPipelineConfig:
+      description: Represents the Service Catalog Configuration for a Pipeline of a given Use Case
+      title: Pipeline Configuration
+      required:
+      - pipeline
+      - variables
+      properties:
+        pipeline:
+          $ref: '#/components/schemas/SCConfigPathConfig'
+        variables:
+          $ref: '#/components/schemas/SCConfigPathDestConfig'
+    InfrastructureGraphNode:
+      description: Holds the information of a Node of the Graph
+      type: object
+      title: Infrastructure
+      required:
+      - id
+      - canonical
+      - position
+      - resource
+      properties:
+        canonical:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        position:
+          description: It holds [x,y]
+          type: array
+          items:
+            type: integer
+            format: uint64
+        resource:
+          $ref: '#/components/schemas/TerraformProviderResourceSimple'
+    FormsTransformMath:
+      description: A numeric operation applied to each value
+      type: object
+      title: Forms transform math
+      properties:
+        by:
+          description: The operand applied to each value
+          type: number
+          format: double
+        op:
+          description: The arithmetic operation to apply
+          type: string
+          enum:
+          - multiply
+          - divide
+          - add
+          - subtract
+    FormSection:
+      type: object
+      title: Forms File Section
+      required:
+      - name
+      - groups
+      properties:
+        description:
+          description: An optional description to display for this section
+          type: string
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormGroup'
+        name:
+          type: string
+    FormVariables:
+      description: "Forms variables filled, the format to respect is as follows\n{\n  \"sectionX\": {\n    \"group1\": {\n      \"key1\": \"value1\",\n      \"key2\": \"value2\",\n      \"key3\": \"value3\"\n    },\n  },\n  \"sectionY\": {\n    \"group2\": {\n      \"key1\": \"value1\",\n      \"key2\": \"value2\",\n      \"key3\": \"value3\"\n    },\n  },\n  \"sectionZ\": {\n    \"group3\": {\n      \"key1\": \"value2\"\n    },\n  }\n}\nKeys being the variable name that you want to see substituted/defined,\nwhile the section and group are the one from the form's file.\n"
+      type: object
+      additionalProperties:
+        type: object
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    ServiceCatalogTechnology:
+      description: ServiceCatalogTechnology is a Technology of the Service Catalog
+      title: ServiceCatalogTechnology
+      properties:
+        technology:
+          type: string
+        version:
+          type: string
+    FormUseCase:
+      type: object
+      title: Forms File Use case
+      required:
+      - name
+      - sections
+      properties:
+        cost_estimation:
+          description: 'False hides the cost estimation panel of the form. Set by `cost_estimation: false` on the use case in the .forms.yml; the component stack configuration endpoint also returns false when the root organization has disable_cost_estimation enabled. Omitted means enabled.'
+          type:
+          - boolean
+          - 'null'
+        name:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormSection'
+    ConfigureComponent:
+      description: The entity which represents the information of a component to configure.
+      type: object
+      title: Configure Component
+      required:
+      - use_case
+      properties:
+        confirm_credential_overwrite:
+          description: 'Credential canonicals this submit confirms it is replacing the secret of. A pinned `cy_cred` field whose credential already exists, and which this component''s saved configuration did not previously reference, is refused unless its canonical is listed here: the write replaces the whole secret and Vault keeps no history. Naming a canonical that is not in that situation is ignored.'
+          type: array
+          items:
+            type: string
+        service_catalog_source_version_id:
+          description: Is the ID of the new SCS Version used
+          type: integer
+          format: uint32
+          minimum: 1
+        use_case:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        vars:
+          $ref: '#/components/schemas/FormVariables'
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    EnvironmentVariableItem:
+      description: A single key/value pair attached to an Environment. The value is surfaced to interpolation contexts (StackForms, value_ref, pipelines, Terraform templates) under the `.environment.variables` template path.
+      title: Environment Variable Item
+      required:
+      - key
+      - type
+      - value
+      properties:
+        created_at:
+          description: The date and time (unix timestamp) the variable was created.
+          type: integer
+          format: uint64
+          readOnly: true
+        description:
+          description: Optional free-form description of the variable.
+          type: string
+          maxLength: 1000
+        key:
+          description: Identifier used to reference the variable in templates (e.g. `($ .environment.variables.my_key $)`). Must not contain dots and must include at least one alphanumeric character.
+          type: string
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^.]*[A-Za-z0-9][^.]*$
+        sensitive:
+          description: Display hint for the UI to mask this value. The API returns the value in plaintext regardless.
+          type: boolean
+          default: false
+        type:
+          description: Declared shape of the value. Names mirror stackforms widget types so the two APIs stay consistent.
+          type: string
+          enum:
+          - string
+          - boolean
+          - integer
+          - float
+          - array
+          - map
+        updated_at:
+          description: The date and time (unix timestamp) the variable was last updated.
+          type: integer
+          format: uint64
+          readOnly: true
+        value:
+          description: 'The variable value. Its shape must match the `type` field: a JSON string, boolean, integer, float, array or object respectively.'
+          type: object
+    ProjectSimple:
+      description: The entity which represents minimal information of a project.
+      type: object
+      title: ProjectSimple
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - color
+      - icon
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        color:
+          type: string
+          maxLength: 64
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        favorite:
+          type: boolean
+        icon:
+          type: string
+          maxLength: 64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this project. When a user is the owner of a
+
+            project it has all the permissions on it.
+
+            In the event where the user has been deleted that field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    InfrastructureGraph:
+      description: Holds all the Infrastructure of the component
+      type: object
+      title: InfrastructureGraph
+      required:
+      - nodes
+      - edges
+      properties:
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfrastructureGraphEdge'
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/InfrastructureGraphNode'
+    SCConfigCustomConfig:
+      description: Represents the Service Catalog Configuration for Custom Tech for a given Use Case
+      title: Custom Tech Configuration
+      required:
+      - var_path
+      - templates
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/SCTemplateConfig'
+        var_path:
+          description: A path to a file holding selected values of variables (JSON format)
+          type: string
+    ServiceCatalogConfigs:
+      description: Represents the Service Catalog Configuration assigned per Use case
+      type: object
+      title: Service Catalog Configurations
+      additionalProperties:
+        $ref: '#/components/schemas/ServiceCatalogConfig'
+    LabelSelectorRequirement:
+      description: A single label constraint applied to a stack's labels
+      title: Label Selector Requirement
+      required:
+      - key
+      - operator
+      - values
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        operator:
+          description: The matching operator. 'eq' requires the label to carry the single value; 'in' requires the label to carry at least one of the values.
+          type: string
+          enum:
+          - eq
+          - in
+        values:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            maxLength: 255
+            minLength: 1
+  parameters:
+    service_catalog_source_version_id:
+      description: The ID of the SCS Version
+      name: service_catalog_source_version_id
+      in: query
+      schema:
+        type: integer
+        format: uint32
+    use_case_query:
+      description: A use case of a stack to be selectd from the stack config
+      name: use_case
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    ignore_config_files_err:
+      description: Defines if the error in config files operation (such as their removal) will be ignored instead of throwing an error and stopping the request
+      name: ignore_config_files_err
+      in: query
+      schema:
+        type: boolean
+    skip_hooks:
+      description: If set to true, the pipeline hooks are skipped when executing the operation
+      name: skip_hooks
+      in: query
+      schema:
+        type: boolean
+    component_search_query:
+      description: Search by component's canonical or name.
+      name: component_search
+      in: query
+      schema:
+        type: string
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    component_canonical_query:
+      description: A canonical of a component.
+      name: component_canonical
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    api_key:
+      description: An API key used for authentication embedded in the URL path
+      name: api_key
+      in: path
+      required: true
+      schema:
+        type: string
+    plugin_id:
+      description: A plugin id
+      name: plugin_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+    component_name_query:
+      description: A name of a component.
+      name: component_name
+      in: query
+      schema:
+        type: string
+    component_canonical:
+      description: A canonical of a component.
+      name: component_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    widget_id:
+      description: A widget id
+      name: widget_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

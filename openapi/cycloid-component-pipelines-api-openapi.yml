@@ -1,0 +1,1963 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Component pipelines API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on the pipelines of a component
+  name: Component pipelines
+paths:
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    get:
+      description: Get the pipelines that the authenticated user has access to.
+      tags:
+      - Component pipelines
+      operationId: getComponentPipelines
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: List of the pipelines which authenticated user has access to.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pipeline'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - created_at: 1500135021
+                  environment: dev
+                  groups:
+                  - jobs:
+                    - code-validation-preprod
+                    - build-container-preprod
+                    - tag-container-image-preprod
+                    - clean-container-preprod
+                    name: all
+                    resources: null
+                  id: 238
+                  name: ci-website
+                  paused: true
+                  project:
+                    canonical: proj-1
+                    created_at: 1500135021
+                    id: 5
+                    name: project1
+                    service_catalog_ref: cycloidio:stack-magento
+                    updated_at: 1500135021
+                  public: false
+                  started: false
+                  status: pending
+                  team_name: cycloid-products
+                  updated_at: 1500135021
+                  use_case: website-ci-use-case
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 1
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get component pipelines
+      x-summary-source: derived
+    post:
+      description: Create a new pipeline
+      tags:
+      - Component pipelines
+      operationId: createPipeline
+      responses:
+        '200':
+          description: The information of the pipeline which has been created.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Pipeline'
+              example:
+                data:
+                  created_at: 1500135021
+                  environment: dev
+                  groups:
+                  - jobs:
+                    - code-validation-preprod
+                    - build-container-preprod
+                    - tag-container-image-preprod
+                    - clean-container-preprod
+                    name: all
+                    resources: null
+                  - jobs:
+                    - code-validation-preprod
+                    - build-container-preprod
+                    - tag-container-image-preprod
+                    - clean-container-preprod
+                    name: preprod
+                    resources: null
+                  id: 238
+                  name: ci-website
+                  paused: true
+                  project:
+                    canonical: proj-1
+                    created_at: 1500135021
+                    id: 5
+                    name: project1
+                    service_catalog_ref: cycloidio:stack-magento
+                    updated_at: 1500135021
+                  public: false
+                  started: false
+                  status: pending
+                  team_name: cycloid-products
+                  updated_at: 1500135021
+                  use_case: website-ci-use-case
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewPipeline'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewPipeline'
+        description: The configuration of the pipeline to create.
+        required: true
+      summary: Create pipeline
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    get:
+      description: Get the pipeline.
+      tags:
+      - Component pipelines
+      operationId: getPipeline
+      responses:
+        '200':
+          description: The information of the pipeline which has the specified name.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Pipeline'
+              example:
+                data:
+                  created_at: 1500135021
+                  environment: dev
+                  groups:
+                  - jobs:
+                    - code-validation-preprod
+                    - build-container-preprod
+                    - tag-container-image-preprod
+                    - clean-container-preprod
+                    name: all
+                    resources: null
+                  - jobs:
+                    - code-validation-preprod
+                    - build-container-preprod
+                    - tag-container-image-preprod
+                    - clean-container-preprod
+                    name: preprod
+                    resources: null
+                  id: 238
+                  name: ci-website
+                  paused: true
+                  project:
+                    canonical: proj-1
+                    created_at: 1500135021
+                    id: 5
+                    name: project1
+                    service_catalog_ref: cycloidio:stack-magento
+                    updated_at: 1500135021
+                  public: false
+                  team_name: cycloid-products
+                  updated_at: 1500135021
+                  use_case: website-ci-use-case
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get pipeline
+      x-summary-source: derived
+    put:
+      description: 'Update the configuration of the given pipeline name. This endpoint operates in two modes:
+
+        1. pipeline config refresh from git (remote),
+
+        2. live config update.
+
+        In 1. we use the configured vars to execute the current config template retrieved from git. Parameter passed_config is ignored.
+
+        In 2. we use the passed_config as is to update the pipeline config. The passed_config is the new pipeline config - it''s not templated again.'
+      tags:
+      - Component pipelines
+      summary: Update the configuration of the given pipeline name
+      operationId: updatePipeline
+      responses:
+        '200':
+          description: The information of the pipeline which has been updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Pipeline'
+              example:
+                data:
+                  created_at: 1500135021
+                  environment: dev
+                  groups:
+                  - jobs:
+                    - code-validation-preprod
+                    - build-container-preprod
+                    - tag-container-image-preprod
+                    - clean-container-preprod
+                    name: all
+                    resources: null
+                  - jobs:
+                    - code-validation-preprod
+                    - build-container-preprod
+                    - tag-container-image-preprod
+                    - clean-container-preprod
+                    name: preprod
+                    resources: null
+                  id: 238
+                  name: ci-website
+                  paused: true
+                  project:
+                    canonical: proj-1
+                    created_at: 1500135021
+                    id: 5
+                    name: project1
+                    service_catalog_ref: cycloidio:stack-magento
+                    updated_at: 1500135021
+                  public: false
+                  team_name: cycloid-products
+                  updated_at: 1500135021
+                  use_case: website-ci-use-case
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdatePipeline'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdatePipeline'
+        description: The pipeline configuration
+        required: true
+    delete:
+      description: Delete the pipeline.
+      tags:
+      - Component pipelines
+      operationId: deletePipeline
+      responses:
+        '204':
+          description: Pipeline has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete pipeline
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/config
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    get:
+      description: Get the YAML configuration of the pipeline.
+      tags:
+      - Component pipelines
+      operationId: getPipelineConfig
+      responses:
+        '200':
+          description: This endpoint returns the config of the pipeline.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: string
+              example:
+                data: '{"resources":[{"name":"5m","type":"time","source":{"interval":"5m"}}],"jobs":[{"name":"job-hello-world","public":true,"plan":[{"get":"5m","trigger":true},{"task":"hello-world","privileged":true,"config":{"platform":"linux","image_resource":{"type":"docker-image","source":{"repository":"busybox"}},"run":{"path":"echo","args":["hello world"]}}}]}]}'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get pipeline config
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/diff
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    put:
+      description: 'The diff between the provided pipeline configuration (or current config stored on git) of the pipeline with the given name.
+
+        This endpoint operates in two modes:
+
+        1. diff with pipeline config from git (remote),
+
+        2. diff with the passed_config.
+
+        In 1. we use the configured vars to execute the current config template retrieved from git. Parameter passed_config is ignored.
+
+        In 2. we use the passed_config as is to update the pipeline config. The passed_config is the new pipeline config - it''s not templated again.'
+      tags:
+      - Component pipelines
+      summary: The diff between the provided pipeline configuration (or current config stored…
+      operationId: diffPipeline
+      responses:
+        '200':
+          description: The diff between the provided pipeline configuration and the existing pipeline has been done.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PipelineDiffs'
+              example:
+                data:
+                  groups:
+                  - diff:
+                    - delta_type: '-'
+                      line: '- test-develop'
+                    label: group
+                    name: bar
+                    status: removed
+                  jobs:
+                  - diff:
+                    - delta_type: +
+                      line: '- terraform-plan-api'
+                    label: job
+                    name: foo
+                    status: added
+                  resource_types:
+                  - diff:
+                    - delta_type: '-'
+                      line: 'name: terraform'
+                    label: resource type
+                    name: glop
+                    status: removed
+                  resources:
+                  - diff:
+                    - delta_type: '-'
+                      line: '  - key: foo'
+                    - delta_type: +
+                      line: '  - key: bar'
+                    label: resource
+                    name: bli
+                    status: changed
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdatePipeline'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdatePipeline'
+        description: The pipeline configuration
+        required: true
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/pause
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    put:
+      description: Pause a pipeline
+      tags:
+      - Component pipelines
+      operationId: pausePipeline
+      responses:
+        '204':
+          description: Pipeline has been paused.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Pause pipeline
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/rename
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/pipeline_name_query'
+    put:
+      description: Rename a pipeline
+      tags:
+      - Component pipelines
+      operationId: renamePipeline
+      responses:
+        '204':
+          description: Pipeline has been renamed.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Rename pipeline
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/synced
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    get:
+      description: Will check if the pipeline from the database and the one specified in the stack are synced or not
+      tags:
+      - Component pipelines
+      operationId: syncedPipeline
+      responses:
+        '200':
+          description: The diff between the stack's pipeline and the existing pipeline if any exists.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PipelineStatus'
+              example:
+                data:
+                  diffs:
+                    groups:
+                    - diff:
+                      - delta_type: '-'
+                        line: '- test-develop'
+                      label: group
+                      name: bar
+                      status: removed
+                    jobs:
+                    - diff:
+                      - delta_type: +
+                        line: '- terraform-plan-api'
+                      label: job
+                      name: foo
+                      status: added
+                    resource_types:
+                    - diff:
+                      - delta_type: '-'
+                        line: 'name: terraform'
+                      label: resource type
+                      name: glop
+                      status: removed
+                    resources:
+                    - diff:
+                      - delta_type: '-'
+                        line: '  - key: foo'
+                      - delta_type: +
+                        line: '  - key: bar'
+                      label: resource
+                      name: bli
+                      status: changed
+                  error: ''
+                  synced: out_of_sync
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Synced pipeline
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/unpause
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    put:
+      description: Unpause a pipeline
+      tags:
+      - Component pipelines
+      operationId: unpausePipeline
+      responses:
+        '204':
+          description: Pipeline has been unpaused.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Unpause pipeline
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/variables
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    get:
+      description: Get the YAML variables of the pipeline.
+      tags:
+      - Component pipelines
+      operationId: getPipelineVariables
+      responses:
+        '200':
+          description: This endpoint returns the variables of the pipeline.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PipelineVariables'
+              example:
+                data:
+                  has_saved_yaml_vars: true
+                  yaml_vars: 'var1: some_var'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '409':
+          description: Project has no config repository configured
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get pipeline variables
+      x-summary-source: derived
+components:
+  schemas:
+    Job:
+      description: The entity which represents a job output in the application.
+      type: object
+      title: Job
+      required:
+      - id
+      - name
+      properties:
+        disable_manual_trigger:
+          type: boolean
+        finished_build:
+          $ref: '#/components/schemas/Build'
+        first_logged_build_id:
+          type: integer
+          format: uint64
+        groups:
+          type: array
+          items:
+            type: string
+        has_new_inputs:
+          type: boolean
+        id:
+          type: integer
+          format: uint64
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobInput'
+        name:
+          type: string
+        next_build:
+          $ref: '#/components/schemas/Build'
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobOutput'
+        paused:
+          type: boolean
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        team_name:
+          type: string
+        transition_build:
+          $ref: '#/components/schemas/Build'
+    VersionConfig:
+      description: The entity which represents a version configuration in the application.
+      type: object
+      title: VersionConfig
+      properties:
+        every:
+          type: boolean
+        latest:
+          type: boolean
+        pinned:
+          type: object
+          additionalProperties:
+            type: string
+    GroupConfig:
+      description: The entity which represents pipeline group config
+      type: object
+      title: GroupConfig
+      required:
+      - name
+      properties:
+        jobs:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        resources:
+          type: array
+          items:
+            type: string
+    PipelineDiffs:
+      description: Represents the diffs between two pipelines
+      type: object
+      title: PipelineDiffs
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineDiff'
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineDiff'
+        resource_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineDiff'
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineDiff'
+    ConfigRepositorySyncStatus:
+      description: Derived health of a config repository's asynchronous git projection, computed from the pending commit-outbox entries. Surfaced so the UI can tell the user their saved configuration is failing to sync (and is being retried automatically) without implying the configuration was lost.
+      type: object
+      title: ConfigRepositorySyncStatus
+      required:
+      - state
+      properties:
+        last_error:
+          description: The most recent sync failure message (present when state is error).
+          type: string
+        oldest_pending_at:
+          description: Unix timestamp in milliseconds of the oldest change still pending projection to git.
+          type: integer
+          format: uint64
+        pending_count:
+          description: Number of buffered changes not yet mirrored to git.
+          type: integer
+          format: uint64
+        state:
+          description: 'synced: nothing pending, git mirror up to date. syncing: pending entries, no recorded error (normal catch-up). error: pending entries are failing to sync and are being retried.'
+          type: string
+          enum:
+          - synced
+          - syncing
+          - error
+    ServiceCatalogTechnology:
+      description: ServiceCatalogTechnology is a Technology of the Service Catalog
+      title: ServiceCatalogTechnology
+      properties:
+        technology:
+          type: string
+        version:
+          type: string
+    ServiceCatalog:
+      description: Represents the Service Catalog item
+      title: Service Catalog
+      required:
+      - id
+      - name
+      - canonical
+      - author
+      - keywords
+      - ref
+      - form_enabled
+      - trusted
+      - directory
+      - visibility
+      - organization_canonical
+      - version
+      - latest
+      properties:
+        author:
+          type: string
+        blueprint:
+          description: Determines if given stack is a blueprint
+          type: boolean
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_providers:
+          description: Cloud providers supported by the stack
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudProvider'
+        created_at:
+          type: integer
+          format: uint64
+        default_version_branch:
+          description: Default version of the stack, based on the Catalog Repository branch
+          type: string
+        dependencies:
+          description: 'Canonicals of the stacks that must be instantiated before this one. Read-only: dependencies can only be declared in the stack''s .cycloid.yml source file and are refreshed from it; they cannot be set or changed through the API.'
+          type: array
+          items:
+            type: string
+          readOnly: true
+        description:
+          type: string
+        directory:
+          description: Directory where the ServiceCatalog configuration is found.
+          type: string
+        form_enabled:
+          description: Indicates if this stack can be configured with form's or not. Based on the presence or not of a valid .forms.yaml file since it's creation or last refresh.
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        image:
+          type: string
+          format: uri
+        keywords:
+          type: array
+          items:
+            type: string
+        labels:
+          description: Structured key:value labels declared in the stack's .cycloid.yml
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogLabel'
+        latest:
+          description: Indicates if the stack uses the latest version
+          type: boolean
+        name:
+          type: string
+        organization_canonical:
+          description: Organization that the stack belongs to
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        readme:
+          description: Readme of the stack
+          type: string
+        ref:
+          type: string
+        service_catalog_source_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        team:
+          description: Team that maintains the stack
+          $ref: '#/components/schemas/SimpleTeam'
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCatalogTechnology'
+        trusted:
+          description: If 'true' the ServiceCatalog is from the main organization and can be trusted.
+          type: boolean
+        unique:
+          description: Determines if the stack can be instantiated only once per organization, project and environment
+          type: boolean
+        updated_at:
+          type: integer
+          format: uint64
+        version:
+          description: Version of the stack
+          type: string
+        visibility:
+          type: string
+    JobInput:
+      description: The entity which represents a job input in the application.
+      type: object
+      title: JobInput
+      required:
+      - name
+      - resource
+      - trigger
+      properties:
+        name:
+          type: string
+        passed:
+          type: array
+          items:
+            type: string
+        resource:
+          type: string
+        trigger:
+          type: boolean
+        version:
+          $ref: '#/components/schemas/VersionConfig'
+    EnvironmentType:
+      description: Represent an environment type that belongs to an organization. Environment types are used to categorize environments (e.g., production, staging, development).
+      title: Environment Type
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - is_default
+      - color
+      - environments_count
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-z]+(?:[\da-z\-._]+[\da-z]|[\da-z])$
+        color:
+          description: Color associated with this environment type
+          type: string
+          maxLength: 64
+        created_at:
+          type: integer
+          format: uint64
+        environments_count:
+          description: The total count of environments using this environment type
+          type: integer
+          format: uint32
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_default:
+          description: Indicates if this is a system-provided default environment type that cannot be deleted or renamed
+          type: boolean
+        label_selector:
+          description: Optional label selector constraining which stacks are offered in environments of this type. Absent means no constraint.
+          $ref: '#/components/schemas/LabelSelector'
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+        updated_at:
+          type: integer
+          format: uint64
+    ServiceCatalogLabel:
+      description: A structured key:value label declared on a stack
+      title: Service Catalog Label
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        value:
+          type: string
+          maxLength: 255
+          minLength: 1
+    PipelineStatus:
+      description: Pipeline status returned upon pipelines comparison between the one locally stored in the database and its counter part on git.
+      type: object
+      title: PipelineStatus
+      required:
+      - synced
+      properties:
+        diffs:
+          type: object
+          $ref: '#/components/schemas/PipelineDiffs'
+        error:
+          type: string
+        synced:
+          description: "The state can vary depending on how far the comparison process went. There are 4 possible states which are:\n  - unknown: one of the pipeline (database/git) couldn't be retrieved\n  - sycned: both database & git pipelines are identical\n  - out_of_sync: database & git pipelines have some differences\n  - errored: both pipelines got retrieved but the comparison triggered an error"
+          type: string
+          enum:
+          - unknown
+          - synced
+          - out_of_sync
+          - errored
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    CloudAccountSimple:
+      description: A simplified cloud account representation without credentials, used when embedding a cloud account in other entities.
+      title: Cloud Account Simple
+      required:
+      - id
+      - canonical
+      - name
+      - cloud_provider
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        cloud_provider:
+          description: The canonical of the associated cloud provider. Can be a built-in provider canonical (aws, google, azurerm; aliases like gcp/microsoft azure are accepted and normalized) or an org-scoped custom cloud provider canonical.
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: A user-defined name for the cloud account
+          type: string
+          maxLength: 255
+          minLength: 1
+    CloudProvider:
+      description: CloudProvider represents a cloud provider. Those cloud providers are used to identify the scope of projects and/or stacks.
+      title: Cloud Provider
+      required:
+      - canonical
+      - name
+      properties:
+        abbreviation:
+          type: string
+          maxLength: 60
+          minLength: 2
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+          enum:
+          - aws
+          - google
+          - azurerm
+          - flexibleengine
+          - openstack
+          - scaleway
+          - vmware
+          - ovh
+          - alibaba
+          - oracle
+          - vsphere
+          - kubernetes
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 60
+          minLength: 2
+        regions:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: integer
+          format: uint64
+    ServiceCatalogSourceVersion:
+      description: Version of a SCS for the Stacks
+      type: object
+      title: Version
+      required:
+      - id
+      - name
+      - commit_hash
+      - status
+      - type
+      - usage
+      - is_latest
+      properties:
+        commit_hash:
+          description: Last commit hash that references it
+          type: string
+          minLength: 1
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_latest:
+          description: If it's the latest
+          type: boolean
+        name:
+          description: Name of the version
+          type: string
+        status:
+          description: Status of the version
+          type: string
+          enum:
+          - no_status
+          - active
+          - deleted
+          - outdated
+        type:
+          description: Type of the version
+          type: string
+          enum:
+          - tag
+          - branch
+        usage:
+          description: How many stacks use it
+          type: integer
+    Project:
+      description: The entity which represents the information of a project.
+      type: object
+      title: Project
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - environments
+      - color
+      - icon
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        color:
+          type: string
+          maxLength: 64
+        config_repository_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        environments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Environment'
+        favorite:
+          type: boolean
+        icon:
+          type: string
+          maxLength: 64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this project. When a user is the owner of a
+
+            project it has all the permissions on it.
+
+            In the event where the user has been deleted that field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+        version_status:
+          description: Aggregated value of the Environments Components Version.Status
+          type: array
+          items:
+            type: string
+            enum:
+            - no_status
+            - latest
+            - active
+            - deleted
+            - outdated
+    EnvironmentVariableItem:
+      description: A single key/value pair attached to an Environment. The value is surfaced to interpolation contexts (StackForms, value_ref, pipelines, Terraform templates) under the `.environment.variables` template path.
+      title: Environment Variable Item
+      required:
+      - key
+      - type
+      - value
+      properties:
+        created_at:
+          description: The date and time (unix timestamp) the variable was created.
+          type: integer
+          format: uint64
+          readOnly: true
+        description:
+          description: Optional free-form description of the variable.
+          type: string
+          maxLength: 1000
+        key:
+          description: Identifier used to reference the variable in templates (e.g. `($ .environment.variables.my_key $)`). Must not contain dots and must include at least one alphanumeric character.
+          type: string
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^.]*[A-Za-z0-9][^.]*$
+        sensitive:
+          description: Display hint for the UI to mask this value. The API returns the value in plaintext regardless.
+          type: boolean
+          default: false
+        type:
+          description: Declared shape of the value. Names mirror stackforms widget types so the two APIs stay consistent.
+          type: string
+          enum:
+          - string
+          - boolean
+          - integer
+          - float
+          - array
+          - map
+        updated_at:
+          description: The date and time (unix timestamp) the variable was last updated.
+          type: integer
+          format: uint64
+          readOnly: true
+        value:
+          description: 'The variable value. Its shape must match the `type` field: a JSON string, boolean, integer, float, array or object respectively.'
+          type: object
+    ProjectSimple:
+      description: The entity which represents minimal information of a project.
+      type: object
+      title: ProjectSimple
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - color
+      - icon
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        color:
+          type: string
+          maxLength: 64
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        favorite:
+          type: boolean
+        icon:
+          type: string
+          maxLength: 64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this project. When a user is the owner of a
+
+            project it has all the permissions on it.
+
+            In the event where the user has been deleted that field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    PipelineDiffRecord:
+      description: Represents a diff record of a pipeline diff
+      type: object
+      title: PipelineDiffRecord
+      required:
+      - line
+      - delta_type
+      properties:
+        delta_type:
+          description: Represents the type of delta (added, removed, changed, equals) for the text line
+          type: string
+        line:
+          description: Represents a text line in a pipeline configuration
+          type: string
+    Environment:
+      description: Represent an environment that belongs to an organization. This is the base environment entity without project-specific relations.
+      title: Environment
+      required:
+      - id
+      - canonical
+      - created_at
+      - updated_at
+      - resources_count
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:[\da-zA-Z\-._]+[\da-zA-Z]|[\da-zA-Z])$
+        cloud_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudAccountSimple'
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/Component'
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          description: Optional description of the environment
+          type: string
+          maxLength: 1000
+        environment_type:
+          $ref: '#/components/schemas/EnvironmentType'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: The display name of the environment
+          type: string
+          maxLength: 100
+          minLength: 1
+        owner:
+          description: 'Organization member that owns this environment. When a user is the owner of an
+
+            environment it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        resources_count:
+          description: The total count of resources attributed to this environment
+          type: integer
+          format: uint32
+        updated_at:
+          type: integer
+          format: uint64
+        variables:
+          description: Full set of environment variables attached to this environment, available under the `.environment.variables` template path during interpolation.
+          type: array
+          items:
+            $ref: '#/components/schemas/EnvironmentVariableItem'
+        version_status:
+          description: Aggregated value of the Components Version.Status in this environment. Only populated when the environment is returned alongside a Project.
+          type: array
+          items:
+            type: string
+            enum:
+            - no_status
+            - latest
+            - active
+            - deleted
+            - outdated
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    LabelSelector:
+      description: Constrains which stacks are offered in environments of a given type, based on the stack's labels. Every requirement must be satisfied for a stack to match.
+      title: Label Selector
+      required:
+      - requirements
+      properties:
+        enforcement:
+          description: '''soft'' only filters the available-stacks list; ''hard'' also rejects creating a component from a non-matching stack.'
+          type: string
+          default: soft
+          enum:
+          - soft
+          - hard
+        requirements:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LabelSelectorRequirement'
+    Build:
+      description: The information relative to a build.
+      type: object
+      title: Build
+      required:
+      - id
+      - team_name
+      - name
+      - status
+      - api_url
+      properties:
+        api_url:
+          type: string
+        config_revision:
+          description: 'The revision of the component configuration this build was gated on, set when the build is created. The component configuration is mirrored to the config repository asynchronously; creating a build waits for the acknowledged revision to be visible to the CI, and reports it here so a caller can tie the build back to the configuration write it made. Absent on builds read back later, and on components with no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        end_time:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint64
+        job_name:
+          type: string
+        name:
+          type: string
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        reap_time:
+          type: integer
+          format: uint64
+        start_time:
+          type: integer
+          format: uint64
+        status:
+          type: string
+        team_name:
+          type: string
+    JobOutput:
+      description: The entity which represents a job output in the application.
+      type: object
+      title: JobOutput
+      required:
+      - name
+      - resource
+      properties:
+        name:
+          type: string
+        resource:
+          type: string
+    UpdatePipeline:
+      description: 'The entity which represents a new pipeline config to update in the
+
+        application.
+
+        If the refresh_from_git is requested, the passed_config is ignored
+
+        and the new pipeline config and vars are retrieved from git instead.
+
+        If the refresh_from_git is set to false (default), the passed_config is required
+
+        and is used to update the pipeline config. The passed_config is NOT templated.'
+      type: object
+      title: Update Pipeline
+      properties:
+        check_credentials:
+          type: boolean
+        passed_config:
+          description: 'Already templated ''final'' pipeline config that is used to perform ''live updates''.
+
+            What you pass here is what you get.'
+          type: string
+        refresh_from_git:
+          description: If set to true, the new pipeline content and vars are retrieved from git and templated.
+          type: boolean
+          default: false
+        yaml_vars:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    SimpleTeam:
+      description: The entity which represents the information of a team a bit simplified.
+      type: object
+      title: SimpleTeam
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'Organization member that owns this team. When a user is the owner of a
+
+            team it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    Pipeline:
+      description: 'The entity which represents a pipeline in the application.
+
+        '
+      type: object
+      title: Pipeline
+      required:
+      - id
+      - name
+      - paused
+      - public
+      - team_name
+      - environment
+      - project
+      - jobs
+      - created_at
+      - updated_at
+      - component
+      properties:
+        archived:
+          type: boolean
+        component:
+          $ref: '#/components/schemas/Component'
+        created_at:
+          type: integer
+          format: uint64
+        environment:
+          $ref: '#/components/schemas/Environment'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupConfig'
+        id:
+          type: integer
+          format: uint64
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+        name:
+          type: string
+        paused:
+          type: boolean
+        project:
+          $ref: '#/components/schemas/Project'
+        public:
+          type: boolean
+        started:
+          type: boolean
+        status:
+          type: string
+        team_name:
+          type: string
+        updated_at:
+          type: integer
+          format: uint64
+    PipelineVariables:
+      description: The entity which contains pipeline's variables.
+      type: object
+      title: Pipeline variables
+      required:
+      - yaml_vars
+      - has_saved_yaml_vars
+      properties:
+        has_saved_yaml_vars:
+          description: 'The has_saved_yaml_vars specifies whether the returned vars are from
+
+            the saved ones or the sample ones. If the has_saved_yaml_vars is true,
+
+            it means that the saved have been returned.
+
+            '
+          type: boolean
+        yaml_vars:
+          type: string
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    PipelineDiff:
+      description: Represents a diff element of a PipelineDiffs.
+      type: object
+      title: PipelineDiff
+      required:
+      - name
+      - status
+      - diff
+      properties:
+        diff:
+          description: Represents the diff of all configuration line for an element
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineDiffRecord'
+        name:
+          description: Represents the name of the element in a pipeline. For example the job name for jobs section
+          type: string
+        status:
+          description: Represents the status of the element (added, removed, changed)
+          type: string
+          enum:
+          - added
+          - removed
+          - changed
+    Component:
+      description: The entity which represents the information of a component.
+      type: object
+      title: Component
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      - service_catalog
+      - environment
+      - project
+      - version
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+        cloud_provider:
+          description: 'The cloud provider object that this environment is using.
+
+            In the event where the cloud provider is not yet defined/supported
+
+            that field might be empty.
+
+            '
+          $ref: '#/components/schemas/CloudProvider'
+        config_repository_sync_status:
+          description: Status of the asynchronous projection of this component's saved StackForms configuration to its project's config git repository. The configuration is always persisted (DB source of truth); this reports whether the git mirror is up to date, catching up, or failing. Absent when there is nothing pending to mirror.
+          $ref: '#/components/schemas/ConfigRepositorySyncStatus'
+        config_revision:
+          description: 'The revision of this component''s StackForms configuration currently mirrored to the config git repository, and therefore the one a build started now would plan against. Unlike config_repository_sync_status it is reported even when the mirror is up to date, so an automation that wrote a configuration can confirm the revision a build will read is its own, and match it against the config_revision reported when creating a build. Absent when the component has no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        created_at:
+          type: integer
+          format: uint64
+        description:
+          type: string
+        environment:
+          description: The environment object that this component is using.
+          $ref: '#/components/schemas/Environment'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_configured:
+          description: The status of the component.
+          type: boolean
+        name:
+          type: string
+          minLength: 1
+        project:
+          description: The project object that this component is using.
+          $ref: '#/components/schemas/ProjectSimple'
+        service_catalog:
+          description: The Service Catalog that was used to create project.
+          $ref: '#/components/schemas/ServiceCatalog'
+        stackform_updated_at:
+          description: Unix timestamp in milliseconds of when the component was last configured via StackForms. Absent if the component has never been configured or the information is unavailable.
+          type: integer
+          format: uint64
+        updated_at:
+          type: integer
+          format: uint64
+        use_case:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: (^[a-z0-9]+(([a-z0-9\-_]+)?[a-z0-9]+)?$)
+        version:
+          description: The version used by the Component
+          $ref: '#/components/schemas/ServiceCatalogSourceVersion'
+    NewPipeline:
+      description: The entity which represents a new pipeline to create in the application.
+      type: object
+      title: Create Pipeline
+      required:
+      - pipeline_name
+      properties:
+        check_credentials:
+          description: Validate credentials manager variables in the pipeline config.
+          type: boolean
+        passed_config:
+          type: string
+        pipeline_name:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+[a-z0-9\-._]+[a-z0-9]+$
+        yaml_vars:
+          type: string
+    LabelSelectorRequirement:
+      description: A single label constraint applied to a stack's labels
+      title: Label Selector Requirement
+      required:
+      - key
+      - operator
+      - values
+      properties:
+        key:
+          type: string
+          maxLength: 255
+          minLength: 1
+        operator:
+          description: The matching operator. 'eq' requires the label to carry the single value; 'in' requires the label to carry at least one of the values.
+          type: string
+          enum:
+          - eq
+          - in
+        values:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            maxLength: 255
+            minLength: 1
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  parameters:
+    component_canonical:
+      description: A canonical of a component.
+      name: component_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    pipeline_name_query:
+      description: A pipeline name
+      name: pipeline_name
+      in: query
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[a-z0-9]+[a-z0-9\-_.]+[a-z0-9]+$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+    pipeline_name:
+      description: A pipeline name
+      name: inpath_pipeline_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[a-z0-9]+[a-z0-9\-_.]+[a-z0-9]+$
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

@@ -1,0 +1,289 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Authentications API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Authentications
+paths:
+  /authentications:
+    get:
+      security: []
+      description: List of authentications available in the root organization.
+      tags:
+      - Authentications
+      operationId: listDefaultAuthentications
+      responses:
+        '200':
+          description: List of authentications which are available in the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Authentication'
+              example:
+                data:
+                - client_id: 67b96869-421d-4897-9f95-dc66aacbe915
+                  created_at: 1503225026
+                  enabled: true
+                  tenant_id: 67b96869-421d-4897-9f95-dc66aacbe915
+                  type: AuthenticationAzureAD
+                  updated_at: 1503335026
+                - client_id: 741192805913-s10ibou8065iofnb9rcir9269skiqts9.apps.googleusercontent.com
+                  created_at: 1503225026
+                  enabled: true
+                  type: AuthenticationGoogle
+                  updated_at: 1503335026
+                - client_id: 6a94210b44f4a612952e
+                  created_at: 1503225026
+                  enabled: true
+                  host_address: https://api.github.com
+                  type: AuthenticationGitHub
+                  updated_at: 1503335026
+                - created_at: 1503225026
+                  enabled: true
+                  provider: https://samltest.id/saml/idp
+                  sso_url: https://samltest.id/idp/profile/SAML2/Redirect/SSO?SAMLRequest=fJLPbtswDIdfReDdkeV0aU3UAbwGwwJ...
+                  type: AuthenticationSAML
+                  updated_at: 1503335026
+                - client_id: 6a94210b44f4a612952e
+                  created_at: 1503225026
+                  enabled: true
+                  oidc_allow_insecure_discovery: false
+                  oidc_discovery_url: https://idp-internal.corp.example/realms/cycloid
+                  oidc_issuer: https://oidc.example.com
+                  type: AuthenticationOIDC
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List default authentications
+      x-summary-source: derived
+  /authentications/{organization_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      security: []
+      description: List of authentications available in the root organization.
+      tags:
+      - Authentications
+      operationId: listOrganizationDefaultAuthentications
+      responses:
+        '200':
+          description: List of authentications which are available in the organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Authentication'
+              example:
+                data:
+                - client_id: 67b96869-421d-4897-9f95-dc66aacbe915
+                  created_at: 1503225026
+                  enabled: true
+                  tenant_id: 67b96869-421d-4897-9f95-dc66aacbe915
+                  type: AuthenticationAzureAD
+                  updated_at: 1503335026
+                - client_id: 741192805913-s10ibou8065iofnb9rcir9269skiqts9.apps.googleusercontent.com
+                  created_at: 1503225026
+                  enabled: true
+                  type: AuthenticationGoogle
+                  updated_at: 1503335026
+                - client_id: 6a94210b44f4a612952e
+                  created_at: 1503225026
+                  enabled: true
+                  host_address: https://api.github.com
+                  type: AuthenticationGitHub
+                  updated_at: 1503335026
+                - created_at: 1503225026
+                  enabled: true
+                  provider: https://samltest.id/saml/idp
+                  sso_url: https://samltest.id/idp/profile/SAML2/Redirect/SSO?SAMLRequest=fJLPbtswDIdfReDdkeV0aU3UAbwGwwJ...
+                  type: AuthenticationSAML
+                  updated_at: 1503335026
+                - client_id: 6a94210b44f4a612952e
+                  created_at: 1503225026
+                  enabled: true
+                  oidc_allow_insecure_discovery: false
+                  oidc_discovery_url: https://idp-internal.corp.example/realms/cycloid
+                  oidc_issuer: https://oidc.example.com
+                  type: AuthenticationOIDC
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List organization default authentications
+      x-summary-source: derived
+components:
+  responses:
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  schemas:
+    AuthenticationConfig:
+      type: object
+      title: AuthenticationConfig
+      required:
+      - enabled
+      - type
+      properties:
+        enabled:
+          description: Whether the authentication is enabled
+          type: boolean
+        inherited:
+          description: 'Whether this authentication is not owned by the queried organization but
+
+            resolved from the nearest ancestor organization that has it configured.
+
+            Read-only; only ever set by the organization authentications list/get
+
+            endpoints for a child organization without its own configuration.
+
+            '
+          type: boolean
+          readOnly: true
+        inherited_from:
+          description: 'Canonical of the ancestor organization that owns this configuration when
+
+            `inherited` is true. Empty otherwise.
+
+            '
+          type: string
+          readOnly: true
+        type:
+          type: string
+      discriminator:
+        propertyName: type
+    Authentication:
+      type: object
+      title: AuthenticationWrapper
+      properties:
+        config:
+          $ref: '#/components/schemas/AuthenticationConfig'
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  parameters:
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

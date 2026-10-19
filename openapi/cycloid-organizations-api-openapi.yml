@@ -1,98 +1,2149 @@
 openapi: 3.2.0
 info:
-  title: Cycloid HTTP Organizations API
-  description: The Cycloid HTTP API is the programmatic surface of the Cycloid Internal Developer Portal & Platform.
-  version: '1.0'
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organizations API
+  termsOfService: https://console.cycloid.io/terms
   contact:
-    name: Cycloid Support
+    name: The Great Owl
     url: https://www.cycloid.io
     email: contact@cycloid.io
   license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
 servers:
 - url: https://http-api.cycloid.io
-  description: Cycloid production HTTP API
 security:
-- ApiKeyAuth: []
-- OAuth2: []
+- api_key: []
+- api_key_query: []
 tags:
-- name: Organizations
-  description: Manage organizations, members, teams, and events.
+- description: Operations for organizations.
+  name: Organizations
 paths:
   /organizations:
     get:
+      description: Get the organizations that the authenticated user has access.
       tags:
       - Organizations
-      summary: List organizations
-      operationId: listOrganizations
+      operationId: getOrgs
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - description: Search by the organization's name
+        name: organization_name
+        in: query
+        schema:
+          type: string
+      - description: Search by organization's creation date
+        name: organization_created_at
+        in: query
+        schema:
+          type: integer
+          format: uint64
+      - $ref: '#/components/parameters/order_by_query'
       responses:
         '200':
-          description: List of organizations
+          description: List of the organizations which authenticated user has access.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Organization'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - blocked: null
+                  can_children_create_appearance: true
+                  can_create_appearance: true
+                  canonical: org1
+                  ci_port: 443
+                  ci_team_name: asfdOPNljk
+                  ci_url: https://scheduler.cycloid.io
+                  created_at: 1503225026
+                  has_children: true
+                  id: 1
+                  name: Organization 1
+                  subscription:
+                    expires_at: 1501131026
+                    members_count: 10
+                    plan:
+                      canonical: free_trial
+                      id: 5
+                      name: Free Trial
+                  updated_at: 1503335026
+                - blocked: null
+                  can_children_create_appearance: true
+                  can_create_appearance: true
+                  canonical: org2
+                  ci_port: 443
+                  ci_team_name: asfdOPNljk
+                  ci_url: https://scheduler.cycloid.io
+                  created_at: 1501131026
+                  has_children: false
+                  id: 1
+                  name: Organization 2
+                  subscription:
+                    expires_at: 1501131026
+                    members_count: 10
+                    plan:
+                      canonical: free_trial
+                      id: 5
+                      name: Free Trial
+                  updated_at: 1503333026
+                - blocked: null
+                  can_children_create_appearance: true
+                  can_create_appearance: true
+                  canonical: org3
+                  ci_port: 443
+                  ci_team_name: asfdOPNljk
+                  ci_url: https://scheduler.cycloid.io
+                  created_at: 1500135021
+                  has_children: false
+                  id: 1
+                  name: Organization 3
+                  subscription:
+                    expires_at: 1501131026
+                    members_count: 10
+                    plan:
+                      canonical: free_trial
+                      id: 5
+                      name: Free Trial
+                  updated_at: 1503332021
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 3
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get orgs
+      x-summary-source: derived
     post:
+      description: Create a new organization, making the authenticated user the owner of it.
       tags:
       - Organizations
-      summary: Create organization
-      operationId: createOrganization
+      operationId: createOrg
       responses:
-        '201':
-          description: Organization created
+        '200':
+          description: Organization created. The body contains the information of the new created organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Organization'
+              example:
+                data:
+                  blocked: null
+                  can_children_create_appearance: false
+                  can_create_appearance: true
+                  canonical: org1
+                  ci_port: 443
+                  ci_team_name: asfdOPNljk
+                  ci_url: https://scheduler.cycloid.io
+                  created_at: 1503225026
+                  has_children: false
+                  id: 1
+                  name: Organization 1
+                  updated_at: 1503335026
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewOrganization'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewOrganization'
+        description: The information of the organization to create.
+        required: true
+      summary: Create org
+      x-summary-source: derived
   /organizations/{organization_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
     get:
+      description: Get the information of the organization.
       tags:
       - Organizations
-      summary: Get organization
-      operationId: getOrganization
-      parameters:
-      - $ref: '#/components/parameters/OrganizationCanonical'
+      operationId: getOrg
       responses:
         '200':
-          description: Organization detail
-  /organizations/{organization_canonical}/members:
-    get:
+          description: The information of the organization which has the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Organization'
+              example:
+                data:
+                  blocked: null
+                  can_children_create_appearance: false
+                  can_create_appearance: true
+                  canonical: org3
+                  ci_team_name: asfdOPNljk
+                  created_at: 1500135021
+                  has_children: false
+                  id: 1
+                  name: Organization 3
+                  subscription:
+                    expires_at: 1501131026
+                    members_count: 10
+                    plan:
+                      canonical: free_trial
+                      id: 5
+                      name: Free Trial
+                  updated_at: 1503332021
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get org
+      x-summary-source: derived
+    put:
+      description: Update the information of the organization.
       tags:
       - Organizations
-      summary: List members
-      operationId: listOrganizationMembers
-      parameters:
-      - $ref: '#/components/parameters/OrganizationCanonical'
+      operationId: updateOrg
       responses:
         '200':
-          description: Members
-  /organizations/{organization_canonical}/teams:
-    get:
+          description: Organization updated. The body contains information of the updated organization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Organization'
+              example:
+                data:
+                  blocked: null
+                  can_children_create_appearance: true
+                  can_create_appearance: true
+                  canonical: org2
+                  ci_team_name: asfdOPNljk
+                  created_at: 1501131026
+                  id: 1
+                  name: Organization 2
+                  subscription:
+                    expires_at: 1501131026
+                    members_count: 10
+                    plan:
+                      canonical: free_trial
+                      id: 5
+                      name: Free Trial
+                  updated_at: 1503333026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganization'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganization'
+        description: The information of the organization to update.
+        required: true
+      summary: Update org
+      x-summary-source: derived
+    delete:
+      description: Delete the organization.
       tags:
       - Organizations
-      summary: List teams
-      operationId: listOrganizationTeams
-      parameters:
-      - $ref: '#/components/parameters/OrganizationCanonical'
+      operationId: deleteOrg
+      responses:
+        '204':
+          description: Organization has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete org
+      x-summary-source: derived
+  /organizations/{organization_canonical}/ancestors:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get all the ancestors between the Organization and the User with the shortest path.
+      tags:
+      - Organizations
+      operationId: getAncestors
       responses:
         '200':
-          description: Teams
+          description: Get all the ancestors between the Organization and the User with the shortest path. 0 index is the parent and n is the searched child
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Organization'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - blocked: null
+                  can_children_create_appearance: true
+                  can_create_appearance: true
+                  canonical: org1
+                  ci_team_name: asfdOPNljk
+                  created_at: 1503225026
+                  id: 1
+                  name: Organization 1
+                  updated_at: 1503335026
+                - blocked:
+                  - require_payment
+                  can_children_create_appearance: true
+                  can_create_appearance: true
+                  canonical: org2
+                  ci_team_name: asfdOPNljk
+                  created_at: 1501131026
+                  id: 2
+                  name: Organization 2
+                  updated_at: 1503333026
+                - blocked:
+                  - require_payment
+                  can_children_create_appearance: true
+                  can_create_appearance: true
+                  canonical: org3
+                  ci_team_name: asfdOPNljk
+                  created_at: 1500135021
+                  id: 3
+                  name: Organization 3
+                  updated_at: 1503332021
+                pagination:
+                  index: 33
+                  size: 10
+                  total: 42
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get ancestors
+      x-summary-source: derived
+  /organizations/{organization_canonical}/branches:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/credential_canonical_not_required_query'
+    - $ref: '#/components/parameters/git_url_query'
+    get:
+      description: 'Return all the branches of repository. If the repository is empty then an
+
+        empty list will be returned.'
+      tags:
+      - Organizations
+      operationId: getRepoBranches
+      responses:
+        '200':
+          description: List of the repository branches
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: string
+              example:
+                data:
+                - stacks
+                - stacks2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get repo branches
+      x-summary-source: derived
+  /organizations/{organization_canonical}/can_do:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Checks if the JWT can do the action
+      tags:
+      - Organizations
+      operationId: canDo
+      responses:
+        '200':
+          description: The information of the possibility to do the action
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CanDoOutput'
+              example:
+                data:
+                  entity_canonicals:
+                  - pepito
+                  - grillo
+                  ok: true
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/CanDoInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CanDoInput'
+        description: The information of the authorization
+        required: true
+      summary: Can do
+      x-summary-source: derived
+  /organizations/{organization_canonical}/can_do_batch:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      description: Checks if the JWT can do multiple actions at once
+      tags:
+      - Organizations
+      operationId: canDoBatch
+      responses:
+        '200':
+          description: The results of the authorization checks
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: object
+                    additionalProperties:
+                      $ref: '#/components/schemas/CanDoBatchOutputItem'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/CanDoBatchInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CanDoBatchInput'
+        description: The list of authorization checks
+        required: true
+      summary: Can do batch
+      x-summary-source: derived
+  /organizations/{organization_canonical}/events:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: 'Retrieve the list of events which has been registered on the organization. The events to request can be filtered using Unix timestamps in milliseconds (begin and end timestamps range), the event type and severity; when more than one are applied then they are applied with a logical AND.
+
+        - The Unix timestamps must always be specified, the rest of the filters
+
+        are not mandatory.'
+      tags:
+      - Organizations
+      operationId: getEvents
+      parameters:
+      - $ref: '#/components/parameters/timestamp_range_begin_query'
+      - $ref: '#/components/parameters/timestamp_range_end_query'
+      - $ref: '#/components/parameters/event_type'
+      - $ref: '#/components/parameters/event_severity'
+      responses:
+        '200':
+          description: The list of events which fulfills the query parameters filter
+          content:
+            application/json:
+              schema:
+                description: The list of log lines
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Event'
+              example:
+                data:
+                - icon: fa-info-circle
+                  id: 42
+                  message: Cyclobot created the build cleanup-deployment#42 of pipeline awesome-project-pr_1337
+                  severity: info
+                  tags:
+                  - key: action
+                    value: create
+                  - key: entity
+                    value: build
+                  - key: name
+                    value: awesome-project-pr_1337/cleanup-deployment
+                  - key: user
+                    value: cyclobot
+                  timestamp: 123456789000
+                  title: A build has been created
+                  type: Cycloid
+                - icon: fa-info-circle
+                  id: 2
+                  message: A new deployment of awesome-project version 1.1.93-rc.5 has been done on staging environment
+                  severity: info
+                  tags:
+                  - key: env
+                    value: staging
+                  - key: project
+                    value: awesome-project
+                  timestamp: 123456795000
+                  title: Success deployment of awesome-project version 1.1.93-rc.5 on staging environment
+                  type: Custom
+                - id: 3
+                  message: Kubernetes nodes of the deployment awesome-project are under heavy load
+                  severity: warn
+                  tags:
+                  - key: Name
+                    value: my-mum-kubernetes-prod
+                  - key: UUID
+                    value: 3ec0a46e-435e-4c5e-989b-02179efb49b5
+                  - key: alertname
+                    value: K8SNodeDiskPressure
+                  - key: condition
+                    value: DiskPressure
+                  - key: customer
+                    value: awesome-customer
+                  - key: env
+                    value: prod
+                  - key: instance
+                    value: 172.30.12.2338080
+                  - key: job
+                    value: kube-state-metrics
+                  - key: node
+                    value: ip-127-0-0-1.eu-west-1.compute.internal
+                  - key: project
+                    value: kubernetes
+                  - key: receiver
+                    value: on_call
+                  - key: service
+                    value: k8s
+                  - key: severity
+                    value: warning
+                  - key: status
+                    value: false
+                  timestamp: 123456810000
+                  title: Nodes are overloaded
+                  type: Monitoring
+                - icon: fa-aws
+                  id: 5
+                  message: A new AWS instance has been created
+                  severity: info
+                  tags:
+                  - key: env
+                    value: testing
+                  - key: project
+                    value: awesome-project
+                  timestamp: 123456823000
+                  title: AWS created
+                  type: AWS
+                - icon: fa-aws
+                  id: 7
+                  message: A new AWS instance is ready to accept requests
+                  severity: info
+                  tags:
+                  - key: env
+                    value: testing
+                  - key: project
+                    value: secret-project
+                  timestamp: 123456834000
+                  title: AWS is ready
+                  type: AWS
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get events
+      x-summary-source: derived
+    post:
+      description: Send a event on the organization to be registered.
+      tags:
+      - Organizations
+      operationId: sendEvent
+      responses:
+        '200':
+          description: Event has been registered
+          content:
+            application/json:
+              schema:
+                description: The newly created event
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Event'
+              example:
+                data:
+                - icon: fa-info-circle
+                  message: A new member has been added to the project Website
+                  severity: info
+                  tags:
+                  - key: project_canonical
+                    value: website
+                  - key: environment_canonical
+                    value: development
+                  - key: user
+                    value: batman
+                  timestamp: 123456789000
+                  title: New member added
+                  type: Cycloid
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewEvent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewEvent'
+        description: The information associated with the event to register.
+        required: true
+      summary: Send event
+      x-summary-source: derived
+  /organizations/{organization_canonical}/events/count:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Retrieve a count of events for given parameters
+      tags:
+      - Organizations
+      operationId: getEventsCount
+      parameters:
+      - $ref: '#/components/parameters/timestamp_range_begin_query'
+      - $ref: '#/components/parameters/timestamp_range_end_query'
+      - $ref: '#/components/parameters/events_count_granularity_filter'
+      - $ref: '#/components/parameters/project_canonical_query'
+      responses:
+        '200':
+          description: The count of events which fulfills the query parameters filter
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EventsCount'
+              example:
+                data:
+                - count: 10
+                  end: 1514851200000
+                  start: 1514764800000
+                - count: 20
+                  end: 1514937600000
+                  start: 1514851200000
+                - count: 30
+                  end: 1515024000000
+                  start: 1514937600000
+                - count: 40
+                  end: 1515110400000
+                  start: 1515024000000
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get events count
+      x-summary-source: derived
+  /organizations/{organization_canonical}/events/tags:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical_query'
+    get:
+      description: Retrieve the list of tags and set of values for all the events of the organization.
+      tags:
+      - Organizations
+      operationId: getEventsTags
+      responses:
+        '200':
+          description: The list of tags and set of values for all the events of the organization.
+          content:
+            application/json:
+              schema:
+                description: The list of tags with associated set of values
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: object
+              example:
+                data:
+                  action:
+                  - create
+                  - delete
+                  - update
+                  customer:
+                  - awesome-customer
+                  - cycloid
+                  entity:
+                  - build
+                  - pipeline
+                  env:
+                  - prod
+                  - staging
+                  - testing
+                  name:
+                  - awesome-project-pr_1337
+                  - awesome-project-pr_42
+                  project:
+                  - awesome-project
+                  - pet-project
+                  - secret-project
+                  user:
+                  - cycloidbot
+                  - geralt-of-rivia
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get events tags
+      x-summary-source: derived
+  /organizations/{organization_canonical}/messages:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Returns the messages associated to the organization.
+      tags:
+      - Organizations
+      summary: Get the organization messages
+      operationId: getOrganizationMessages
+      responses:
+        '200':
+          description: Message retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/OrganizationMessages'
+              example:
+                data:
+                  creation_restricted_message: Organization creation is disabled for your account
+        '401':
+          description: Unauthorized.
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    put:
+      description: Updates the messages associated to the organization.
+      tags:
+      - Organizations
+      summary: Update the organization messages
+      operationId: updateOrganizationMessages
+      responses:
+        '200':
+          description: Messages updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/OrganizationMessages'
+        '401':
+          description: Unauthorized.
+        '403':
+          description: Forbidden.
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganizationMessages'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganizationMessages'
+        required: true
+  /organizations/{organization_canonical}/nav:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      security:
+      - api_key: []
+      description: Get the sidebar nav ordering config for the organization.
+      tags:
+      - Organizations
+      operationId: getOrgNav
+      responses:
+        '200':
+          description: Nav ordering config.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/NavConfig'
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get org nav
+      x-summary-source: derived
+    put:
+      security:
+      - api_key: []
+      description: Create or replace the sidebar nav ordering config for the organization. Sending an empty items array resets to default ordering.
+      tags:
+      - Organizations
+      operationId: updateOrgNav
+      responses:
+        '200':
+          description: Updated nav ordering config.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/NavConfig'
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NavConfig'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NavConfig'
+        required: true
+      summary: Update org nav
+      x-summary-source: derived
+  /organizations/{organization_canonical}/summary:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get the summary of the organization
+      tags:
+      - Organizations
+      operationId: getSummary
+      responses:
+        '200':
+          description: The summary object
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Summary'
+              example:
+                data:
+                  config_repositories: 5
+                  credentials: 5
+                  pipelines: 5
+                  projects: 5
+                  roles: 5
+                  service_catalog_sources: 5
+                  service_catalogs: 5
+                  teams: 5
+                  users: 5
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+      summary: Get summary
+      x-summary-source: derived
 components:
   parameters:
-    OrganizationCanonical:
+    event_severity:
+      description: Specify the severities of the events to be requested. The returned events must have one of the specified severities.
+      name: severity
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          enum:
+          - info
+          - warn
+          - err
+          - crit
+          type: string
+    timestamp_range_begin_query:
+      description: The unix timestamp in milliseconds, which indicate the start of the time range.
+      name: begin
+      in: query
+      schema:
+        type: integer
+        format: uint64
+    order_by_query:
+      description: 'Allows to order the list of items. Example usage: field_name:asc. Multiple order_by parameters are allowed, applied in the order they are specified.
+
+        '
+      name: order_by
+      in: query
+      schema:
+        type: string
+    credential_canonical_not_required_query:
+      description: A Credential canonical
+      name: credential_canonical
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    events_count_granularity_filter:
+      description: Sets the events count granularity, it can be month, week, day.
+      name: events_count_granularity
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+        - month
+        - week
+        - day
+    git_url_query:
+      description: Git URL to repository
+      name: git_url
+      in: query
+      required: true
+      schema:
+        type: string
+        pattern: ^((/|~)[^/]*)+.(\.git)|(([\w\]+@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(/)?
+    event_type:
+      description: Specify the types of the events to be requested. The returned events must have one of the specified types.
+      name: type
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          enum:
+          - Cycloid
+          - AWS
+          - Monitoring
+          - Custom
+          type: string
+    organization_canonical:
+      description: A canonical of an organization.
       name: organization_canonical
       in: path
       required: true
       schema:
         type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    project_canonical_query:
+      description: A list of projects' canonical to filter from
+      name: project_canonical
+      in: query
+      schema:
+        type: string
+        pattern: ^[\da-z]+(?:(?:[\da-z\-._]+)?[\da-z])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    timestamp_range_end_query:
+      description: The unix timestamp in milliseconds, which indicate the end of the time range.
+      name: end
+      in: query
+      schema:
+        type: integer
+        format: uint64
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  schemas:
+    UpdateOrganization:
+      description: The entity which represents the information of an organization to be updated.
+      type: object
+      title: Update Organization
+      required:
+      - name
+      properties:
+        can_children_create_appearance:
+          description: Omitting this field or sending null preserves the current value.
+          type:
+          - boolean
+          - 'null'
+        can_children_manage_oidc_mapping:
+          description: Omitting this field or sending null preserves the current value.
+          type:
+          - boolean
+          - 'null'
+        can_children_use_dedicated_authentication:
+          description: Omitting this field or sending null preserves the current value.
+          type:
+          - boolean
+          - 'null'
+        creation_restricted_message:
+          description: Message displayed to users when organization creation is restricted
+          type:
+          - string
+          - 'null'
+        disable_cost_estimation:
+          description: 'When true, the StackForms cost estimation panel is hidden on every organization of the platform. Only the root organization can set it to true: sending true for a sub-organization is rejected with a 422 error, while false is accepted anywhere. Omitting this field or sending null preserves the current value.'
+          type:
+          - boolean
+          - 'null'
+        disable_member_invitation_email:
+          description: 'When true, adding a member sends no invitation email, platform-wide. Only the root organization can set it to true: sending true for a sub-organization is rejected with a 422 error, while false is accepted anywhere. Omitting this field or sending null preserves the current value.'
+          type:
+          - boolean
+          - 'null'
+        disable_signup:
+          description: 'When true, signups are rejected everywhere on the platform (plain email/password, AWS Marketplace, and SSO/social auto-enrollment) unless the email is already invited — same gate as sso_invite_only. Only the root organization can set it to true: sending true for a sub-organization is rejected with a 422 error, while false is accepted anywhere. Omitting this field or sending null preserves the current value.'
+          type:
+          - boolean
+          - 'null'
+        hide_stack_version_out_of_sync:
+          description: When true, the component list and project list hide the indicator shown when a version's commit no longer matches its reference commit. Other version status indicators are unaffected. Omitting this field or sending null preserves the current value.
+          type:
+          - boolean
+          - 'null'
+        impersonation_emails:
+          description: Emails of the users allowed to impersonate other users. A non-empty list is accepted on the root organization only, any other organization gets a 422. Emails are trimmed, lowercased and deduplicated before being stored. Omitting this field or sending null preserves the current value. Send an empty array [] to clear the list.
+          type:
+          - array
+          - 'null'
+          maxItems: 100
+          items:
+            type: string
+            maxLength: 255
+            pattern: ^\S+@\S+\.\S+$
+        is_using_dedicated_authentication:
+          description: Omitting this field or sending null preserves the current value.
+          type:
+          - boolean
+          - 'null'
+        mfa_enabled:
+          description: Omitting this field or sending null preserves the current value.
+          type:
+          - boolean
+          - 'null'
+        name:
+          type: string
+          minLength: 2
+        sso_invite_only:
+          description: When true, SSO users can only join the organization if they have been explicitly invited
+          type:
+          - boolean
+          - 'null'
+        stack_branch_exclude_patterns:
+          description: Glob patterns (filepath.Match syntax). Versions matching any of these are hidden from non-team-member users. Omitting this field or sending null preserves the current value. Send an empty array [] to clear all patterns.
+          type:
+          - array
+          - 'null'
+          maxItems: 50
+          items:
+            type: string
+            maxLength: 200
+        stack_branch_include_patterns:
+          description: Glob patterns (filepath.Match syntax). When set, only versions whose name matches at least one pattern are shown to non-team-member users. Empty means show all. Omitting this field or sending null preserves the current value. Send an empty array [] to clear all patterns.
+          type:
+          - array
+          - 'null'
+          maxItems: 50
+          items:
+            type: string
+            maxLength: 200
+    CanDoInput:
+      description: The input of the 'can_do' endpoint
+      type: object
+      title: CanDoInput
+      required:
+      - action
+      - entity_canonicals
+      properties:
+        action:
+          type: string
+        entity_canonicals:
+          description: List of the canonicals to the Resource excluding the Organization
+          type: array
+          items:
+            type: string
+    Subscription:
+      description: 'It reflects the relation between an Organization and a Plan which
+
+        could be the Free Trial or others, for more info check https://www.cycloid.io/pricing
+
+        '
+      type: object
+      title: Subscription
+      required:
+      - expires_at
+      - plan
+      properties:
+        current_members:
+          type: integer
+          format: uint64
+        expires_at:
+          type: integer
+          format: uint64
+        members_count:
+          type: integer
+          format: uint64
+        plan:
+          $ref: '#/components/schemas/SubscriptionPlan'
+    CanDoOutput:
+      description: The output of the 'can_do' endpoint
+      type: object
+      title: CanDoOutput
+      required:
+      - ok
+      properties:
+        entity_canonicals:
+          type: array
+          items:
+            type: string
+        ok:
+          type: boolean
+    NavConfig:
+      description: Sidebar nav ordering configuration for an organization.
+      type: object
+      title: NavConfig
+      properties:
+        items:
+          type: array
+          maxItems: 200
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/NavItem'
+    Organization:
+      description: The entity which holds all the direct information attached to an organization.
+      type: object
+      title: Organization
+      required:
+      - id
+      - canonical
+      - ci_team_name
+      - ci_url
+      - ci_port
+      - name
+      - is_root
+      - can_create_appearance
+      - can_children_create_appearance
+      - can_use_dedicated_authentication
+      - can_children_use_dedicated_authentication
+      - can_manage_oidc_mapping
+      - can_children_manage_oidc_mapping
+      - is_using_dedicated_authentication
+      - mfa_enabled
+      - blocked
+      - has_children
+      - created_at
+      - updated_at
+      properties:
+        admins:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberOrg'
+        appearance:
+          $ref: '#/components/schemas/Appearance'
+        blocked:
+          type: array
+          items:
+            type: string
+        can_children_create_appearance:
+          type: boolean
+        can_children_manage_oidc_mapping:
+          type: boolean
+        can_children_use_dedicated_authentication:
+          type: boolean
+        can_create_appearance:
+          type: boolean
+        can_manage_oidc_mapping:
+          type:
+          - boolean
+          - 'null'
+          readOnly: true
+        can_use_dedicated_authentication:
+          type: boolean
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        ci_port:
+          type: string
+        ci_team_name:
+          type: string
+        ci_url:
+          type: string
+        created_at:
+          type: integer
+          format: uint64
+        disable_cost_estimation:
+          description: When true, the StackForms cost estimation panel is hidden on every organization of the platform. Set on the root organization and applied platform-wide, so it is only returned for the root organization.
+          type:
+          - boolean
+          - 'null'
+        disable_member_invitation_email:
+          description: When true, adding a member to an organization sends no invitation email. Set on the root organization and applied platform-wide, so it is only returned for the root organization.
+          type:
+          - boolean
+          - 'null'
+        disable_signup:
+          description: When true, signups are rejected everywhere on the platform (plain email/password, AWS Marketplace, and SSO/social auto-enrollment) unless the email is already invited — same gate as sso_invite_only. Set on the root organization and applied platform-wide, so it is only returned for the root organization.
+          type:
+          - boolean
+          - 'null'
+        has_children:
+          type: boolean
+        hide_stack_version_out_of_sync:
+          description: When true, the component list and project list hide the indicator shown when a version's commit no longer matches its reference commit. Other version status indicators are unaffected.
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        impersonation_emails:
+          description: Emails of the users allowed to impersonate other users. Set on the root organization only; empty means nobody can impersonate. Only returned to callers allowed to update the organization, omitted for everyone else.
+          type:
+          - array
+          - 'null'
+          maxItems: 100
+          items:
+            type: string
+            maxLength: 255
+            pattern: ^\S+@\S+\.\S+$
+        is_root:
+          description: Defines if this organization is the root one on the platform or not
+          type: boolean
+        is_using_dedicated_authentication:
+          type: boolean
+        mfa_enabled:
+          type: boolean
+        name:
+          type: string
+          minLength: 2
+        parent_canonical:
+          description: Canonical of the immediate parent organization. Omitted when this organization is root.
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        parent_name:
+          description: Display name of the immediate parent organization. Omitted when this organization is root.
+          type:
+          - string
+          - 'null'
+        sso_invite_only:
+          description: When true, SSO users can only join the organization if they have been explicitly invited
+          type:
+          - boolean
+          - 'null'
+        stack_branch_exclude_patterns:
+          description: Glob patterns (filepath.Match syntax). Versions matching any of these are hidden from non-team-member users.
+          type:
+          - array
+          - 'null'
+          maxItems: 50
+          items:
+            type: string
+            maxLength: 200
+        stack_branch_include_patterns:
+          description: Glob patterns (filepath.Match syntax). When set, only versions whose name matches at least one pattern are shown to non-team-member users. Empty means show all.
+          type:
+          - array
+          - 'null'
+          maxItems: 50
+          items:
+            type: string
+            maxLength: 200
+        subscription:
+          $ref: '#/components/schemas/Subscription'
+        updated_at:
+          type: integer
+          format: uint64
+    OrganizationMessages:
+      type: object
+      properties:
+        creation_restricted_message:
+          type:
+          - string
+          - 'null'
+    Role:
+      description: Role represents the authorization level that an user has to access to a specific entity of the system. A role contains a list of rules to define the access control. Note not all the entities supports roles access control; see the API endpoints to know which entities support them.
+      title: Role access control
+      required:
+      - id
+      - name
+      - canonical
+      - description
+      - rules
+      - default
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        default:
+          type: boolean
+        description:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          maxLength: 100
+          minLength: 2
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        updated_at:
+          type: integer
+          format: uint64
+    CanDoBatchOutputItem:
+      description: A single result item from the 'can_do_batch' endpoint
+      type: object
+      title: CanDoBatchOutputItem
+      required:
+      - action
+      - ok
+      properties:
+        action:
+          type: string
+        entity_canonicals:
+          type: array
+          items:
+            type: string
+        ok:
+          type: boolean
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    CanDoBatchInput:
+      description: The input of the 'can_do_batch' endpoint
+      type: object
+      title: CanDoBatchInput
+      required:
+      - actions
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CanDoBatchActionInput'
+    MemberOrg:
+      description: Member is a user who is associated to an organization.
+      type: object
+      title: Member of an organization
+      required:
+      - id
+      - created_at
+      - role
+      properties:
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: user email
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        invitation_email:
+          description: The email address to which the invitation was sent. It's used to resend the invitation.
+          type: string
+          format: email
+        invitation_resent_at:
+          type: integer
+          format: uint64
+        invitation_state:
+          type: string
+          enum:
+          - pending
+          - accepted
+          - declined
+        invited_at:
+          description: When the user had been invited to join as a member. When not present, the user is already a member, so she/he has verified her/his invitation.
+          type: integer
+          format: uint64
+        invited_by:
+          description: Organization member who invited the current user.
+          $ref: '#/components/schemas/SimpleMemberOrg'
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: User's preferred language
+          type: string
+          enum:
+          - en
+          - fr
+          - es
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        role:
+          $ref: '#/components/schemas/Role'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleTeam'
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    CanDoBatchActionInput:
+      description: A single action item in the 'can_do_batch' input
+      type: object
+      title: CanDoBatchActionInput
+      required:
+      - canonical
+      - action
+      - entity_canonicals
+      properties:
+        action:
+          type: string
+        canonical:
+          description: A client-chosen key used to identify this action in the response map
+          type: string
+          minLength: 1
+        entity_canonicals:
+          description: List of the canonicals to the Resource excluding the Organization
+          type: array
+          items:
+            type: string
+    SubscriptionPlan:
+      description: It reflects the Plan used for the subscription
+      type: object
+      title: SubscriptionPlan
+      required:
+      - name
+      - canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        name:
+          type: string
+          minLength: 2
+    UpdateOrganizationMessages:
+      type: object
+      properties:
+        creation_restricted_message:
+          type:
+          - string
+          - 'null'
+    User:
+      description: A summary of a user to be used in places where only the basic information are need or are enough.
+      type: object
+      title: Basic info of a user
+      required:
+      - id
+      - username
+      - full_name
+      - email
+      - locale
+      - created_at
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: User's primary email.
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        locale:
+          description: The local that the user prefer.
+          type: string
+          pattern: ^[a-z]{2}(?:-[a-z][a-z])?$
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 30
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    SimpleMemberOrg:
+      description: Simplified model of a member of an organization. The member is 'accepted' and have an associated user account.
+      type: object
+      title: Simplified model of a member of an organization
+      required:
+      - id
+      - email
+      - created_at
+      properties:
+        created_at:
+          description: When the user became a member.
+          type: integer
+          format: uint64
+        email:
+          description: Primary email
+          type: string
+          format: email
+        full_name:
+          type: string
+        id:
+          description: Member ID (different from the user ID)
+          type: integer
+          format: uint32
+          minimum: 1
+        last_login_at:
+          description: When the user logged in last time.
+          type: integer
+          format: uint64
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          description: When the user had the role modified.
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    NavItem:
+      description: A single sidebar entry with an explicit position.
+      type: object
+      title: NavItem
+      required:
+      - type
+      - key
+      - position
+      properties:
+        key:
+          description: Native section name (e.g. "dashboard") or plugin_widget id (as string)
+          type: string
+          maxLength: 255
+          minLength: 1
+        position:
+          type: integer
+          format: uint32
+          minimum: 1
+        type:
+          type: string
+          enum:
+          - native
+          - plugin_widget
+    Rule:
+      description: Rules define the specific access to the platform
+      title: Rule
+      required:
+      - id
+      - effect
+      - action
+      properties:
+        action:
+          description: It can be the normal Policy.Code or contain globs like `*` or `**`
+          type: string
+        effect:
+          type: string
+          enum:
+          - allow
+        id:
+          description: This is the id of the row from the database, but for blocking organizations we generate rules that are not in the database. When this happens the id is allowed to be 0.
+          type: integer
+          format: uint32
+        resources:
+          description: It is the list of resources in which this Rule applies to, the format of it is the one on the Policy.Code but with the `canonical` of the entities like `organization:org-can:team:team-can` for an action of `organization:team:read`
+          type: array
+          items:
+            type: string
+    EventsCount:
+      description: The entity which represents the information of the count of events
+      type: object
+      title: Events Count
+      required:
+      - start
+      - end
+      - count
+      properties:
+        count:
+          type: integer
+          format: uint64
+        end:
+          type: integer
+          format: uint64
+        start:
+          type: integer
+          format: uint64
+    Tag:
+      description: Key and value pair defined with the widely adopted name, tag.
+      type: object
+      title: Key and value pair
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          maxLength: 254
+          minLength: 1
+        value:
+          type: string
+          maxLength: 254
+          pattern: ^(?:[\w\-+=.:/@ ]*)$
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    Event:
+      description: A event which has registered an activity in the Cycloid platform.
+      title: An event
+      required:
+      - id
+      - timestamp
+      - type
+      - title
+      - message
+      - severity
+      - tags
+      properties:
+        color:
+          description: 'The HTML color associated to the event. The valid colors are the ones listed in the  CSS 2 specification: https://www.w3.org/TR/CSS2/syndata.html#value-def-color. Only the keyword are accepted, the hexadecimal values are not valid.'
+          type: string
+          maxLength: 20
+          minLength: 3
+          pattern: '[a-z]+'
+        icon:
+          description: '[A Font Awesome class name](https://fontawesome.com/icons)'
+          type: string
+          minLength: 3
+        id:
+          description: The unique ID of the event from the database.
+          type: integer
+          format: uint32
+        message:
+          description: The message associated to the event.
+          type: string
+          minLength: 1
+        severity:
+          description: The severity associated to the event.
+          type: string
+          enum:
+          - info
+          - warn
+          - err
+          - crit
+        tags:
+          description: The list of tags associated to the event.
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        timestamp:
+          description: The timestamp when the event was created in milliseconds.
+          type: integer
+          format: uint64
+        title:
+          description: The title of the event.
+          type: string
+          minLength: 1
+        type:
+          description: The type of the event
+          type: string
+          enum:
+          - Cycloid
+          - AWS
+          - Monitoring
+          - Custom
+    SimpleTeam:
+      description: The entity which represents the information of a team a bit simplified.
+      type: object
+      title: SimpleTeam
+      required:
+      - id
+      - canonical
+      - name
+      - created_at
+      - updated_at
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          type: string
+          minLength: 2
+        owner:
+          description: 'Organization member that owns this team. When a user is the owner of a
+
+            team it has all the permissions on it.
+
+            In the event where the user has been deleted this field might be empty.
+
+            '
+          $ref: '#/components/schemas/User'
+        updated_at:
+          type: integer
+          format: uint64
+    NewOrganization:
+      description: The entity which represents a new organization to create in the application.
+      type: object
+      title: Create Organization
+      required:
+      - name
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        name:
+          type: string
+          minLength: 2
+    Summary:
+      type: object
+      title: Summary of the organization
+      required:
+      - projects
+      - pipelines
+      - credentials
+      - service_catalog_sources
+      - config_repositories
+      - teams
+      - users
+      - roles
+      - service_catalogs
+      properties:
+        config_repositories:
+          type: integer
+          format: uint64
+        credentials:
+          type: integer
+          format: uint64
+        pipelines:
+          type: integer
+          format: uint64
+        projects:
+          type: integer
+          format: uint64
+        roles:
+          type: integer
+          format: uint64
+        service_catalog_sources:
+          type: integer
+          format: uint64
+        service_catalogs:
+          type: integer
+          format: uint64
+        teams:
+          type: integer
+          format: uint64
+        users:
+          type: integer
+          format: uint64
+    Appearance:
+      description: An Appearance holds the values of the branding configuration, which are rendered across an organization
+      title: Appearance
+      required:
+      - canonical
+      - name
+      - display_name
+      - tab_title
+      - color
+      - logo
+      - favicon
+      - footer
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        color:
+          type: object
+          required:
+          - r
+          - g
+          - b
+          properties:
+            b:
+              description: Blue color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+            g:
+              description: Green color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+            r:
+              description: Red color value of the RGB color
+              type: integer
+              format: uint32
+              maximum: 255
+        created_at:
+          type: integer
+          format: uint64
+        display_name:
+          type: string
+          maxLength: 50
+          minLength: 1
+        favicon:
+          type: string
+          format: uri
+        footer:
+          type: string
+          maxLength: 1000
+        is_active:
+          type: boolean
+        logo:
+          type: string
+          format: uri
+        name:
+          type: string
+          maxLength: 50
+          minLength: 1
+        tab_title:
+          type: string
+          maxLength: 50
+          minLength: 1
+        updated_at:
+          type: integer
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    NewEvent:
+      description: A new event to register in the Cycloid platform.
+      title: A new event
+      required:
+      - type
+      - title
+      - message
+      - severity
+      - tags
+      properties:
+        color:
+          description: 'The HTML color associated to the event. The valid colors are the ones listed in the  CSS 2 specification: https://www.w3.org/TR/CSS2/syndata.html#value-def-color. Only the keyword are accepted, the hexadecimal values are not valid.'
+          type: string
+          maxLength: 20
+          minLength: 3
+          pattern: '[a-z]+'
+        icon:
+          description: '[A Font Awesome class name](https://fontawesome.com/icons)'
+          type: string
+          minLength: 3
+        message:
+          description: The message associated to the event.
+          type: string
+          minLength: 1
+        severity:
+          description: tThe severity associated to the event.
+          type: string
+          enum:
+          - info
+          - warn
+          - err
+          - crit
+        tags:
+          description: The list of tags associated to the event.
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        title:
+          description: The title of the event.
+          type: string
+          minLength: 1
+        type:
+          description: The type of the event
+          type: string
+          enum:
+          - Cycloid
+          - AWS
+          - Monitoring
+          - Custom
+  responses:
+    unauthenticated:
+      description: The user cannot be authenticated with the credentials which she/he has used.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthenticated
+              message: invalid credentials
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
   securitySchemes:
-    ApiKeyAuth:
+    api_key:
+      description: The API authorization is done with JWT tokens
       type: apiKey
-      in: header
       name: Authorization
-    OAuth2:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: https://console.cycloid.io/oauth/authorize
-          tokenUrl: https://http-api.cycloid.io/oauth/token
-          refreshUrl: https://http-api.cycloid.io/oauth/refresh
-          scopes:
-            organization:read: Read organization data
-            organization:write: Modify organization data
-externalDocs:
-  description: Cycloid API Documentation
-  url: https://docs.cycloid.io
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

@@ -1,0 +1,692 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome!
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Cloud Cost Management Provider Histograms
+paths:
+  /organizations/{organization_canonical}/cloud_cost_management/providers:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Return a histogram of the costs generated in a given period aggregated by time granularity and other terms, for a single provider.
+      tags:
+      - Organization Cloud Cost Management Provider Histograms
+      operationId: getCloudCostManagementProviders
+      parameters:
+      - $ref: '#/components/parameters/cost_granularity_filter'
+      - $ref: '#/components/parameters/timestamp_range_begin_query'
+      - $ref: '#/components/parameters/timestamp_range_end_query'
+      - $ref: '#/components/parameters/cost_currency_filter'
+      - $ref: '#/components/parameters/cost_projects_filter'
+      - $ref: '#/components/parameters/cost_linked_accounts_filter'
+      - $ref: '#/components/parameters/cost_master_accounts_filter'
+      responses:
+        '200':
+          description: 'Cloud Cost Management histogram for a period of time and a single provider.
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudCostManagementProviders'
+              example:
+                data:
+                - buckets:
+                  - buckets:
+                    - buckets:
+                      - cost: 25
+                        value: storage
+                      - cost: 25
+                        value: compute
+                      cost: 50
+                      value: us-est-1
+                    - buckets:
+                      - cost: 20
+                        value: storge
+                      - cost: 30
+                        value: compute
+                      cost: 50
+                      value: us-est-2
+                    cost: 100
+                    value: 2021-03
+                  - buckets:
+                    - buckets:
+                      - cost: 50
+                        value: storage
+                      - cost: 20
+                        value: compute
+                      cost: 70
+                      value: us-est-1
+                    - buckets:
+                      - cost: 15
+                        value: storage
+                      - cost: 15
+                        value: compute
+                      cost: 30
+                      value: us-est-2
+                    cost: 100
+                    value: 2021-04
+                  cost: 200
+                  gcp: null
+                - aws: null
+                  buckets:
+                  - buckets:
+                    - buckets:
+                      - cost: 25
+                        value: storage
+                      - cost: 25
+                        value: compute
+                      cost: 50
+                      value: us-est-1
+                    - buckets:
+                      - cost: 20
+                        value: storge
+                      - cost: 30
+                        value: compute
+                      cost: 50
+                      value: us-est-2
+                    cost: 100
+                    value: 2021-03
+                  - buckets:
+                    - buckets:
+                      - cost: 50
+                        value: storage
+                      - cost: 20
+                        value: compute
+                      cost: 70
+                      value: us-est-1
+                    - buckets:
+                      - cost: 15
+                        value: storage
+                      - cost: 15
+                        value: compute
+                      cost: 30
+                      value: us-est-2
+                    cost: 100
+                    value: 2021-04
+                  cost: 200
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get cloud cost management providers
+      x-summary-source: derived
+  /organizations/{organization_canonical}/cloud_cost_management/{provider_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/provider_canonical'
+    get:
+      description: Return a histogram of the costs generated in a given period aggregated by time granularity and other terms, for a single provider.
+      tags:
+      - Organization Cloud Cost Management Provider Histograms
+      operationId: getCloudCostManagementProvider
+      parameters:
+      - $ref: '#/components/parameters/cost_granularity_filter'
+      - $ref: '#/components/parameters/timestamp_range_begin_query'
+      - $ref: '#/components/parameters/timestamp_range_end_query'
+      - $ref: '#/components/parameters/cost_currency_filter'
+      - $ref: '#/components/parameters/cost_projects_filter'
+      - $ref: '#/components/parameters/cost_environments_filter'
+      - $ref: '#/components/parameters/cost_components_filter'
+      - $ref: '#/components/parameters/cost_services_filter'
+      - $ref: '#/components/parameters/cost_tag_key_value_filter'
+      - $ref: '#/components/parameters/cost_categories_filter'
+      - $ref: '#/components/parameters/cost_master_accounts_filter'
+      - $ref: '#/components/parameters/cost_linked_accounts_filter'
+      - $ref: '#/components/parameters/cost_regions_filter'
+      - $ref: '#/components/parameters/cost_resource_tagging_filter'
+      - $ref: '#/components/parameters/cost_group_by_filter'
+      - $ref: '#/components/parameters/cost_record_type_filter'
+      responses:
+        '200':
+          description: 'Cloud Cost Management histogram for a period of time and a single provider.
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudCostManagementProviderDetails'
+              example:
+                data:
+                  buckets:
+                  - buckets:
+                    - buckets:
+                      - cost: 25
+                        value: storage
+                      - cost: 25
+                        value: compute
+                      cost: 50
+                      value: us-est-1
+                    - buckets:
+                      - cost: 20
+                        value: storge
+                      - cost: 30
+                        value: compute
+                      cost: 50
+                      value: us-est-2
+                    cost: 100
+                    value: 2021-03
+                  - buckets:
+                    - buckets:
+                      - cost: 50
+                        value: storage
+                      - cost: 20
+                        value: compute
+                      cost: 70
+                      value: us-est-1
+                    - buckets:
+                      - cost: 15
+                        value: storage
+                      - cost: 15
+                        value: compute
+                      cost: 30
+                      value: us-est-2
+                    cost: 100
+                    value: 2021-04
+                  cost: 200
+                  filter_values:
+                    components:
+                    - storage
+                    - compute
+                    - containers
+                    linked_account:
+                    - acc1
+                    - acc2
+                    projects:
+                    - proj1
+                    - proj2
+                    regions:
+                    - us-east-1
+                    - eu-west-1
+                    tags:
+                      key1:
+                      - value1
+                      - value2
+                      key2:
+                      - value1
+                      - value2
+                      - value3
+                      key3:
+                      - value1
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get cloud cost management provider
+      x-summary-source: derived
+components:
+  schemas:
+    CloudCostManagementProviderDetails:
+      description: 'Description of the costs of a specific provider
+
+        '
+      type: object
+      title: CloudCostManagementProviderDetails
+      required:
+      - cost_histogram
+      properties:
+        cost_histogram:
+          $ref: '#/components/schemas/CloudCostManagementHistogram'
+        filter_values:
+          $ref: '#/components/schemas/CloudCostManagementFilterValues'
+    CloudCostManagementBucket:
+      description: 'A sum of the cost generated in a period aggregated by one or more terms,
+
+        for example if we aggregate costs by project here we have all the cost
+
+        generated by a specific project in the period of time defined by the
+
+        filters of the histogram.  In case the filter specifies more than one
+
+        aggregation term this type will recursively contain the other levels of
+
+        aggregation.
+
+        '
+      title: CloudCostManagementBucket
+      required:
+      - cost
+      - value
+      - kwh
+      - co2e
+      properties:
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudCostManagementBucket'
+        co2e:
+          description: The total CO2e emissions for the aggregated usage, in metric tons.
+          type: number
+        cost:
+          type: number
+        kwh:
+          description: The total energy consumption for the aggregated usage, in kwh
+          type: number
+        value:
+          description: 'The value of the aggregation term, for example if we aggregate cost
+
+            by region aggregate_value can be us-east-2, if we aggregate by project
+
+            this can be cool_project_number_42, by service can be S3 or EC2, etc..
+
+            '
+          type: string
+    CloudCostManagementFilterValues:
+      description: 'A collection of the values for which the cost can be filtered, i.e. all
+
+        the providers, services, regions, etc... for one org.
+
+        '
+      title: CloudCostManagementFilterValues
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        components:
+          type: array
+          items:
+            type: string
+        currencies:
+          type: array
+          items:
+            type: string
+        environments:
+          type: array
+          items:
+            type: string
+        instance_types:
+          type: array
+          items:
+            type: string
+        linked_accounts:
+          type: array
+          items:
+            type: string
+        linked_accounts_with_cp:
+          type: object
+        master_accounts:
+          type: array
+          items:
+            type: string
+        master_accounts_with_cp:
+          type: object
+        projects:
+          type: array
+          items:
+            type: string
+        providers:
+          type: array
+          items:
+            type: string
+        regions:
+          type: array
+          items:
+            type: string
+        resources:
+          type: array
+          items:
+            type: string
+        services:
+          type: array
+          items:
+            type: string
+        tags:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    CloudCostManagementProviders:
+      description: 'Date histogram of the cost of all the providers
+
+        '
+      type: object
+      title: CloudCostManagementProviders
+      required:
+      - cost_histogram
+      properties:
+        cost_histogram:
+          $ref: '#/components/schemas/CloudCostManagementHistogram'
+    CloudCostManagementHistogram:
+      description: The histogram of the costs for a period composed of buckets that aggregate the costs.
+      title: CloudCostManagementHistogram
+      required:
+      - cost
+      - kwh
+      - co2e
+      - buckets
+      properties:
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudCostManagementBucket'
+        co2e:
+          description: The total CO2e emissions for the period, in metric tons.
+          type: number
+        cost:
+          description: The total cost for the period.
+          type: number
+        kwh:
+          description: The total energy consumption for the period, in kwh.
+          type: number
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+  parameters:
+    cost_linked_accounts_filter:
+      description: The ids of the linked accounts that you can use to filter your results
+      name: linked_accounts
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    cost_regions_filter:
+      description: The names of the regions that you can use to filter your results
+      name: regions
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    timestamp_range_begin_query:
+      description: The unix timestamp in milliseconds, which indicate the start of the time range.
+      name: begin
+      in: query
+      schema:
+        type: integer
+        format: uint64
+    cost_tag_key_value_filter:
+      description: The key and value of a tag concatenated by a ;.
+      name: tags
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          maxLength: 127
+          minLength: 4
+          pattern: ^[^;]+;[^;]+$
+          type: string
+    cost_master_accounts_filter:
+      description: The ids of the master accounts that you can use to filter your results
+      name: master_accounts
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    cost_group_by_filter:
+      description: Represents a group when you specify a group by criteria, or in the response to a query with a specific grouping.
+      name: group_by
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          enum:
+          - environment
+          - service
+          - instance_type
+          - category
+          - location
+          - linked_account
+          - project
+          - record_type
+          - component
+          type: string
+        uniqueItems: true
+    cost_categories_filter:
+      description: The names of the categories that you can use to filter and group your results.
+      name: categories
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          enum:
+          - other
+          - compute
+          - storage
+          - database
+          - dev_tools
+          - networking
+          - analytics
+          - containers
+          - machine_learning
+          - multimedia
+          - security
+          type: string
+    cost_granularity_filter:
+      description: Sets the cost granularity, it can be month, week, day.
+      name: granularity
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+        - month
+        - week
+        - day
+    cost_projects_filter:
+      description: The names of the projects that you can use to filter your results
+      name: projects
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    cost_currency_filter:
+      description: The currency required for the results.
+      name: currency
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+        - USD
+        - EUR
+        - CNY
+        - GBP
+    cost_record_type_filter:
+      description: The type of records that you can use to filter your results. For example usage or credit.
+      name: record_types
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    cost_components_filter:
+      description: The names of the components that you can use to filter your results
+      name: components
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    provider_canonical:
+      description: A canonical of a Provider
+      name: provider_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    cost_resource_tagging_filter:
+      description: Filter results by only tagged or not tagged resources
+      name: resource_tagging
+      in: query
+      schema:
+        type: string
+        enum:
+        - tagged_resources
+        - untagged_resources
+    cost_environments_filter:
+      description: The names of the environments that you can use to filter your results
+      name: environments
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    cost_services_filter:
+      description: The names of the services that you can use to filter and group your results.
+      name: services
+      in: query
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+    timestamp_range_end_query:
+      description: The unix timestamp in milliseconds, which indicate the end of the time range.
+      name: end
+      in: query
+      schema:
+        type: integer
+        format: uint64
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

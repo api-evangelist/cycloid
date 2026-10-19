@@ -1,0 +1,559 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Component Pipeline Resources API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on the resources of a pipeline in a component
+  name: Component Pipeline Resources
+paths:
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    get:
+      description: Get the resources of the pipeline.
+      tags:
+      - Component Pipeline Resources
+      operationId: getPipelineResources
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: The resources of the pipeline's which has the specified name.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Resource'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - check_error: ''
+                  failing_to_check: false
+                  groups: null
+                  name: ecr-website-preprod
+                  paused: false
+                  type: docker-image
+                - check_error: ''
+                  failing_to_check: false
+                  groups: null
+                  name: git-website-preprod
+                  paused: false
+                  type: git
+                - check_error: ''
+                  failing_to_check: false
+                  groups: null
+                  name: vault-preprod
+                  paused: false
+                  type: vault
+                - check_error: ''
+                  failing_to_check: false
+                  groups: null
+                  name: slack-alert-preprod
+                  paused: false
+                  type: slack-notification
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 4
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get pipeline resources
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    get:
+      description: Get a specific resource of the pipeline.
+      tags:
+      - Component Pipeline Resources
+      operationId: getResource
+      responses:
+        '200':
+          description: The resource of the pipeline's which has the specified name.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Resource'
+              example:
+                data:
+                  check_error: ''
+                  failing_to_check: false
+                  groups: null
+                  name: ecr-website-preprod
+                  paused: false
+                  type: docker-image
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get resource
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}/check
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    post:
+      description: Trigger a check for a specified resource.
+      tags:
+      - Component Pipeline Resources
+      operationId: checkResource
+      responses:
+        '200':
+          description: The resource checked result.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Build'
+              example:
+                data:
+                  api_url: /api/v1/builds/62
+                  id: 62
+                  name: check
+                  pipeline_id: 1
+                  pipeline_name: pipeline1
+                  resource_name: 5m
+                  start_time: 1630426278
+                  status: started
+                  team_name: 1359872e-88fe-47a7-8c55-923108823a55
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/CIVersion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CIVersion'
+        description: Check for new version from the specified version.
+      summary: Check resource
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}/pin_comment
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    put:
+      description: Set pin comment on a specified resource
+      tags:
+      - Component Pipeline Resources
+      operationId: resourceSetPinComment
+      responses:
+        '204':
+          description: Resource pin has been commented
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/PinComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PinComment'
+        description: Specify the comment to put on a pinned resource.
+        required: true
+      summary: Resource set pin comment
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}/unpin
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    put:
+      description: Unpin a specified resource
+      tags:
+      - Component Pipeline Resources
+      operationId: unpinResource
+      responses:
+        '204':
+          description: Resource has been unpinned
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Unpin resource
+      x-summary-source: derived
+components:
+  schemas:
+    PinComment:
+      description: Represents a pin comment of a resource
+      type: object
+      title: PinComment
+      required:
+      - pin_comment
+      properties:
+        pin_comment:
+          type: string
+    Resource:
+      description: The entity which represents a resource in the application.
+      type: object
+      title: Resource
+      required:
+      - name
+      - type
+      properties:
+        build:
+          $ref: '#/components/schemas/BuildSummary'
+        icon:
+          type: string
+        last_checked:
+          type: integer
+          format: uint64
+        name:
+          type: string
+        pin_comment:
+          type: string
+        pinned_in_config:
+          type: boolean
+        pinned_version:
+          type: object
+          additionalProperties:
+            type: string
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        team_name:
+          type: string
+        type:
+          type: string
+    BuildSummary:
+      description: The information relative to a build summary.
+      type: object
+      title: BuildSummary
+      required:
+      - id
+      - team_name
+      - name
+      - status
+      properties:
+        end_time:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint64
+        job_name:
+          type: string
+        name:
+          type: string
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        plan:
+          type: object
+        start_time:
+          type: integer
+          format: uint64
+        status:
+          type: string
+        team_name:
+          type: string
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    Build:
+      description: The information relative to a build.
+      type: object
+      title: Build
+      required:
+      - id
+      - team_name
+      - name
+      - status
+      - api_url
+      properties:
+        api_url:
+          type: string
+        config_revision:
+          description: 'The revision of the component configuration this build was gated on, set when the build is created. The component configuration is mirrored to the config repository asynchronously; creating a build waits for the acknowledged revision to be visible to the CI, and reports it here so a caller can tie the build back to the configuration write it made. Absent on builds read back later, and on components with no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        end_time:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint64
+        job_name:
+          type: string
+        name:
+          type: string
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        reap_time:
+          type: integer
+          format: uint64
+        start_time:
+          type: integer
+          format: uint64
+        status:
+          type: string
+        team_name:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    CIVersion:
+      description: Represent a version of a resource
+      type: object
+      title: CIVersion
+      additionalProperties:
+        type: string
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+  parameters:
+    component_canonical:
+      description: A canonical of a component.
+      name: component_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    resource_name:
+      description: A resource name
+      name: resource_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
+        minLength: 1
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    pipeline_name:
+      description: A pipeline name
+      name: inpath_pipeline_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[a-z0-9]+[a-z0-9\-_.]+[a-z0-9]+$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

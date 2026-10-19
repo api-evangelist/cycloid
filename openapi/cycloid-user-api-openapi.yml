@@ -1,0 +1,1969 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! User API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations for the authenticated user.
+  name: User
+paths:
+  /user:
+    get:
+      description: Get the information of the account of the authenticated user.
+      tags:
+      - User
+      operationId: getUserAccount
+      responses:
+        '200':
+          description: The user account information.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserAccount'
+              example:
+                data:
+                  country:
+                    code: GB
+                    name: United Kingdom
+                  created_at: 1503225026
+                  emails:
+                  - email: mariano@jimenez.com
+                    purpose: primary
+                    verified: true
+                  full_name: Mariano Jimenez
+                  guide:
+                    presentation: false
+                    tutorial:
+                      configEnv: false
+                      createProject: false
+                      credentials: false
+                      customEnvConfig: false
+                      deployed: false
+                      finish: false
+                      letsgo: false
+                      reviewDeploy: false
+                      selectStack: false
+                      tasksDetails: false
+                      welcome: false
+                  last_login: 1503413020
+                  locale: en
+                  picture_url: https://avatars2.githubusercontent.com/u/14579210
+                  updated_at: 1503335026
+                  username: user-1
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get user account
+      x-summary-source: derived
+    put:
+      description: Update the information of the account of the authenticated user.
+      tags:
+      - User
+      operationId: updateUserAccount
+      responses:
+        '200':
+          description: The updated user profile information.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserAccount'
+              example:
+                data:
+                  country_code: UK
+                  created_at: 1503225026
+                  emails:
+                  - email: mariano@jimenez.com
+                    purpose: primary
+                    verified: true
+                  full_name: Mariano Jimenez
+                  last_login: 1503413020
+                  locale: en
+                  picture_url: https://avatars2.githubusercontent.com/u/14579210
+                  updated_at: 1503335026
+                  username: user-1
+        '409':
+          description: Trying setting an unverified email as the primary
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        '503':
+          $ref: '#/components/responses/retry_operation'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserAccount'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateUserAccount'
+        description: The user content
+        required: true
+      summary: Update user account
+      x-summary-source: derived
+    post:
+      security: []
+      description: Create a new User (sign-up).
+      tags:
+      - User
+      operationId: signUp
+      responses:
+        '200':
+          description: Account created. The response specifies whether the user is already verified or not. If verified, the response contains a login token allowing to access the dashboard without having to verify the account. If not verified, the account MUST be verified through the link sent to the email address.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - verified
+                properties:
+                  session:
+                    $ref: '#/components/schemas/UserSession'
+                  verified:
+                    description: Specifies whether the user is already verified.
+                    type: boolean
+              example:
+                verified: false
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewUserAccount'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewUserAccount'
+        description: The user content
+        required: true
+      summary: Sign up
+      x-summary-source: derived
+    delete:
+      description: The authenticated user delete itself from the system.
+      tags:
+      - User
+      operationId: deleteUserAccount
+      responses:
+        '204':
+          description: User account has been deleted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete user account
+      x-summary-source: derived
+  /user/aws_marketplace:
+    post:
+      security: []
+      description: Create a new AWS Marketplace User.
+      tags:
+      - User
+      operationId: signUpAWSMarketplace
+      responses:
+        '204':
+          description: Account created. The account MUST be verified through the link sent to the email address.
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewAWSMarketplaceUserAccount'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewAWSMarketplaceUserAccount'
+        description: The user content
+        required: true
+      summary: Sign up AWS marketplace
+      x-summary-source: derived
+  /user/aws_marketplace/entitlement:
+    post:
+      security: []
+      description: 'This endpoint handles redirections from AWS Marketplace to our system.
+
+        If user doesn''t exist, he''ll be redirected to registration page.
+
+        If user exist, he''ll be redirected to login page.'
+      tags:
+      - User
+      operationId: handleAWSMarketplaceUserEntitlement
+      responses:
+        '301':
+          description: The user is redirected based on his account state.
+          headers:
+            Location:
+              schema:
+                type: string
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Handle AWS marketplace user entitlement
+      x-summary-source: derived
+  /user/email/authentication/{authentication_token}:
+    put:
+      security: []
+      description: Verify that the email address is own by the user.
+      tags:
+      - User
+      operationId: emailAuthenticationVerification
+      parameters:
+      - $ref: '#/components/parameters/authentication_token'
+      responses:
+        '200':
+          description: The token which represents the session of the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserSession'
+              example:
+                data:
+                  owns:
+                  - organization:seraf:team:teamcan
+                  permissions:
+                    organization:team:create:
+                      action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImY0YjdiZjZlLTE1NmYtNDYxMy05NmFiLWIwMzg5NzdiMWRkMSJ9.eyJpc3MiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJzdWIiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJhdWQiOiJjdXN0b21lciIsIm5iZiI6MTUwMzQ3NDg2NywiaWF0IjoxNTAzNDc0ODY3LCJqdGkiOiJjNDU5ODgwMS04YWQzLTRhMDctODIwZC02MzRmN2RkMWQ2MDgiLCJjeWNsb2lkIjp7InVzZXIiOnsiaWQiOjEsInVzZXJuYW1lIjoidXNlci0xIiwiZ2l2ZW5fbmFtZSI6Ik1hcmlhbm8iLCJmYW1pbHlfbmFtZSI6IkppbWVuZXoiLCJwaWN0dXJlX3VybCI6Imh0dHBzOi8vYXZhdGFyczIuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3UvMTQ1NzkyMTAiLCJsb2NhbGUiOiJlbiJ9fX0.v6BuWwO6vN6PNW9d-Eqdoy7GHfUXKQ7byRbqwKRwHlA
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Email authentication verification
+      x-summary-source: derived
+  /user/email/verification:
+    post:
+      security: []
+      description: Re-send the verification user's email to the indicated address.
+      tags:
+      - User
+      operationId: emailVerificationResend
+      responses:
+        '204':
+          description: The email verification has been re-sent.
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UserEmail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserEmail'
+        description: The email address to re-send the verification email. This endpoint doesn't return any error status code if the email doesn't exist nor it's already verified for avoiding that an attacker could find registered users email address.
+        required: true
+      summary: Email verification resend
+      x-summary-source: derived
+  /user/email/verification/{verification_token}:
+    put:
+      security: []
+      description: Verify that the email address is own by the user.
+      tags:
+      - User
+      operationId: emailVerification
+      parameters:
+      - $ref: '#/components/parameters/verification_token'
+      responses:
+        '204':
+          description: Email address has been verified.
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Email verification
+      x-summary-source: derived
+  /user/guide:
+    put:
+      security: []
+      description: Update user's guide progress.
+      tags:
+      - User
+      operationId: updateUserGuide
+      responses:
+        '204':
+          description: The guide progress has been updated.
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UserGuide'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserGuide'
+        description: The guide's progress JSON schema
+      summary: Update user guide
+      x-summary-source: derived
+  /user/impersonate:
+    post:
+      description: Start a support impersonation session (ENG-407). The caller is authenticated with their own JWT and their primary email must be on the root organization impersonation allowlist. The returned session JWT has the target user as its subject, scoped to the given organization or to none when the organization is omitted (the client then refreshes into one of the target's organizations, as after a plain login), and carries an 'impersonator' claim naming the caller so every request stays attributable. It expires after the configured impersonation TTL and a refresh never extends it.
+      tags:
+      - User
+      operationId: impersonateUser
+      responses:
+        '200':
+          description: The token which represents the impersonated session.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserSession'
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UserImpersonate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserImpersonate'
+        description: The user to impersonate and the organization to scope the session to.
+        required: true
+      summary: Impersonate user
+      x-summary-source: derived
+  /user/impersonate/stop:
+    post:
+      description: 'End an impersonation session (ENG-407). Must be called with the impersonated JWT. The session is revoked: the impersonated JWT, and every JWT a refresh derived from it, are refused from then on, and the stop is logged next to the start.'
+      tags:
+      - User
+      operationId: stopImpersonateUser
+      responses:
+        '204':
+          description: The impersonation session has been ended.
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Stop impersonate user
+      x-summary-source: derived
+  /user/login:
+    post:
+      security: []
+      description: Authenticate a user and return a new JWT token.
+      tags:
+      - User
+      operationId: login
+      responses:
+        '200':
+          description: The token which represents the session of the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserSession'
+              example:
+                data:
+                  owns:
+                  - organization:seraf:team:teamcan
+                  permissions:
+                    organization:team:create:
+                      action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImY0YjdiZjZlLTE1NmYtNDYxMy05NmFiLWIwMzg5NzdiMWRkMSJ9.eyJpc3MiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJzdWIiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJhdWQiOiJjdXN0b21lciIsIm5iZiI6MTUwMzQ3NDg2NywiaWF0IjoxNTAzNDc0ODY3LCJqdGkiOiJjNDU5ODgwMS04YWQzLTRhMDctODIwZC02MzRmN2RkMWQ2MDgiLCJjeWNsb2lkIjp7InVzZXIiOnsiaWQiOjEsInVzZXJuYW1lIjoidXNlci0xIiwiZ2l2ZW5fbmFtZSI6Ik1hcmlhbm8iLCJmYW1pbHlfbmFtZSI6IkppbWVuZXoiLCJwaWN0dXJlX3VybCI6Imh0dHBzOi8vYXZhdGFyczIuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3UvMTQ1NzkyMTAiLCJsb2NhbGUiOiJlbiJ9fX0.v6BuWwO6vN6PNW9d-Eqdoy7GHfUXKQ7byRbqwKRwHlA
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        description: The user content
+        required: true
+      summary: Login
+      x-summary-source: derived
+  /user/login/{organization_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    post:
+      security: []
+      description: Authenticate a user and return a new JWT token.
+      tags:
+      - User
+      operationId: loginToOrg
+      responses:
+        '200':
+          description: The token which represents the session of the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserSession'
+              example:
+                data:
+                  owns:
+                  - organization:seraf:team:teamcan
+                  permissions:
+                    organization:team:create:
+                      action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImY0YjdiZjZlLTE1NmYtNDYxMy05NmFiLWIwMzg5NzdiMWRkMSJ9.eyJpc3MiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJzdWIiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJhdWQiOiJjdXN0b21lciIsIm5iZiI6MTUwMzQ3NDg2NywiaWF0IjoxNTAzNDc0ODY3LCJqdGkiOiJjNDU5ODgwMS04YWQzLTRhMDctODIwZC02MzRmN2RkMWQ2MDgiLCJjeWNsb2lkIjp7InVzZXIiOnsiaWQiOjEsInVzZXJuYW1lIjoidXNlci0xIiwiZ2l2ZW5fbmFtZSI6Ik1hcmlhbm8iLCJmYW1pbHlfbmFtZSI6IkppbWVuZXoiLCJwaWN0dXJlX3VybCI6Imh0dHBzOi8vYXZhdGFyczIuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3UvMTQ1NzkyMTAiLCJsb2NhbGUiOiJlbiJ9fX0.v6BuWwO6vN6PNW9d-Eqdoy7GHfUXKQ7byRbqwKRwHlA
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        description: The user content
+        required: true
+      summary: Login to org
+      x-summary-source: derived
+  /user/logout:
+    post:
+      description: End the session of the JWT used to call it. The JWT, and every JWT a refresh derived from it, are refused from then on.
+      tags:
+      - User
+      operationId: logout
+      responses:
+        '204':
+          description: The session has been ended.
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Logout
+      x-summary-source: derived
+  /user/notification_settings:
+    get:
+      security: []
+      description: Get the notification settings for the user.
+      tags:
+      - User
+      operationId: getNotificationSettings
+      responses:
+        '200':
+          description: The notification settings of the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationSettings'
+              example:
+                data:
+                  watch_projects_on_create: true
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get notification settings
+      x-summary-source: derived
+    post:
+      security: []
+      description: A user's notification settings.
+      tags:
+      - User
+      operationId: updateNotificationSettings
+      responses:
+        '204':
+          description: The notification settings were updated
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NotificationSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationSettings'
+        description: Desired notification settings
+        required: true
+      summary: Update notification settings
+      x-summary-source: derived
+  /user/notifications:
+    get:
+      security: []
+      description: List all the notifications for the user.
+      tags:
+      - User
+      operationId: listNotifications
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/order_by_query'
+      responses:
+        '200':
+          description: The notifications for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+              example:
+              - created_at: 1503225026
+                event:
+                  icon: fa-check-circle
+                  id: 123
+                  message: The build deploy-app#42 of pipeline my-project-prod has completed successfully
+                  severity: info
+                  tags:
+                  - key: action
+                    value: complete
+                  - key: entity
+                    value: build
+                  timestamp: 1503225026000
+                  title: Pipeline build completed
+                  type: Cycloid
+                id: 42
+                read_at: 1503340000
+                updated_at: 1503335026
+                watch_rule_canonical: watch-my-project
+              - created_at: 1503225100
+                event:
+                  icon: fa-info-circle
+                  id: 124
+                  message: A new AWS EC2 instance was detected in the production environment
+                  severity: info
+                  tags:
+                  - key: environment
+                    value: production
+                  timestamp: 1503225100000
+                  title: New infrastructure resource detected
+                  type: Cycloid
+                id: 43
+                updated_at: 1503335100
+                watch_rule_canonical: watch-infrastructure
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List notifications
+      x-summary-source: derived
+    delete:
+      security: []
+      description: Delete all the notifications for the user at once.
+      tags:
+      - User
+      operationId: deleteAllNotifications
+      responses:
+        '204':
+          description: Deletion succeeded, no further information available
+        '403':
+          $ref: '#/components/responses/unauthenticated'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete all notifications
+      x-summary-source: derived
+  /user/notifications/read_all:
+    post:
+      security: []
+      description: Mark the all notification as read for the user.
+      tags:
+      - User
+      operationId: markAllNotificationAsRead
+      responses:
+        '200':
+          description: The notifications was marked as read
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Mark all notification as read
+      x-summary-source: derived
+  /user/notifications/{notification_id}:
+    parameters:
+    - $ref: '#/components/parameters/notification_id'
+    get:
+      security: []
+      description: Get the notification for the user.
+      tags:
+      - User
+      operationId: getNotification
+      responses:
+        '200':
+          description: The notification for the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+              example:
+                created_at: 1503225026
+                event:
+                  icon: fa-check-circle
+                  id: 123
+                  message: The build deploy-app#42 of pipeline my-project-prod has completed successfully
+                  severity: info
+                  tags:
+                  - key: action
+                    value: complete
+                  - key: entity
+                    value: build
+                  - key: project_canonical
+                    value: my-project
+                  timestamp: 1503225026000
+                  title: Pipeline build completed
+                  type: Cycloid
+                id: 42
+                read_at: 1503340000
+                updated_at: 1503335026
+                watch_rule_canonical: watch-my-project
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get notification
+      x-summary-source: derived
+    delete:
+      security: []
+      description: Delete the notification for the user.
+      tags:
+      - User
+      operationId: deleteNotification
+      responses:
+        '204':
+          description: The notification was deleted
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete notification
+      x-summary-source: derived
+  /user/notifications/{notification_id}/read:
+    parameters:
+    - $ref: '#/components/parameters/notification_id'
+    post:
+      security: []
+      description: Mark the notification as read for the user.
+      tags:
+      - User
+      operationId: markNotificationAsRead
+      responses:
+        '200':
+          description: The notification was marked as read
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Mark notification as read
+      x-summary-source: derived
+  /user/notifications/{notification_id}/unread:
+    parameters:
+    - $ref: '#/components/parameters/notification_id'
+    post:
+      security: []
+      description: Mark the notification as unread for the user.
+      tags:
+      - User
+      operationId: markNotificationAsUnread
+      responses:
+        '200':
+          description: The notification was marked as unread
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Mark notification as unread
+      x-summary-source: derived
+  /user/refresh_token:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical_query'
+    - $ref: '#/components/parameters/child_canonical_query'
+    get:
+      description: 'Refresh the user JWT and returns a new one if the previous is valid. The ''organization_canonical_query'' has to be of an organization in which the user belongs to, and the ''child_canonical_query'' of a child of the ''organization_canonical_query'' in any level (could be of a grand child). When only ''child_canonical_query'' is provided (without ''organization_canonical_query''), the backend will resolve the parent automatically: if the user is a direct member of the child org, a normal JWT is returned; otherwise, the ancestry chain is walked to find a parent org the user belongs to, and a child JWT is returned.'
+      tags:
+      - User
+      operationId: refreshToken
+      responses:
+        '200':
+          description: The token which represents the session of the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserSession'
+              example:
+                data:
+                  owns:
+                  - organization:seraf:team:teamcan
+                  permissions:
+                    organization:team:create:
+                      action: organization:team:read
+                      effect: allow
+                      id: 21
+                      resources:
+                      - organization:org-can:team:team-can
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImY0YjdiZjZlLTE1NmYtNDYxMy05NmFiLWIwMzg5NzdiMWRkMSJ9.eyJpc3MiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJzdWIiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJhdWQiOiJjdXN0b21lciIsIm5iZiI6MTUwMzQ3NDg2NywiaWF0IjoxNTAzNDc0ODY3LCJqdGkiOiJjNDU5ODgwMS04YWQzLTRhMDctODIwZC02MzRmN2RkMWQ2MDgiLCJjeWNsb2lkIjp7InVzZXIiOnsiaWQiOjEsInVzZXJuYW1lIjoidXNlci0xIiwiZ2l2ZW5fbmFtZSI6Ik1hcmlhbm8iLCJmYW1pbHlfbmFtZSI6IkppbWVuZXoiLCJwaWN0dXJlX3VybCI6Imh0dHBzOi8vYXZhdGFyczIuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3UvMTQ1NzkyMTAiLCJsb2NhbGUiOiJlbiJ9LCJvcmdhbml6YXRpb24iOnsiaWQiOjIsImNhbm9uaWNhbCI6Im9yZzIiLCJuYW1lIjoiT3JnIDIifSwicGVybWlzc2lvbnMiOnsib3JnYW5pemF0aW9uOmRlbGV0ZSI6WyIxIl0sIm9yZ2FuaXphdGlvbjp1cGRhdGUiOltdLCJvcmdhbml6YXRpb246dGVhbTpjcmVhdGUiOltdLCJvcmdhbml6YXRpb246dGVhbTpyZWFkIjpbXSwib3JnYW5pemF0aW9uOnRlYW06ZGVsZXRlIjpbIjIiXSwib3JnYW5pemF0aW9uOm1lbWJlcjpjcmVhdGUiOltdLCJvcmdhbml6YXRpb246bWVtYmVyOnJlYWQiOltdLCJvcmdhbml6YXRpb246bWVtYmVyOmRlbGV0ZSI6W10sIm9yZ2FuaXphdGlvbjpwcm9qZWN0OnJlYWQiOltdfX19.CHA3146UEHwVW6nYkDgYeSukGeZIH55mi4O0LsemenA
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Refresh token
+      x-summary-source: derived
+  /user/reset_password:
+    put:
+      security: []
+      description: Reset the user password when it has been forgotten. Due to security reasons, the endpoint doesn't return a Unprocessable Entity (422) when the token is invalid. 404 Status code is returned if the user has been deleted of the system between the user password request and this request.
+      tags:
+      - User
+      operationId: passwordResetUpdate
+      responses:
+        '204':
+          description: The password has been changed.
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetUpdate'
+        description: The reset password payload
+        required: true
+      summary: Password reset update
+      x-summary-source: derived
+    post:
+      security: []
+      description: Request to reset the password. Due to security reasons, this endpoint doesn't return Not Found (404) when the email doesn't exist or belongs to a user primary email.
+      tags:
+      - User
+      operationId: passwordResetReq
+      responses:
+        '204':
+          description: The password has been changed.
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetReq'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordResetReq'
+        description: The reset password payload
+        required: true
+      summary: Password reset req
+      x-summary-source: derived
+  /user/watch_rules:
+    get:
+      security: []
+      description: List all the watch rules for the user.
+      tags:
+      - User
+      operationId: listWatchRules
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      - $ref: '#/components/parameters/order_by_query'
+      responses:
+        '200':
+          description: The watch rules for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WatchRule'
+              example:
+              - actions:
+                - create
+                - update
+                - delete
+                canonical: watch-my-project
+                created_at: 1503225026
+                entities:
+                - pipeline
+                - build
+                - resource
+                project_canonical: my-project
+                updated_at: 1503335026
+              - actions:
+                - create
+                - update
+                canonical: watch-infrastructure
+                created_at: 1503226000
+                entities:
+                - component
+                - environment
+                project_canonical: infrastructure
+                updated_at: 1503336000
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List watch rules
+      x-summary-source: derived
+    post:
+      security: []
+      description: Create a new watch rule for the user.
+      tags:
+      - User
+      operationId: createWatchRule
+      responses:
+        '200':
+          description: The watch rule was created
+        '409':
+          description: Credential deletion has internal conflict
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewWatchRule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewWatchRule'
+        required: true
+      summary: Create watch rule
+      x-summary-source: derived
+  /user/watch_rules/{watch_rule_canonical}:
+    parameters:
+    - $ref: '#/components/parameters/watch_rule_canonical'
+    get:
+      security: []
+      description: Get the watch rule for the user.
+      tags:
+      - User
+      operationId: getWatchRule
+      responses:
+        '200':
+          description: The watch rule for the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchRule'
+              example:
+                actions:
+                - create
+                - update
+                - delete
+                canonical: watch-my-project
+                created_at: 1503225026
+                entities:
+                - pipeline
+                - build
+                - resource
+                project_canonical: my-project
+                updated_at: 1503335026
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get watch rule
+      x-summary-source: derived
+    put:
+      security: []
+      description: Update the watch rule for the user.
+      tags:
+      - User
+      operationId: updateWatchRule
+      responses:
+        '200':
+          description: The watch rule was updated
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateWatchRule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateWatchRule'
+        required: true
+      summary: Update watch rule
+      x-summary-source: derived
+    delete:
+      description: Delete the watch rule for the user.
+      tags:
+      - User
+      operationId: deleteWatchRule
+      responses:
+        '200':
+          description: The watch rule was deleted
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete watch rule
+      x-summary-source: derived
+  /user/{social_type}/oauth:
+    parameters:
+    - $ref: '#/components/parameters/social_type'
+    get:
+      security: []
+      description: Used to know if a user from the platform exists on that 'social_type'. If it exists we'll return the JWT 'token', if it does not we'll return the data of that user on the 'user' so it can be confirmed and created
+      tags:
+      - User
+      operationId: getOAuthUser
+      parameters:
+      - $ref: '#/components/parameters/oauth_code'
+      - $ref: '#/components/parameters/organization_canonical_query'
+      - $ref: '#/components/parameters/code_verifier'
+      - description: OAuth state parameter for CSRF protection. When OIDCStateValidationEnabled is true, this value is validated against the stored state cookie before the authorization code exchange proceeds.
+        name: state
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Used to know if a user from the platform exists on that 'social_type'.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserOAuth'
+              example:
+                data:
+                  user:
+                    email: some@email.com
+                    full_name: Jordi Capdevila
+                    picture_url: https://via.placeholder.com/150?text=cycloid.io
+                    social_id: some-random-id
+                    username: some-name
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get OAuth user
+      x-summary-source: derived
+    post:
+      security: []
+      description: Create a user from the OAuth 'social_type'
+      tags:
+      - User
+      operationId: createOAuthUser
+      responses:
+        '200':
+          description: Create a user from the OAuth 'social_type'
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/UserSession'
+              example:
+                data:
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImY0YjdiZjZlLTE1NmYtNDYxMy05NmFiLWIwMzg5NzdiMWRkMSJ9.eyJpc3MiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJzdWIiOiJodHRwczovL2N5Y2xvaWQuaW8iLCJhdWQiOiJjdXN0b21lciIsIm5iZiI6MTUwMzQ3NDg2NywiaWF0IjoxNTAzNDc0ODY3LCJqdGkiOiJjNDU5ODgwMS04YWQzLTRhMDctODIwZC02MzRmN2RkMWQ2MDgiLCJjeWNsb2lkIjp7InVzZXIiOnsiaWQiOjEsInVzZXJuYW1lIjoidXNlci0xIiwiZ2l2ZW5fbmFtZSI6Ik1hcmlhbm8iLCJmYW1pbHlfbmFtZSI6IkppbWVuZXoiLCJwaWN0dXJlX3VybCI6Imh0dHBzOi8vYXZhdGFyczIuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3UvMTQ1NzkyMTAiLCJsb2NhbGUiOiJlbiJ9LCJvcmdhbml6YXRpb24iOnsiaWQiOjIsImNhbm9uaWNhbCI6Im9yZzIiLCJuYW1lIjoiT3JnIDIifSwicGVybWlzc2lvbnMiOnsib3JnYW5pemF0aW9uOmRlbGV0ZSI6WyIxIl0sIm9yZ2FuaXphdGlvbjp1cGRhdGUiOltdLCJvcmdhbml6YXRpb246dGVhbTpjcmVhdGUiOltdLCJvcmdhbml6YXRpb246dGVhbTpyZWFkIjpbXSwib3JnYW5pemF0aW9uOnRlYW06ZGVsZXRlIjpbIjIiXSwib3JnYW5pemF0aW9uOm1lbWJlcjpjcmVhdGUiOltdLCJvcmdhbml6YXRpb246bWVtYmVyOnJlYWQiOltdLCJvcmdhbml6YXRpb246bWVtYmVyOmRlbGV0ZSI6W10sIm9yZ2FuaXphdGlvbjpwcm9qZWN0OnJlYWQiOltdfX19.CHA3146UEHwVW6nYkDgYeSukGeZIH55mi4O0LsemenA
+        '401':
+          $ref: '#/components/responses/unauthenticated'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewOAuthUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewOAuthUser'
+        description: The user content
+        required: true
+      summary: Create OAuth user
+      x-summary-source: derived
+components:
+  schemas:
+    NewWatchRuleFilter:
+      description: The entity which represents the information of an Watch rule filter
+      type: object
+      title: New Watch rule filter
+      required:
+      - operation
+      - entity
+      properties:
+        entity:
+          description: '* means the filter is applied to all the entities'
+          type: string
+        operation:
+          description: '* means the filter is applied to all the operations'
+          type: string
+    NewOAuthUser:
+      description: The User OAuth information
+      title: User's OAuth information
+      required:
+      - email
+      - full_name
+      - social_id
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+          maxLength: 255
+          minLength: 2
+        invitation_token:
+          description: The field is used when a user signup from an invitation to an organization. Giving the token, the created user will be automatically added to the organization.
+          type: string
+          minLength: 5
+        locale:
+          description: User's preferred language
+          type: string
+          enum:
+          - en
+          - fr
+          - es
+        organization_canonical:
+          type: string
+        picture_url:
+          type: string
+          format: uri
+        social_id:
+          type: string
+        username:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    UserPasswordResetReq:
+      description: Request to send a token for allowing the user to reset its current password.
+      title: User password reset request
+      required:
+      - email
+      properties:
+        email:
+          description: the email address must be the primary email of the user.
+          type: string
+          format: email
+    WatchRule:
+      description: The entity which represents the information of a Watch rule
+      type: object
+      title: Watch rule
+      required:
+      - id
+      - canonical
+      - name
+      - muted
+      - created_at
+      - updated_at
+      - filters
+      - organization_canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        created_at:
+          type: integer
+          format: uint64
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchRuleFilter'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        muted:
+          type: boolean
+        name:
+          type: string
+          minLength: 2
+        organization_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        project_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        updated_at:
+          type: integer
+          format: uint64
+    UserPasswordResetUpdate:
+      description: Reset the current user password to the one provided. The user must have a valid token for the resetting password action.
+      title: User password reset update
+      required:
+      - password
+      - token
+      properties:
+        password:
+          type: string
+          format: password
+          minLength: 12
+        token:
+          type: string
+          minLength: 1
+    UserLogin:
+      description: Validate the user to access to the application. The user can login with the primary email address.
+      title: Log in
+      required:
+      - password
+      - email
+      properties:
+        email:
+          type: string
+          format: email
+        organization_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        password:
+          type: string
+          format: password
+          minLength: 8
+    NotificationSettings:
+      type: object
+      title: User's notification settings
+      required:
+      - watch_projects_on_create
+      - activity_report_frequency
+      properties:
+        activity_report_frequency:
+          description: The frequency of the activity report.
+          type: string
+          enum:
+          - none
+          - daily
+          - weekly
+        watch_projects_on_create:
+          description: Automatically subscribe to the project updates when creating a new project.
+          type: boolean
+    UserSession:
+      description: The JWT which allows the user to access to the application.
+      title: User's session
+      required:
+      - token
+      - permissions
+      - owns
+      properties:
+        owns:
+          type: array
+          items:
+            type: string
+        permissions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Rule'
+        token:
+          type: string
+    Notification:
+      description: The entity which represents the information of a Notification
+      type: object
+      title: Notification
+      required:
+      - id
+      - created_at
+      - updated_at
+      - event
+      properties:
+        created_at:
+          type: integer
+          format: uint64
+        event:
+          type: object
+          $ref: '#/components/schemas/Event'
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        read_at:
+          type: integer
+          format: uint64
+        updated_at:
+          type: integer
+          format: uint64
+        watch_rule_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    UserImpersonate:
+      description: 'The user to impersonate, identified by email, and optionally the organization the impersonated session is scoped to (ENG-407). Without it the session is minted like a login without an organization: the client lists the target''s organizations and refreshes into one of them.'
+      title: Impersonate a user
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          format: email
+        organization_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    UpdateUserAccountEmail:
+      description: The email address of a user to be updated.
+      title: User's email
+      required:
+      - email
+      - purpose
+      properties:
+        email:
+          type: string
+          format: email
+        purpose:
+          description: This values are set by the application to indicate the purpose of the email address. At least there is always one which is the primary.
+          type: string
+    UserEmail:
+      description: The user's email address
+      title: User email address
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          format: email
+    Rule:
+      description: Rules define the specific access to the platform
+      title: Rule
+      required:
+      - id
+      - effect
+      - action
+      properties:
+        action:
+          description: It can be the normal Policy.Code or contain globs like `*` or `**`
+          type: string
+        effect:
+          type: string
+          enum:
+          - allow
+        id:
+          description: This is the id of the row from the database, but for blocking organizations we generate rules that are not in the database. When this happens the id is allowed to be 0.
+          type: integer
+          format: uint32
+        resources:
+          description: It is the list of resources in which this Rule applies to, the format of it is the one on the Policy.Code but with the `canonical` of the entities like `organization:org-can:team:team-can` for an action of `organization:team:read`
+          type: array
+          items:
+            type: string
+    Tag:
+      description: Key and value pair defined with the widely adopted name, tag.
+      type: object
+      title: Key and value pair
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          maxLength: 254
+          minLength: 1
+        value:
+          type: string
+          maxLength: 254
+          pattern: ^(?:[\w\-+=.:/@ ]*)$
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    Event:
+      description: A event which has registered an activity in the Cycloid platform.
+      title: An event
+      required:
+      - id
+      - timestamp
+      - type
+      - title
+      - message
+      - severity
+      - tags
+      properties:
+        color:
+          description: 'The HTML color associated to the event. The valid colors are the ones listed in the  CSS 2 specification: https://www.w3.org/TR/CSS2/syndata.html#value-def-color. Only the keyword are accepted, the hexadecimal values are not valid.'
+          type: string
+          maxLength: 20
+          minLength: 3
+          pattern: '[a-z]+'
+        icon:
+          description: '[A Font Awesome class name](https://fontawesome.com/icons)'
+          type: string
+          minLength: 3
+        id:
+          description: The unique ID of the event from the database.
+          type: integer
+          format: uint32
+        message:
+          description: The message associated to the event.
+          type: string
+          minLength: 1
+        severity:
+          description: The severity associated to the event.
+          type: string
+          enum:
+          - info
+          - warn
+          - err
+          - crit
+        tags:
+          description: The list of tags associated to the event.
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        timestamp:
+          description: The timestamp when the event was created in milliseconds.
+          type: integer
+          format: uint64
+        title:
+          description: The title of the event.
+          type: string
+          minLength: 1
+        type:
+          description: The type of the event
+          type: string
+          enum:
+          - Cycloid
+          - AWS
+          - Monitoring
+          - Custom
+    NewAWSMarketplaceUserAccount:
+      description: Create a new AWS Marketplace user account.
+      title: Sign up from AWS Marketplace
+      required:
+      - email
+      - password
+      - full_name
+      - aws_marketplace_token
+      properties:
+        aws_marketplace_token:
+          description: The AWS marketplace token
+          type: string
+          minLength: 1
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+          maxLength: 255
+          minLength: 2
+        locale:
+          description: User's preferred language
+          type: string
+          enum:
+          - en
+          - fr
+          - es
+        password:
+          type: string
+          format: password
+          minLength: 12
+        username:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    UpdateWatchRule:
+      description: The entity which represents the information of a Watch rule
+      type: object
+      title: Update Watch rule
+      required:
+      - name
+      - muted
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewWatchRuleFilter'
+        muted:
+          type: boolean
+        name:
+          type: string
+          minLength: 2
+    NewUserAccount:
+      description: Create a new user account.
+      title: Sign up
+      required:
+      - email
+      - password
+      - full_name
+      properties:
+        country_code:
+          description: Alpha-2 country code of a country the user is from
+          type: string
+          pattern: ^[A-Z]{2}$
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+          maxLength: 255
+          minLength: 2
+        invitation_token:
+          description: The field is used when a user signup from an invitation to an organization. Giving the token, the created user will be automatically added to the organization.
+          type: string
+          minLength: 5
+        locale:
+          description: User's preferred language
+          type: string
+          enum:
+          - en
+          - fr
+          - es
+        password:
+          type: string
+          format: password
+          minLength: 12
+        username:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    Country:
+      description: Single country Representation
+      title: Country
+      required:
+      - code
+      - name
+      properties:
+        code:
+          type: string
+          pattern: ^[A-Z]{2}$
+        name:
+          type: string
+    NewWatchRule:
+      description: The entity which represents the information of an Watch rule
+      type: object
+      title: New Watch rule
+      required:
+      - name
+      - filters
+      - organization_canonical
+      properties:
+        canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        filters:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/NewWatchRuleFilter'
+        name:
+          type: string
+          minLength: 2
+        organization_canonical:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+        project_canonical:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    UserAccount:
+      description: The user's account contains information related with the authenticated user.
+      title: User's account
+      required:
+      - created_at
+      - updated_at
+      - last_login
+      - emails
+      - username
+      - full_name
+      - locale
+      - mfa_enabled
+      properties:
+        country:
+          $ref: '#/components/schemas/Country'
+        created_at:
+          type: integer
+          format: uint64
+        emails:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/UserAccountEmail'
+        full_name:
+          type: string
+          maxLength: 255
+          minLength: 2
+        guide:
+          $ref: '#/components/schemas/UserGuide'
+        last_login:
+          type: integer
+          format: uint64
+        locale:
+          description: User's preferred language
+          type: string
+          enum:
+          - en
+          - fr
+          - es
+        mfa_enabled:
+          type: boolean
+        picture_url:
+          type: string
+          format: uri
+        updated_at:
+          type: integer
+          format: uint64
+        username:
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    UserAccountEmail:
+      description: The email address of a user.
+      title: User's email
+      required:
+      - email
+      - verified
+      - purpose
+      properties:
+        created_at:
+          type: integer
+          format: uint64
+        email:
+          type: string
+          format: email
+        purpose:
+          description: This values are set by the application to indicate the purpose of the email address. At least there is always one which is the primary.
+          type: string
+        verified:
+          type: boolean
+    UserGuide:
+      description: The user's guide progress JSON schema
+      type: object
+      title: User guide JSON schema
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    UpdateUserAccount:
+      description: The user's account information of the authenticated user to be updated. The username is not editable and is used to match the user account. Emails and password can be omitted if they don't have to be updated, because we can now if they have been sent or not although go-swagger doesn't currently support `PATCH` updates (see [comment](https://github.com/cycloidio/youdeploy-http-api/pull/71#issuecomment-321894076)), we do for this one with this 2 properties because they are good for the user, specially for the `password_update` one. In order to detect if they have been sent or not, we check if the length of array of emails is 0 (if it's sent, then the length MUST be greater than 0 as specified with minItems) and in case of the `password_update` field if it's `nil` or not. If the 'picture_url' is not send then it's removed from the user as it implies that it has deleted it, and also because we do not support partial updates
+      title: Update user's account
+      required:
+      - username
+      - full_name
+      - locale
+      - mfa_enabled
+      properties:
+        country_code:
+          description: Code of a country the user is from in alpha-2 format
+          type: string
+          pattern: ^[A-Z]{2}$
+        emails:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/UpdateUserAccountEmail'
+        full_name:
+          type: string
+          maxLength: 255
+          minLength: 2
+        locale:
+          description: User's preferred language
+          type: string
+          enum:
+          - en
+          - fr
+          - es
+        mfa_enabled:
+          type: boolean
+        password_update:
+          description: The update password requires to confirm the old password.
+          required:
+          - current
+          - new
+          properties:
+            current:
+              type: string
+              format: password
+              minLength: 8
+            new:
+              type: string
+              format: password
+              minLength: 8
+        picture_url:
+          type: string
+          format: uri
+        username:
+          description: Used to identify the user. Not editable.
+          type: string
+          maxLength: 100
+          minLength: 2
+          pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    WatchRuleFilter:
+      description: The entity which represents the information of a Watch rule filter
+      type: object
+      title: Watch rule filter
+      required:
+      - id
+      - created_at
+      - updated_at
+      - operation
+      - entity
+      properties:
+        created_at:
+          type: integer
+          format: uint64
+        entity:
+          description: '* means the filter is applied to all the entities'
+          type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        operation:
+          description: '* means the filter is applied to all the operations'
+          type: string
+        updated_at:
+          type: integer
+          format: uint64
+    UserOAuth:
+      description: The User OAuth information, if it's on the platform it'll return the 'token' to login, if not the 'user' to show to the user
+      title: User's OAuth information
+      properties:
+        oidc_partial_failure_groups:
+          description: OIDC group names whose mapped team could not be applied during a partial-apply login (the team did not resolve in the login organization). The login still succeeds with the valid teams applied; the frontend surfaces these as a non-blocking banner (FE-1435). Empty or absent when every mapped team applied cleanly.
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        token:
+          description: Is the JWT of the platform user
+          type: string
+        user:
+          type: object
+          $ref: '#/components/schemas/NewOAuthUser'
+  parameters:
+    authentication_token:
+      description: A token for authenticating login vie email
+      name: authentication_token
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 5
+    verification_token:
+      description: A token for verifying emails, invitations, etc.
+      name: verification_token
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 5
+    organization_canonical_query:
+      description: A canonical of a organization used for filtering.
+      name: organization_canonical
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    watch_rule_canonical:
+      description: A canonical of a watch rule.
+      name: watch_rule_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    order_by_query:
+      description: 'Allows to order the list of items. Example usage: field_name:asc. Multiple order_by parameters are allowed, applied in the order they are specified.
+
+        '
+      name: order_by
+      in: query
+      schema:
+        type: string
+    child_canonical_query:
+      description: A canonical of a child organization used for filtering.
+      name: child_canonical
+      in: query
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    code_verifier:
+      description: The PKCE code_verifier used for OAuth 2.0 PKCE flow
+      name: code_verifier
+      in: query
+      schema:
+        type: string
+    oauth_code:
+      description: The OAuth code returned form the Social Provider
+      name: oauth_code
+      in: query
+      required: true
+      schema:
+        type: string
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    social_type:
+      description: The OAuth Social type
+      name: social_type
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+        - azuread
+        - saml2
+        - google
+        - github
+        - oidc
+    notification_id:
+      description: Notification ID
+      name: notification_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  responses:
+    unauthenticated:
+      description: The user cannot be authenticated with the credentials which she/he has used.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthenticated
+              message: invalid credentials
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    retry_operation:
+      description: The operation couldn't be executed or completed and it should retried.
+      headers:
+        Retry-After:
+          description: The number of seconds to wait until retry the request
+          schema:
+            type: integer
+            format: uint16
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: RetryOperation
+              message: Operation must be retried.
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

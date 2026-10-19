@@ -1,0 +1,602 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Component Pipeline Resources Versions API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on the versions of a resource in a pipeline
+  name: Component Pipeline Resources Versions
+paths:
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}/versions
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    - $ref: '#/components/parameters/filter_version'
+    get:
+      description: Get versions of a pipeline's resource
+      tags:
+      - Component Pipeline Resources Versions
+      operationId: getResourceVersions
+      parameters:
+      - $ref: '#/components/parameters/concourse_page_since'
+      - $ref: '#/components/parameters/concourse_page_until'
+      - $ref: '#/components/parameters/concourse_page_limit'
+      responses:
+        '200':
+          description: Get versions of a specified resource.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination_concourse
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ResourceVersion'
+                  pagination_concourse:
+                    $ref: '#/components/schemas/PaginationConcourse'
+              example:
+                data:
+                - enabled: true
+                  id: 45
+                  resource: time-resource
+                  type: time
+                  version:
+                    time: '2018-06-07T16:12:02.037357287Z'
+                - enabled: true
+                  id: 46
+                  resource: time-resource
+                  type: time
+                  version:
+                    time: '2018-06-07T16:13:02.037357287Z'
+                pagination_concourse:
+                  next:
+                    limit: 3
+                    since: 11402
+                    until: 0
+                  previous:
+                    limit: 3
+                    since: 11896
+                    until: 0
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get resource versions
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}/versions/{resource_version_id}/disable
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    - $ref: '#/components/parameters/resource_version_id'
+    put:
+      description: Disable a specified version of a resource
+      tags:
+      - Component Pipeline Resources Versions
+      operationId: disableResourceVersion
+      responses:
+        '204':
+          description: Resource version have been disabled
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Disable resource version
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}/versions/{resource_version_id}/enable
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    - $ref: '#/components/parameters/resource_version_id'
+    put:
+      description: Enable a specified version of a resource
+      tags:
+      - Component Pipeline Resources Versions
+      operationId: enableResourceVersion
+      responses:
+        '204':
+          description: Resource version have been enabled
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Enable resource version
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}/versions/{resource_version_id}/input_to
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    - $ref: '#/components/parameters/resource_version_id'
+    get:
+      description: Get builds that used a specified resource version as input.
+      tags:
+      - Component Pipeline Resources Versions
+      operationId: getBuildsWithVersionAsInput
+      responses:
+        '200':
+          description: The resource of the pipeline's which has the specified name.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Build'
+              example:
+                data:
+                - api_url: /api/v1/builds/11406
+                  end_time: 1504185344
+                  id: 11406
+                  job_name: build-container-preprod
+                  name: '82'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504185240
+                  status: failed
+                  team_name: cycloid-products
+                - api_url: /api/v1/builds/11404
+                  end_time: 1504185078
+                  id: 11404
+                  job_name: build-container-preprod
+                  name: '81'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504184979
+                  status: failed
+                  team_name: cycloid-products
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get builds with version as input
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}/versions/{resource_version_id}/output_of
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    - $ref: '#/components/parameters/resource_version_id'
+    get:
+      description: Get builds that used a specified resource version as output.
+      tags:
+      - Component Pipeline Resources Versions
+      operationId: getBuildsWithVersionAsOutput
+      responses:
+        '200':
+          description: The resource of the pipeline's which has the specified name.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Build'
+              example:
+                data:
+                - api_url: /api/v1/builds/11406
+                  end_time: 1504185344
+                  id: 11406
+                  job_name: build-container-preprod
+                  name: '82'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504185240
+                  status: failed
+                  team_name: cycloid-products
+                - api_url: /api/v1/builds/11404
+                  end_time: 1504185078
+                  id: 11404
+                  job_name: build-container-preprod
+                  name: '81'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504184979
+                  status: failed
+                  team_name: cycloid-products
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get builds with version as output
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/resources/{resource_name}/versions/{resource_version_id}/pin
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/resource_name'
+    - $ref: '#/components/parameters/resource_version_id'
+    put:
+      description: Pin a specified version of a resource
+      tags:
+      - Component Pipeline Resources Versions
+      operationId: pinResourceVersion
+      responses:
+        '204':
+          description: Resource version has been pinned
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Pin resource version
+      x-summary-source: derived
+components:
+  parameters:
+    concourse_page_until:
+      description: The time before which we should look for entities to return.
+      name: concourse_page_until
+      in: query
+      schema:
+        type: integer
+        format: uint64
+        default: 0
+    component_canonical:
+      description: A canonical of a component.
+      name: component_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    concourse_page_limit:
+      description: The number of items at most which the response can have.
+      name: concourse_page_limit
+      in: query
+      schema:
+        type: integer
+        format: uint64
+        default: 10
+    resource_version_id:
+      description: A resource's version id
+      name: resource_version_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint64
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    resource_name:
+      description: A resource name
+      name: resource_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
+        minLength: 1
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    concourse_page_since:
+      description: The time after which we should look for entities to return.
+      name: concourse_page_since
+      in: query
+      schema:
+        type: integer
+        format: uint64
+        default: 0
+    pipeline_name:
+      description: A pipeline name
+      name: inpath_pipeline_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[a-z0-9]+[a-z0-9\-_.]+[a-z0-9]+$
+    filter_version:
+      description: A version of a resource
+      name: filter_version
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        minLength: 1
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  schemas:
+    MetadataField:
+      description: Represent the metadata of a build input
+      type: object
+      title: MetadataField
+      required:
+      - name
+      - value
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    Build:
+      description: The information relative to a build.
+      type: object
+      title: Build
+      required:
+      - id
+      - team_name
+      - name
+      - status
+      - api_url
+      properties:
+        api_url:
+          type: string
+        config_revision:
+          description: 'The revision of the component configuration this build was gated on, set when the build is created. The component configuration is mirrored to the config repository asynchronously; creating a build waits for the acknowledged revision to be visible to the CI, and reports it here so a caller can tie the build back to the configuration write it made. Absent on builds read back later, and on components with no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        end_time:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint64
+        job_name:
+          type: string
+        name:
+          type: string
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        reap_time:
+          type: integer
+          format: uint64
+        start_time:
+          type: integer
+          format: uint64
+        status:
+          type: string
+        team_name:
+          type: string
+    PageConcourse:
+      type: object
+      title: PageConcourse
+      required:
+      - since
+      - until
+      - limit
+      properties:
+        limit:
+          description: The maximum number of entities to return
+          type: integer
+          format: uint64
+        since:
+          description: Entities returned should have a higher timestamp than this one
+          type: integer
+          format: uint64
+        until:
+          description: Entities returned should have a lower timestamp than this one
+          type: integer
+          format: uint64
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    ResourceVersion:
+      description: Represent the outputs of a job
+      type: object
+      title: ResourceVersion
+      required:
+      - id
+      - version
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+        id:
+          type: integer
+          format: uint64
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataField'
+        version:
+          type: object
+          additionalProperties:
+            type: string
+    PaginationConcourse:
+      type: object
+      title: PaginationConcourse
+      required:
+      - next
+      - previous
+      properties:
+        next:
+          $ref: '#/components/schemas/PageConcourse'
+        previous:
+          $ref: '#/components/schemas/PageConcourse'
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

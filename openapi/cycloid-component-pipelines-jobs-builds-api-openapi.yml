@@ -1,0 +1,865 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Component Pipelines Jobs Builds API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on the builds of a job in a pipeline
+  name: Component Pipelines Jobs Builds
+paths:
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/builds/{build_id}/events
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/build_id'
+    get:
+      security:
+      - api_key_query: []
+      description: Get the events of a build.
+      tags:
+      - Component Pipelines Jobs Builds
+      operationId: getBuildEvents
+      responses:
+        '200':
+          description: Stream is starting
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                enum:
+                - text/event-stream
+          x-produces:
+          - text/event-stream
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get build events
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}/builds
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    get:
+      description: Get the pipeline job's builds that the authenticated user has access to.
+      tags:
+      - Component Pipelines Jobs Builds
+      operationId: getBuilds
+      parameters:
+      - $ref: '#/components/parameters/concourse_page_since'
+      - $ref: '#/components/parameters/concourse_page_until'
+      - $ref: '#/components/parameters/concourse_page_limit'
+      responses:
+        '200':
+          description: List the pipeline job's builds which authenticated user has access to.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination_concourse
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Build'
+                  pagination_concourse:
+                    $ref: '#/components/schemas/PaginationConcourse'
+              example:
+                data:
+                - api_url: /api/v1/builds/11406
+                  end_time: 1504185344
+                  id: 11406
+                  job_name: build-container-preprod
+                  name: '82'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504185240
+                  status: failed
+                  team_name: cycloid-products
+                - api_url: /api/v1/builds/11404
+                  end_time: 1504185078
+                  id: 11404
+                  job_name: build-container-preprod
+                  name: '81'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504184979
+                  status: failed
+                  team_name: cycloid-products
+                - api_url: /api/v1/builds/11402
+                  end_time: 1504184140
+                  id: 11402
+                  job_name: build-container-preprod
+                  name: '80'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504184038
+                  status: failed
+                  team_name: cycloid-products
+                pagination_concourse:
+                  next:
+                    limit: 3
+                    since: 11402
+                    until: 0
+                  previous:
+                    limit: 3
+                    since: 11508
+                    until: 0
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get builds
+      x-summary-source: derived
+    post:
+      description: Create a new build for the job
+      tags:
+      - Component Pipelines Jobs Builds
+      operationId: createBuild
+      responses:
+        '200':
+          description: Create a new build for the pipeline's job and returns its details
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Build'
+              example:
+                data:
+                  api_url: /api/v1/builds/11406
+                  config_revision: 42
+                  end_time: 1504185344
+                  id: 11406
+                  job_name: build-container-preprod
+                  name: '82'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504185240
+                  status: failed
+                  team_name: cycloid-products
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '409':
+          $ref: '#/components/responses/config_not_propagated'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Create build
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}/builds/{build_id}
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    - $ref: '#/components/parameters/build_id'
+    get:
+      description: Get the information of the build.
+      tags:
+      - Component Pipelines Jobs Builds
+      operationId: getBuild
+      responses:
+        '200':
+          description: The information of the build which has the specified id.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Build'
+              example:
+                data:
+                  api_url: /api/v1/builds/11406
+                  end_time: 1504185344
+                  id: 11406
+                  job_name: build-container-preprod
+                  name: '82'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504185240
+                  status: failed
+                  team_name: cycloid-products
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get build
+      x-summary-source: derived
+    post:
+      description: Reruns a specific build.
+      tags:
+      - Component Pipelines Jobs Builds
+      operationId: rerunBuild
+      responses:
+        '200':
+          description: Returns the new build created from the specified build ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Build'
+              example:
+                data:
+                  api_url: /api/v1/builds/11406
+                  end_time: 1504185344
+                  id: 11406
+                  job_name: build-container-preprod
+                  name: '82.1'
+                  pipeline_id: 3
+                  pipeline_name: ci-website
+                  reap_time: 0
+                  start_time: 1504185240
+                  status: waiting
+                  team_name: cycloid-products
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Rerun build
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}/builds/{build_id}/abort
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    - $ref: '#/components/parameters/build_id'
+    put:
+      description: Abort a specific build.
+      tags:
+      - Component Pipelines Jobs Builds
+      operationId: abortBuild
+      responses:
+        '204':
+          description: The build has been aborted.
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Abort build
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}/builds/{build_id}/plan
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    - $ref: '#/components/parameters/build_id'
+    get:
+      description: Get the plan of the build.
+      tags:
+      - Component Pipelines Jobs Builds
+      operationId: getBuildPlan
+      responses:
+        '200':
+          description: The information of the build's plan which has the specified id.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PublicPlan'
+              example:
+                data:
+                  plan:
+                    do:
+                    - get:
+                        name: concourse
+                        resource: concourse
+                        type: git
+                        version:
+                          ref: 37a827fb8056bfb88848823f49ae8efe9515e2ea
+                      id: 59b6ed1b
+                    - id: 59b6ed1c
+                      task:
+                        name: build
+                        privileged: false
+                    id: 59b6ed1d
+                  schema: exec.v2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get build plan
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}/builds/{build_id}/preparation
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    - $ref: '#/components/parameters/build_id'
+    get:
+      description: Get the preparation of the Build.
+      tags:
+      - Component Pipelines Jobs Builds
+      operationId: getBuildPreparation
+      responses:
+        '200':
+          description: Return the Preparation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Preparation'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get build preparation
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/components/{component_canonical}/pipelines/{inpath_pipeline_name}/jobs/{job_name}/builds/{build_id}/resources
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/component_canonical'
+    - $ref: '#/components/parameters/pipeline_name'
+    - $ref: '#/components/parameters/job_name'
+    - $ref: '#/components/parameters/build_id'
+    get:
+      description: Get the resources of the build.
+      tags:
+      - Component Pipelines Jobs Builds
+      operationId: getBuildResources
+      parameters:
+      - $ref: '#/components/parameters/page_index'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: The resources of the build's which has the specified id.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/BuildInputsOutputs'
+              example:
+                data:
+                  inputs:
+                  - first_occurrence: true
+                    metadata:
+                    - name: commit
+                      value: 59ecb8ec73d7c4ea4c3827440ed1429268cf4c94
+                    - name: author
+                      value: Adrien Jerphagnon
+                    - name: author_date
+                      value: 2017-07-19 15:23:46 +0200
+                    - name: committer
+                      value: Adrien Jerphagnon
+                    - name: committer_date
+                      value: 2017-07-19 15:23:46 +0200
+                    - name: branch
+                      value: master
+                    - name: message
+                      value: Up assets version
+                    name: git-website-preprod
+                    pipeline_id: 238
+                    resource: git-website-preprod
+                    type: git
+                    version:
+                      ref: 59ecb8ec73d7c4ea4c3827440ed1429268cf4c94
+                  - first_occurrence: true
+                    metadata: null
+                    name: vault-preprod
+                    pipeline_id: 238
+                    resource: vault-preprod
+                    type: vault
+                    version:
+                      date: '1500470493'
+                  - first_occurrence: true
+                    metadata: null
+                    name: vault-preprod
+                    pipeline_id: 238
+                    resource: vault-preprod
+                    type: vault
+                    version:
+                      date: '1500470521'
+                  outputs:
+                  - enabled: false
+                    id: 0
+                    metadata: null
+                    name: website preprod
+                    resource: ecr-website-preprod
+                    type: ''
+                    version:
+                      digest: sha256:58c226280d56dcfe5f7f1de2cce6f22eac36fa95ce8e1b9c604523c4a50d7401
+                  - enabled: false
+                    id: 0
+                    metadata: null
+                    name: slack alert preprod
+                    resource: slack-alert-preprod
+                    type: ''
+                    version:
+                      timestamp: '1500470978'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get build resources
+      x-summary-source: derived
+components:
+  schemas:
+    PublicBuildInput:
+      description: Represent the information of a build input
+      type: object
+      title: PublicBuildInput
+      required:
+      - name
+      - version
+      - pipeline_id
+      - first_occurrence
+      properties:
+        first_occurrence:
+          type: boolean
+        name:
+          type: string
+        pipeline_id:
+          type: integer
+          format: uint64
+        version:
+          type: object
+          additionalProperties:
+            type: string
+    PublicBuildOutput:
+      description: Represents the information of a build output
+      type: object
+      title: PublicBuildOutput
+      required:
+      - name
+      - version
+      properties:
+        name:
+          type: string
+        version:
+          type: object
+          additionalProperties:
+            type: string
+    BuildInputsOutputs:
+      description: Represent the resources input/output related to a build
+      type: object
+      title: BuildInputsOutputs
+      required:
+      - inputs
+      - outputs
+      properties:
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicBuildInput'
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicBuildOutput'
+    Build:
+      description: The information relative to a build.
+      type: object
+      title: Build
+      required:
+      - id
+      - team_name
+      - name
+      - status
+      - api_url
+      properties:
+        api_url:
+          type: string
+        config_revision:
+          description: 'The revision of the component configuration this build was gated on, set when the build is created. The component configuration is mirrored to the config repository asynchronously; creating a build waits for the acknowledged revision to be visible to the CI, and reports it here so a caller can tie the build back to the configuration write it made. Absent on builds read back later, and on components with no saved configuration.
+
+            '
+          type: integer
+          format: uint64
+        end_time:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint64
+        job_name:
+          type: string
+        name:
+          type: string
+        pipeline_id:
+          type: integer
+          format: uint64
+        pipeline_name:
+          type: string
+        reap_time:
+          type: integer
+          format: uint64
+        start_time:
+          type: integer
+          format: uint64
+        status:
+          type: string
+        team_name:
+          type: string
+    PageConcourse:
+      type: object
+      title: PageConcourse
+      required:
+      - since
+      - until
+      - limit
+      properties:
+        limit:
+          description: The maximum number of entities to return
+          type: integer
+          format: uint64
+        since:
+          description: Entities returned should have a higher timestamp than this one
+          type: integer
+          format: uint64
+        until:
+          description: Entities returned should have a lower timestamp than this one
+          type: integer
+          format: uint64
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    PublicPlan:
+      description: The public plan returned requesting a build plan.
+      type: object
+      title: PublicPlan
+      required:
+      - schema
+      - plan
+      properties:
+        plan:
+          type: object
+        schema:
+          type: string
+    Preparation:
+      title: Preparation
+      required:
+      - build_id
+      - paused_pipeline
+      - paused_job
+      - max_running_builds
+      - inputs
+      - inputs_satisfied
+      - missing_input_reasons
+      properties:
+        build_id:
+          type: string
+        inputs:
+          type: object
+        inputs_satisfied:
+          type: object
+        max_running_builds:
+          type: string
+        missing_input_reasons:
+          type: object
+        paused_job:
+          type: string
+        paused_pipeline:
+          type: string
+    PaginationConcourse:
+      type: object
+      title: PaginationConcourse
+      required:
+      - next
+      - previous
+      properties:
+        next:
+          $ref: '#/components/schemas/PageConcourse'
+        previous:
+          $ref: '#/components/schemas/PageConcourse'
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+  parameters:
+    concourse_page_until:
+      description: The time before which we should look for entities to return.
+      name: concourse_page_until
+      in: query
+      schema:
+        type: integer
+        format: uint64
+        default: 0
+    build_id:
+      description: A build id
+      name: build_id
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 20
+        minLength: 1
+        pattern: ^[0-9]+$
+    component_canonical:
+      description: A canonical of a component.
+      name: component_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    concourse_page_limit:
+      description: The number of items at most which the response can have.
+      name: concourse_page_limit
+      in: query
+      schema:
+        type: integer
+        format: uint64
+        default: 10
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    job_name:
+      description: A job name
+      name: job_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 150
+        minLength: 1
+    concourse_page_since:
+      description: The time after which we should look for entities to return.
+      name: concourse_page_since
+      in: query
+      schema:
+        type: integer
+        format: uint64
+        default: 0
+    page_size:
+      description: The number of items at most which the response can have.
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 100
+    pipeline_name:
+      description: A pipeline name
+      name: inpath_pipeline_name
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[a-z0-9]+[a-z0-9\-_.]+[a-z0-9]+$
+    page_index:
+      description: The page number to request. The first page is 1.
+      name: page_index
+      in: query
+      schema:
+        type: integer
+        format: uint32
+        default: 1
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    config_not_propagated:
+      description: The operation couldn't be executed because the component's acknowledged configuration is not yet visible to the CI, and proceeding would use the previous configuration. The configuration is stored on write and mirrored to the config repository asynchronously; the request should be retried.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Conflict
+              message: 'The CI Build cannot start: the component configuration is not yet visible to the CI (the configuration resource check did not finish in time), retry shortly'
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

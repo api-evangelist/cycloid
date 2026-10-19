@@ -1,0 +1,357 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Logs API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- description: Operations on the logs of a project
+  name: Organization Logs
+paths:
+  /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/logs/sources:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    get:
+      description: Get the list of sources configured for the specified project's environment of the organization.
+      tags:
+      - Organization Logs
+      operationId: getProjEnvLogSources
+      responses:
+        '200':
+          description: The list of sources related to the project's environment.
+          content:
+            application/json:
+              schema:
+                description: The list of log sources.
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LogSource'
+              example:
+                data:
+                - id: access.log
+                - id: exception.log
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get proj env log sources
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/projects/{project_canonical}/environments/{environment_canonical}/logs/sources/{log_source_id}
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/project_canonical'
+    - $ref: '#/components/parameters/environment_canonical'
+    - $ref: '#/components/parameters/log_source_id'
+    get:
+      description: 'Get log''s entries information of the specified log stream stream which is associated to the project''s environment of the specified organization. The log''s entries to request can be filtered using the unix timestamp ranges and/or the query as follow - When unix timestamps are defined, they are converted to the specific
+
+        query language used by the configured underlying log system (e.g AWS
+
+        Cloud Watch, ElasticSearch, etc.) and appended to the query value
+
+        respecting the syntax but not checking the content of the query, which
+
+        means that if the whole query must be enclosed by curly brackets hence
+
+        the query value is enclosed on them, the time range filter will be
+
+        added inside not just appended at the end, because otherwise it would
+
+        cause wrong syntax; on the other hand, not checking the content means
+
+        that if the query contains a timerange filter, the whole query will
+
+        contain both and the result will be the one returned by on the
+
+        underlying log system, being an error or not.
+
+        - When no time range are defined, then the query is used as it has been
+
+        send, there is not modification on the query to send to the underlying
+
+        log system, hence the result will be the one returned by it.
+
+        - If none of the filters (timestamp range and query) are sent, then
+
+        a 422 status code will be responded.
+
+        - Some constraints are established by the underlying log system, so
+
+        depending which one has been configured some parameters may be
+
+        required or not.'
+      tags:
+      - Organization Logs
+      operationId: getProjEnvLogEntries
+      parameters:
+      - $ref: '#/components/parameters/timestamp_range_begin_query'
+      - $ref: '#/components/parameters/timestamp_range_end_query'
+      - $ref: '#/components/parameters/raw_query'
+      responses:
+        '200':
+          description: The list of log's entries which are comprehended by the begin and end timestamps and are selected by the optional query.
+          content:
+            application/json:
+              schema:
+                description: The list of log lines
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LogSourceEntry'
+              example:
+                data:
+                - host: theowlhost
+                  message: 178.154.171.21 - - [21/Sep/2017:02:51:22 +0200] "GET /1663-large_default/tienda-de-campana-basica-para-2-personas.jpg HTTP/1.0" 302 773 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)"
+                  timestamp: 0123456789000
+                - host: mymon
+                  message: 141.8.132.28 - - [21/Sep/2017:02:51:27 +0200] "GET /1663-large_default/tienda-de-campana-basica-para-2-personas.jpg/ HTTP/1.0" 302 731 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)"
+                  timestamp: 0123456795000
+                - host: theowlhost
+                  message: 46.229.168.65 - - [21/Sep/2017:02:51:28 +0200] "GET /mosquitera-enrollable-lateral.html HTTP/1.0" 200 25313 "-" "Mozilla/5.0 (compatible; SemrushBot/1.2~bl; +http://www.semrush.com/bot.html)"
+                  timestamp: 0123456800000
+                - host: mymon
+                  message: 141.10.132.56 - - [21/Sep/2017:02:51:56 +0200] "GET /1663-large_default/tienda-de-campana-basica-para-2-personas.jpg/ HTTP/1.0" 302 731 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)"
+                  timestamp: 0123456805000
+                - host: burrowing
+                  message: 46.229.168.65 - - [21/Sep/2017:02:52:03 +0200] "GET /mosquitera-enrollable-lateral.html HTTP/1.0" 200 25313 "-" "Mozilla/5.0 (compatible; SemrushBot/1.2~bl; +http://www.semrush.com/bot.html)"
+                  timestamp: 0123456810000
+                - host: theowlhost
+                  message: 141.10.132.56 - - [21/Sep/2017:02:52:23 +0200] "GET /1663-large_default/tienda-de-campana-basica-para-2-personas.jpg/ HTTP/1.0" 302 731 "-" "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)"
+                  timestamp: 0123456823000
+                - host: elf
+                  message: 123.229.145.65 - - [21/Sep/2017:02:52:49 +0200] "GET /mosquitera-enrollable-lateral.html HTTP/1.0" 200 25313 "-" "Mozilla/5.0 (compatible; SemrushBot/1.2~bl; +http://www.semrush.com/bot.html)"
+                  timestamp: 0123456834000
+                - host: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaelf
+                  message: 123.229.145.65 - - [21/Sep/2017:02:52:49 +0200] "GET /mosquitera-enrollable-lateral.html HTTP/1.0" 200 25313 "-" "Mozilla/5.0 (compatible; SemrushBot/1.2~bl; +http://www.semrush.com/bot.html)"
+                  timestamp: 0123456834000
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get proj env log entries
+      x-summary-source: derived
+components:
+  parameters:
+    raw_query:
+      description: A free text which the content depends of the context of the API endpoint. Can be a free text value or a complete query expressed of supported query language.
+      name: query
+      in: query
+      schema:
+        type: string
+        minLength: 1
+    timestamp_range_begin_query:
+      description: The unix timestamp in milliseconds, which indicate the start of the time range.
+      name: begin
+      in: query
+      schema:
+        type: integer
+        format: uint64
+    environment_canonical:
+      description: The environment canonical to use as part of a path
+      name: environment_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    project_canonical:
+      description: A canonical of a project.
+      name: project_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 1
+        pattern: ^[\da-zA-Z]+(?:(?:[\da-zA-Z\-._]+)?[\da-zA-Z])?$
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    timestamp_range_end_query:
+      description: The unix timestamp in milliseconds, which indicate the end of the time range.
+      name: end
+      in: query
+      schema:
+        type: integer
+        format: uint64
+    log_source_id:
+      description: A unique identifier, which group log's entries under under a context, established by the source.
+      name: log_source_id
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  schemas:
+    LogSourceEntry:
+      description: A log's entry which pertains to a specific log's source.
+      title: Log entry
+      required:
+      - timestamp
+      - host
+      - message
+      properties:
+        host:
+          description: The host registered with the log's entry.
+          type: string
+          minLength: 1
+        message:
+          description: The original (i.e. raw) log's entry.
+          type: string
+          minLength: 1
+        timestamp:
+          description: The timestamp extracted from the original log entry in order to be homogeneous to all the different supported underlying log systems.
+          type: string
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    LogSource:
+      description: The data associated to a log's source. Each log source is the context of a list of entries which are registered through the time.
+      title: A log source
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          minLength: 1
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

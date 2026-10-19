@@ -1,0 +1,302 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Cloud Cost Management Tag Mappings API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Cloud Cost Management Tag Mappings
+paths:
+  /organizations/{organization_canonical}/cloud_cost_management/tag_mapping:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Return the Cloud Cost Management tag mapping for the organization
+      tags:
+      - Organization Cloud Cost Management Tag Mappings
+      operationId: getCloudCostManagementTagMapping
+      responses:
+        '200':
+          description: The CloudCostManagementTagMapping for the organization
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudCostManagementTagMapping'
+              example:
+                data:
+                  created_at: 1503225026
+                  environment_regex: ^Environment$
+                  environment_tags:
+                  - env
+                  - environment
+                  id: 1
+                  project_regex: ^Project$
+                  project_tags:
+                  - proj
+                  - project
+                  updated_at: 1503335026
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get cloud cost management tag mapping
+      x-summary-source: derived
+    put:
+      description: Create or Update a Cloud Cost Management Tag Mapping.
+      tags:
+      - Organization Cloud Cost Management Tag Mappings
+      operationId: putCloudCostManagementTagMapping
+      responses:
+        '200':
+          description: The new or updated Cloud Cost Management Tag Mapping
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CloudCostManagementTagMapping'
+              example:
+                data:
+                  created_at: 1503225026
+                  environment_regex: ^Environment$
+                  environment_tags:
+                  - env
+                  - environment
+                  id: 1
+                  project_regex: ^Project$
+                  project_tags:
+                  - proj
+                  - project
+                  updated_at: 1503335026
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateCloudCostManagementTagMapping'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateCloudCostManagementTagMapping'
+        required: true
+      summary: Put cloud cost management tag mapping
+      x-summary-source: derived
+components:
+  responses:
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+  schemas:
+    UpdateCloudCostManagementTagMapping:
+      description: Create or Update a Cloud Cost Management tag mapping for projects and environments
+      title: Create or Update CloudCostManagementTagMapping
+      properties:
+        component_regex:
+          type: string
+        component_tags:
+          type: array
+          items:
+            type: string
+        environment_regex:
+          type: string
+        environment_tags:
+          type: array
+          items:
+            type: string
+        project_regex:
+          type: string
+        project_tags:
+          type: array
+          items:
+            type: string
+    CloudCostManagementTagMapping:
+      description: 'Object containing Cloud Cost Management tag mapping. The mapping is used to
+
+        identify resources belonging to projects and environments across cloud
+
+        providers. The mapping can be a set of tag keys or a regexp to capture
+
+        tag keys.
+
+        '
+      title: CloudCostManagementTagMapping
+      required:
+      - id
+      - created_at
+      - updated_at
+      properties:
+        all_tags:
+          description: This is a list of all the tag keys in the DB for the Org
+          type: array
+          items:
+            type: string
+        component_regex:
+          type: string
+        component_tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: integer
+          format: uint64
+        environment_regex:
+          type: string
+        environment_tags:
+          type: array
+          items:
+            type: string
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        project_regex:
+          type: string
+        project_tags:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: integer
+          format: uint64
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+  parameters:
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query

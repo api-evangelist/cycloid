@@ -1,0 +1,3061 @@
+openapi: 3.2.0
+info:
+  description: This is the Cycloid's API Reference. It provides descriptions, syntax, and usage examples for each of the actions and data types available within our console.
+  title: Welcome! Organization Plugins API
+  termsOfService: https://console.cycloid.io/terms
+  contact:
+    name: The Great Owl
+    url: https://www.cycloid.io
+    email: contact@cycloid.io
+  license:
+    name: Cycloid @copyrights
+    url: https://cycloid.io
+  version: '0'
+servers:
+- url: https://http-api.cycloid.io
+security:
+- api_key: []
+- api_key_query: []
+tags:
+- name: Organization Plugins
+paths:
+  /organizations/{organization_canonical}/plugin_registries:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get list of Plugin Registries.
+      tags:
+      - Organization Plugins
+      operationId: listPluginRegistries
+      responses:
+        '200':
+          description: List of the Plugin Registries
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PluginRegistry'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - access: false
+                  created_at: 1503225026
+                  id: 1
+                  name: PR1
+                  status: connected
+                  updated_at: 1503335026
+                  url: http://pr1.com
+                - access: true
+                  created_at: 1503225026
+                  id: 2
+                  name: PR2
+                  status: offline
+                  updated_at: 1503335026
+                  url: http://pr2.com
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List plugin registries
+      x-summary-source: derived
+    post:
+      description: Create a new Plugin Registry
+      tags:
+      - Organization Plugins
+      operationId: createPluginRegistry
+      responses:
+        '200':
+          description: Plugin Registry created.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginRegistry'
+              example:
+                data:
+                  access: false
+                  created_at: 1503225026
+                  id: 1
+                  name: PR1
+                  status: connected
+                  updated_at: 1503335026
+                  url: http://pr1.com
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewPluginRegistry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewPluginRegistry'
+        description: 'The information of the Plugin Registry to create.
+
+          '
+        required: true
+      summary: Create plugin registry
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugin_registries/{plugin_registry_id}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_registry_id'
+    get:
+      description: Get a Plugin Registry
+      tags:
+      - Organization Plugins
+      operationId: getPluginRegistry
+      responses:
+        '200':
+          description: The Plugin Registry
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginRegistry'
+              example:
+                data:
+                  access: false
+                  created_at: 1503225026
+                  id: 1
+                  name: PR1
+                  status: connected
+                  updated_at: 1503335026
+                  url: http://pr1.com
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get plugin registry
+      x-summary-source: derived
+    put:
+      description: Update the Plugin Registry
+      tags:
+      - Organization Plugins
+      operationId: updatePluginRegistry
+      responses:
+        '200':
+          description: The updated Plugin Registry
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginRegistry'
+              example:
+                data:
+                  access: false
+                  created_at: 1503225026
+                  id: 1
+                  name: PR1
+                  status: connected
+                  updated_at: 1503335026
+                  url: http://pr1.com
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdatePluginRegistry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdatePluginRegistry'
+        description: The information of the Plugin Registry update
+        required: true
+      summary: Update plugin registry
+      x-summary-source: derived
+    delete:
+      description: Delete a Plugin Registry
+      tags:
+      - Organization Plugins
+      operationId: deletePluginRegistry
+      responses:
+        '204':
+          description: Plugin Registry deleted
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete plugin registry
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugin_registries/{plugin_registry_id}/plugins:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_registry_id'
+    get:
+      description: Get list of Plugins in a Registry
+      tags:
+      - Organization Plugins
+      operationId: listPluginRegistryPlugins
+      responses:
+        '200':
+          description: List of the Plugins in the Registry
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Plugin'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List plugin registry plugins
+      x-summary-source: derived
+    post:
+      description: Create a new Registry Plugin
+      tags:
+      - Organization Plugins
+      operationId: createPluginRegistryPlugin
+      responses:
+        '200':
+          description: Plugin created.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Plugin'
+              example:
+                data:
+                  id: 1
+                  latest:
+                    configuration:
+                    - default: hello world and especially to you <3
+                      description: Message to display in the job
+                      key: message
+                      name: Message
+                      type: string
+                      widget: simple_text
+                    description: Test description plugin
+                    icon: https://placehold.co/50x50
+                    id: 1
+                    images:
+                    - https://placehold.co/600x400
+                    - https://placehold.co/600x400
+                    name: P1
+                    schema:
+                      driver:
+                        database_version: 3.50.4
+                        name: sqlite
+                      name: Plugins
+                      relations:
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        parent_columns:
+                        - id
+                        parent_table: authors
+                        table: quoates
+                      tables:
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: name
+                          type:
+                          - TEXT
+                          - 'null'
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: authors
+                          type: PRIMARY KEY
+                        def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                        name: authors
+                        type: table
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: message
+                          type:
+                          - TEXT
+                          - 'null'
+                        - name: author_id
+                          type: INT UNSIGNED
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: quotes
+                          type: PRIMARY KEY
+                        - columns:
+                          - author_id
+                          def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                          name: '- (Foreign key ID: 0)'
+                          referenced_columns:
+                          - id
+                          referenced_table: authors
+                          table: quotes
+                          type: FOREIGN KEY
+                        def: "CREATE TABLE quotes (\n\t\tid INTEGER PRIMARY KEY,\n\t\tmessage TEXT,\n\t\tauthor_id INT UNSIGNED NOT NULL,\n\n\n\t\tCONSTRAINT fk__quotes__authors\n\t\t\tFOREIGN KEY (author_id) REFERENCES authors (id)\n\t\t\tON DELETE CASCADE\n)"
+                        name: quotes
+                        type: table
+                    scope:
+                    - organization:credential:list
+                    - organization:project:list
+                    status: success
+                    url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                    widgets:
+                    - placement:
+                        config:
+                          tab_name: Quotes
+                        type: component
+                      type: table
+                      widget:
+                        columns:
+                        - title: Message
+                          type: string
+                          value: message
+                        - title: Author
+                          type: string
+                          value: author
+                        query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+                  name: P1
+                  registry:
+                    access: false
+                    created_at: 1503225026
+                    id: 1
+                    name: PR1
+                    status: connected
+                    updated_at: 1503335026
+                    url: http://pr1.com
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewPlugin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewPlugin'
+        description: The information of the Registry Plugin to create
+        required: true
+      summary: Create plugin registry plugin
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugin_registries/{plugin_registry_id}/plugins/by-slug/{plugin_install_slug}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_registry_id'
+    - $ref: '#/components/parameters/plugin_install_slug'
+    get:
+      description: Get a Plugin by its URL slug, with registry fallback for uninstalled plugins
+      tags:
+      - Organization Plugins
+      operationId: getPluginBySlug
+      responses:
+        '200':
+          description: The data of the Plugin
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Plugin'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get plugin by slug
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugin_registries/{plugin_registry_id}/plugins/{plugin_id}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_registry_id'
+    - $ref: '#/components/parameters/plugin_id'
+    get:
+      description: Get a Plugin from the Registry
+      tags:
+      - Organization Plugins
+      operationId: getPluginRegistryPlugin
+      responses:
+        '200':
+          description: The information of the Plugin
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Plugin'
+              example:
+                data:
+                  id: 1
+                  latest:
+                    configuration:
+                    - default: hello world and especially to you <3
+                      description: Message to display in the job
+                      key: message
+                      name: Message
+                      type: string
+                      widget: simple_text
+                    description: Test description plugin
+                    icon: https://placehold.co/50x50
+                    id: 1
+                    images:
+                    - https://placehold.co/600x400
+                    - https://placehold.co/600x400
+                    name: P1
+                    schema:
+                      driver:
+                        database_version: 3.50.4
+                        name: sqlite
+                      name: Plugins
+                      relations:
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        parent_columns:
+                        - id
+                        parent_table: authors
+                        table: quotes
+                      tables:
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: name
+                          type:
+                          - TEXT
+                          - 'null'
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: authors
+                          type: PRIMARY KEY
+                        def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                        name: authors
+                        type: table
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: message
+                          type:
+                          - TEXT
+                          - 'null'
+                        - name: author_id
+                          type: INT UNSIGNED
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: quotes
+                          type: PRIMARY KEY
+                        - columns:
+                          - author_id
+                          def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                          name: '- (Foreign key ID: 0)'
+                          referenced_columns:
+                          - id
+                          referenced_table: authors
+                          table: quotes
+                          type: FOREIGN KEY
+                        def: "CREATE TABLE quotes (\n\t\tid INTEGER PRIMARY KEY,\n\t\tmessage TEXT,\n\t\tauthor_id INT UNSIGNED NOT NULL,\n\n\n\t\tCONSTRAINT fk__quotes__authors\n\t\t\tFOREIGN KEY (author_id) REFERENCES authors (id)\n\t\t\tON DELETE CASCADE\n)"
+                        name: quotes
+                        type: table
+                    scope:
+                    - organization:credential:list
+                    - organization:project:list
+                    status: success
+                    url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                    widgets:
+                    - placement:
+                        config:
+                          tab_name: Quotes
+                        type: component
+                      type: table
+                      widget:
+                        columns:
+                        - title: Message
+                          type: string
+                          value: message
+                        - title: Author
+                          type: string
+                          value: author
+                        query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+                  name: P1
+                  registry:
+                    access: false
+                    created_at: 1503225026
+                    id: 1
+                    name: PR1
+                    status: connected
+                    updated_at: 1503335026
+                    url: http://pr1.com
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get plugin registry plugin
+      x-summary-source: derived
+    put:
+      description: Update the Plugin on the Registry
+      tags:
+      - Organization Plugins
+      operationId: updatePluginRegistryPlugin
+      responses:
+        '200':
+          description: The updated Plugin Registry
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Plugin'
+              example:
+                data:
+                  id: 1
+                  latest:
+                    configuration:
+                    - default: hello world and especially to you <3
+                      description: Message to display in the job
+                      key: message
+                      name: Message
+                      type: string
+                      widget: simple_text
+                    description: Test description plugin
+                    icon: https://placehold.co/50x50
+                    id: 1
+                    images:
+                    - https://placehold.co/600x400
+                    - https://placehold.co/600x400
+                    name: P1
+                    schema:
+                      driver:
+                        database_version: 3.50.4
+                        name: sqlite
+                      name: Plugins
+                      relations:
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        parent_columns:
+                        - id
+                        parent_table: authors
+                        table: quoates
+                      tables:
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: name
+                          type:
+                          - TEXT
+                          - 'null'
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: authors
+                          type: PRIMARY KEY
+                        def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                        name: authors
+                        type: table
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: message
+                          type:
+                          - TEXT
+                          - 'null'
+                        - name: author_id
+                          type: INT UNSIGNED
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: quotes
+                          type: PRIMARY KEY
+                        - columns:
+                          - author_id
+                          def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                          name: '- (Foreign key ID: 0)'
+                          referenced_columns:
+                          - id
+                          referenced_table: authors
+                          table: quotes
+                          type: FOREIGN KEY
+                        def: "CREATE TABLE quotes (\n\t\tid INTEGER PRIMARY KEY,\n\t\tmessage TEXT,\n\t\tauthor_id INT UNSIGNED NOT NULL,\n\n\n\t\tCONSTRAINT fk__quotes__authors\n\t\t\tFOREIGN KEY (author_id) REFERENCES authors (id)\n\t\t\tON DELETE CASCADE\n)"
+                        name: quotes
+                        type: table
+                    scope:
+                    - organization:credential:list
+                    - organization:project:list
+                    status: success
+                    url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                    widgets:
+                    - placement:
+                        config:
+                          tab_name: Quotes
+                        type: component
+                      type: table
+                      widget:
+                        columns:
+                        - title: Message
+                          type: string
+                          value: message
+                        - title: Author
+                          type: string
+                          value: author
+                        query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+                  name: P1
+                  registry:
+                    access: false
+                    created_at: 1503225026
+                    id: 1
+                    name: PR1
+                    status: connected
+                    updated_at: 1503335026
+                    url: http://pr1.com
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdatePlugin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdatePlugin'
+        description: The information of the Plugin Registry update
+        required: true
+      summary: Update plugin registry plugin
+      x-summary-source: derived
+    delete:
+      description: Delete a Plugin from the Registry
+      tags:
+      - Organization Plugins
+      operationId: deletePluginRegistryPlugin
+      responses:
+        '204':
+          description: Plugin deleted
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete plugin registry plugin
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugin_registries/{plugin_registry_id}/plugins/{plugin_id}/versions:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_registry_id'
+    - $ref: '#/components/parameters/plugin_id'
+    get:
+      description: Get list of Plugin Versions.
+      tags:
+      - Organization Plugins
+      operationId: listPluginVersions
+      responses:
+        '200':
+          description: List of the Plugin Versions
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PluginVersion'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - configuration:
+                  - default: hello world and especially to you <3
+                    description: Message to display in the job
+                    key: message
+                    name: Message
+                    type: string
+                    widget: simple_text
+                  description: Test description plugin
+                  icon: https://placehold.co/50x50
+                  id: 1
+                  images:
+                  - https://placehold.co/600x400
+                  - https://placehold.co/600x400
+                  name: P1
+                  schema:
+                    driver:
+                      database_version: 3.50.4
+                      name: sqlite
+                    name: Plugins
+                    relations:
+                    - columns:
+                      - author_id
+                      def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                      parent_columns:
+                      - id
+                      parent_table: authors
+                      table: quoates
+                    tables:
+                    - columns:
+                      - name: id
+                        type:
+                        - INTEGER
+                        - 'null'
+                      - name: name
+                        type:
+                        - TEXT
+                        - 'null'
+                      constraints:
+                      - columns:
+                        - id
+                        def: PRIMARY KEY (id)
+                        name: id
+                        table: authors
+                        type: PRIMARY KEY
+                      def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                      name: authors
+                      type: table
+                    - columns:
+                      - name: id
+                        type:
+                        - INTEGER
+                        - 'null'
+                      - name: message
+                        type:
+                        - TEXT
+                        - 'null'
+                      - name: author_id
+                        type: INT UNSIGNED
+                      constraints:
+                      - columns:
+                        - id
+                        def: PRIMARY KEY (id)
+                        name: id
+                        table: quotes
+                        type: PRIMARY KEY
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        name: '- (Foreign key ID: 0)'
+                        referenced_columns:
+                        - id
+                        referenced_table: authors
+                        table: quotes
+                        type: FOREIGN KEY
+                      def: "CREATE TABLE quotes (\n\t\tid INTEGER PRIMARY KEY,\n\t\tmessage TEXT,\n\t\tauthor_id INT UNSIGNED NOT NULL,\n\n\n\t\tCONSTRAINT fk__quotes__authors\n\t\t\tFOREIGN KEY (author_id) REFERENCES authors (id)\n\t\t\tON DELETE CASCADE\n)"
+                      name: quotes
+                      type: table
+                  scope:
+                  - organization:credential:list
+                  - organization:project:list
+                  status: success
+                  url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                  widgets:
+                  - placement:
+                      config:
+                        tab_name: Quotes
+                      type: component
+                    type: table
+                    widget:
+                      columns:
+                      - title: Message
+                        type: string
+                        value: message
+                      - title: Author
+                        type: string
+                        value: author
+                      query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+                - configuration:
+                  - default: hello world and especially to you <3
+                    description: Message to display in the job
+                    key: message
+                    name: Message
+                    type: string
+                    widget: simple_text
+                  description: Test description plugin
+                  icon: https://placehold.co/50x50
+                  id: 2
+                  images:
+                  - https://placehold.co/600x400
+                  - https://placehold.co/600x400
+                  name: P2
+                  schema:
+                    driver:
+                      database_version: 3.50.4
+                      name: sqlite
+                    name: Plugins
+                    relations:
+                    - columns:
+                      - author_id
+                      def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                      parent_columns:
+                      - id
+                      parent_table: authors
+                      table: quoates
+                    tables:
+                    - columns:
+                      - name: id
+                        type:
+                        - INTEGER
+                        - 'null'
+                      - name: name
+                        type:
+                        - TEXT
+                        - 'null'
+                      constraints:
+                      - columns:
+                        - id
+                        def: PRIMARY KEY (id)
+                        name: id
+                        table: authors
+                        type: PRIMARY KEY
+                      def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                      name: authors
+                      type: table
+                    - columns:
+                      - name: id
+                        type:
+                        - INTEGER
+                        - 'null'
+                      - name: message
+                        type:
+                        - TEXT
+                        - 'null'
+                      - name: author_id
+                        type: INT UNSIGNED
+                      constraints:
+                      - columns:
+                        - id
+                        def: PRIMARY KEY (id)
+                        name: id
+                        table: quotes
+                        type: PRIMARY KEY
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        name: '- (Foreign key ID: 0)'
+                        referenced_columns:
+                        - id
+                        referenced_table: authors
+                        table: quotes
+                        type: FOREIGN KEY
+                      def: "CREATE TABLE quotes (\n\t\tid INTEGER PRIMARY KEY,\n\t\tmessage TEXT,\n\t\tauthor_id INT UNSIGNED NOT NULL,\n\n\n\t\tCONSTRAINT fk__quotes__authors\n\t\t\tFOREIGN KEY (author_id) REFERENCES authors (id)\n\t\t\tON DELETE CASCADE\n)"
+                      name: quotes
+                      type: table
+                  scope:
+                  - organization:credential:list
+                  - organization:project:list
+                  status: success
+                  url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                  widgets:
+                  - placement:
+                      config:
+                        tab_name: Quotes
+                      type: component
+                    type: table
+                    widget:
+                      columns:
+                      - title: Message
+                        type: string
+                        value: message
+                      - title: Author
+                        type: string
+                        value: author
+                      query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List plugin versions
+      x-summary-source: derived
+    post:
+      description: Create a new Plugin
+      tags:
+      - Organization Plugins
+      operationId: createPluginRegistryPluginVersion
+      responses:
+        '200':
+          description: Plugin created.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginVersion'
+              example:
+                data:
+                  configuration:
+                  - default: hello world and especially to you <3
+                    description: Message to display in the job
+                    key: message
+                    name: Message
+                    type: string
+                    widget: simple_text
+                  description: Test description plugin
+                  icon: https://placehold.co/50x50
+                  id: 1
+                  images:
+                  - https://placehold.co/600x400
+                  - https://placehold.co/600x400
+                  name: P1
+                  schema:
+                    driver:
+                      database_version: 3.50.4
+                      name: sqlite
+                    name: Plugins
+                    relations:
+                    - columns:
+                      - author_id
+                      def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                      parent_columns:
+                      - id
+                      parent_table: authors
+                      table: quoates
+                    tables:
+                    - columns:
+                      - name: id
+                        type:
+                        - INTEGER
+                        - 'null'
+                      - name: name
+                        type:
+                        - TEXT
+                        - 'null'
+                      constraints:
+                      - columns:
+                        - id
+                        def: PRIMARY KEY (id)
+                        name: id
+                        table: authors
+                        type: PRIMARY KEY
+                      def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                      name: authors
+                      type: table
+                    - columns:
+                      - name: id
+                        type:
+                        - INTEGER
+                        - 'null'
+                      - name: message
+                        type:
+                        - TEXT
+                        - 'null'
+                      - name: author_id
+                        type: INT UNSIGNED
+                      constraints:
+                      - columns:
+                        - id
+                        def: PRIMARY KEY (id)
+                        name: id
+                        table: quotes
+                        type: PRIMARY KEY
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        name: '- (Foreign key ID: 0)'
+                        referenced_columns:
+                        - id
+                        referenced_table: authors
+                        table: quotes
+                        type: FOREIGN KEY
+                      def: "CREATE TABLE quotes (\n\t\tid INTEGER PRIMARY KEY,\n\t\tmessage TEXT,\n\t\tauthor_id INT UNSIGNED NOT NULL,\n\n\n\t\tCONSTRAINT fk__quotes__authors\n\t\t\tFOREIGN KEY (author_id) REFERENCES authors (id)\n\t\t\tON DELETE CASCADE\n)"
+                      name: quotes
+                      type: table
+                  scope:
+                  - organization:credential:list
+                  - organization:project:list
+                  status: success
+                  url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                  widgets:
+                  - placement:
+                      config:
+                        tab_name: Quotes
+                      type: component
+                    type: table
+                    widget:
+                      columns:
+                      - title: Message
+                        type: string
+                        value: message
+                      - title: Author
+                        type: string
+                        value: author
+                      query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewPluginVersion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewPluginVersion'
+        description: The information of the Plugin Version to create
+        required: true
+      summary: Create plugin registry plugin version
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/plugin_registries/{plugin_registry_id}/plugins/{plugin_id}/versions/{plugin_version_id}
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_registry_id'
+    - $ref: '#/components/parameters/plugin_id'
+    - $ref: '#/components/parameters/plugin_version_id'
+    get:
+      description: Get a Plugin Version from the registry
+      tags:
+      - Organization Plugins
+      operationId: getPluginRegistryPluginVersion
+      responses:
+        '200':
+          description: The information of the Plugin Version
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginVersion'
+              example:
+                data:
+                  configuration:
+                  - default: hello world and especially to you <3
+                    description: Message to display in the job
+                    key: message
+                    name: Message
+                    type: string
+                    widget: simple_text
+                  description: Test description plugin
+                  icon: https://placehold.co/50x50
+                  id: 1
+                  images:
+                  - https://placehold.co/600x400
+                  - https://placehold.co/600x400
+                  name: P1
+                  schema:
+                    driver:
+                      database_version: 3.50.4
+                      name: sqlite
+                    name: Plugins
+                    relations:
+                    - columns:
+                      - author_id
+                      def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                      parent_columns:
+                      - id
+                      parent_table: authors
+                      table: quoates
+                    tables:
+                    - columns:
+                      - name: id
+                        type:
+                        - INTEGER
+                        - 'null'
+                      - name: name
+                        type:
+                        - TEXT
+                        - 'null'
+                      constraints:
+                      - columns:
+                        - id
+                        def: PRIMARY KEY (id)
+                        name: id
+                        table: authors
+                        type: PRIMARY KEY
+                      def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                      name: authors
+                      type: table
+                    - columns:
+                      - name: id
+                        type:
+                        - INTEGER
+                        - 'null'
+                      - name: message
+                        type:
+                        - TEXT
+                        - 'null'
+                      - name: author_id
+                        type: INT UNSIGNED
+                      constraints:
+                      - columns:
+                        - id
+                        def: PRIMARY KEY (id)
+                        name: id
+                        table: quotes
+                        type: PRIMARY KEY
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        name: '- (Foreign key ID: 0)'
+                        referenced_columns:
+                        - id
+                        referenced_table: authors
+                        table: quotes
+                        type: FOREIGN KEY
+                      def: "CREATE TABLE quotes (\n\t\tid INTEGER PRIMARY KEY,\n\t\tmessage TEXT,\n\t\tauthor_id INT UNSIGNED NOT NULL,\n\n\n\t\tCONSTRAINT fk__quotes__authors\n\t\t\tFOREIGN KEY (author_id) REFERENCES authors (id)\n\t\t\tON DELETE CASCADE\n)"
+                      name: quotes
+                      type: table
+                  scope:
+                  - organization:credential:list
+                  - organization:project:list
+                  status: success
+                  url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                  widgets:
+                  - placement:
+                      config:
+                        tab_name: Quotes
+                      type: component
+                    type: table
+                    widget:
+                      columns:
+                      - title: Message
+                        type: string
+                        value: message
+                      - title: Author
+                        type: string
+                        value: author
+                      query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get plugin registry plugin version
+      x-summary-source: derived
+    delete:
+      description: Delete a Plugin Registry Version
+      tags:
+      - Organization Plugins
+      operationId: deletePluginRegistryPluginVersion
+      responses:
+        '204':
+          description: Plugin Version deleted
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete plugin registry plugin version
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/plugin_registries/{plugin_registry_id}/plugins/{plugin_id}/versions/{plugin_version_id}/install
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_registry_id'
+    - $ref: '#/components/parameters/plugin_id'
+    - $ref: '#/components/parameters/plugin_version_id'
+    post:
+      description: Install a Plugin Version
+      tags:
+      - Organization Plugins
+      operationId: createPlugin
+      responses:
+        '200':
+          description: The Plugin Install data
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginInstall'
+              example:
+                data:
+                  created_at: 1503225026
+                  id: 1
+                  name: Plugin1
+                  status: connected
+                  updated_at: 1503335026
+                  url: http://plugin-1.com
+                  uuid: 00000000-0000-0000-0000-000000000001
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/NewPluginInstall'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewPluginInstall'
+        description: Data of the Plugin to install
+        required: true
+      summary: Create plugin
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/plugin_registries/{plugin_registry_id}/plugins/{plugin_id}/versions/{plugin_version_id}/logs
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_id'
+    - $ref: '#/components/parameters/plugin_version_id'
+    - $ref: '#/components/parameters/plugin_registry_id'
+    get:
+      description: Get list of Plugin Version Logs.
+      tags:
+      - Organization Plugins
+      operationId: listPluginRegistryPluginVersionLogs
+      responses:
+        '200':
+          description: List of the Plugin Version Logs
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PluginVersionLog'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: 1
+                  message: pull
+                - id: 2
+                  name: validating ...
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List plugin registry plugin version logs
+      x-summary-source: derived
+  ? /organizations/{organization_canonical}/plugin_registries/{plugin_registry_id}/plugins/{plugin_id}/versions/{plugin_version_id}/retry
+  : parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_registry_id'
+    - $ref: '#/components/parameters/plugin_id'
+    - $ref: '#/components/parameters/plugin_version_id'
+    post:
+      description: Retry a Plugin Registry Version
+      tags:
+      - Organization Plugins
+      operationId: retryPluginRegistryPluginVersion
+      responses:
+        '204':
+          description: Plugin version retried
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Retry plugin registry plugin version
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugin_widgets:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Fetch all plugin widgets for an organization filtered by placement
+      tags:
+      - Organization Plugins
+      operationId: listPluginWidgets
+      parameters:
+      - $ref: '#/components/parameters/placement'
+      responses:
+        '200':
+          description: Plugin widgets
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PluginWidget'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List plugin widgets
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugin_widgets/{widget_id}/query:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/widget_id'
+    get:
+      description: Query data for a table plugin widget via the plugin manager.
+      tags:
+      - Organization Plugins
+      operationId: getPluginWidgetData
+      responses:
+        '200':
+          description: Plugin widget data
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PluginWidgetData'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get plugin widget data
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugin_widgets/{widget_id}/{api_key}/iframe:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/widget_id'
+    - $ref: '#/components/parameters/api_key'
+    - description: Sub-path to proxy to the plugin
+      name: path
+      in: query
+      schema:
+        type: string
+    get:
+      description: Proxy a GET request to the plugin for a widget iframe.
+      tags:
+      - Organization Plugins
+      operationId: getPluginWidgetIframeProxy
+      responses:
+        '200':
+          description: Proxied response from Plugin Manager
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get plugin widget iframe proxy
+      x-summary-source: derived
+    put:
+      description: Proxy a PUT request to the plugin for a widget iframe.
+      tags:
+      - Organization Plugins
+      operationId: putPluginWidgetIframeProxy
+      responses:
+        '200':
+          description: Proxied response from Plugin Manager
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Put plugin widget iframe proxy
+      x-summary-source: derived
+    post:
+      description: Proxy a POST request to the plugin for a widget iframe.
+      tags:
+      - Organization Plugins
+      operationId: postPluginWidgetIframeProxy
+      responses:
+        '200':
+          description: Proxied response from Plugin Manager
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Post plugin widget iframe proxy
+      x-summary-source: derived
+    delete:
+      description: Proxy a DELETE request to the plugin for a widget iframe.
+      tags:
+      - Organization Plugins
+      operationId: deletePluginWidgetIframeProxy
+      responses:
+        '200':
+          description: Proxied response from Plugin Manager
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete plugin widget iframe proxy
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugins:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    get:
+      description: Get a list of all organization Plugins
+      tags:
+      - Organization Plugins
+      operationId: listPlugins
+      responses:
+        '200':
+          description: List of all Organization Plugins (registry plus install data)
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Plugin'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+              example:
+                data:
+                - id: 1
+                  latest:
+                    configuration:
+                    - default: hello world and especially to you <3
+                      description: Message to display in the job
+                      key: message
+                      name: Message
+                      type: string
+                      widget: simple_text
+                    description: Test description plugin
+                    icon: https://placehold.co/50x50
+                    id: 1
+                    images:
+                    - https://placehold.co/600x400
+                    - https://placehold.co/600x400
+                    name: P1
+                    schema:
+                      driver:
+                        database_version: 3.50.4
+                        name: sqlite
+                      name: Plugins
+                      relations:
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        parent_columns:
+                        - id
+                        parent_table: authors
+                        table: quoates
+                      tables:
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: name
+                          type:
+                          - TEXT
+                          - 'null'
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: authors
+                          type: PRIMARY KEY
+                        def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                        name: authors
+                        type: table
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: message
+                          type:
+                          - TEXT
+                          - 'null'
+                        - name: author_id
+                          type: INT UNSIGNED
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: quotes
+                          type: PRIMARY KEY
+                        - columns:
+                          - author_id
+                          def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                          name: '- (Foreign key ID: 0)'
+                          referenced_columns:
+                          - id
+                          referenced_table: authors
+                          table: quotes
+                          type: FOREIGN KEY
+                        def: "CREATE TABLE quotes (\n\t\tid INTEGER PRIMARY KEY,\n\t\tmessage TEXT,\n\t\tauthor_id INT UNSIGNED NOT NULL,\n\n\n\t\tCONSTRAINT fk__quotes__authors\n\t\t\tFOREIGN KEY (author_id) REFERENCES authors (id)\n\t\t\tON DELETE CASCADE\n)"
+                        name: quotes
+                        type: table
+                    scope:
+                    - organization:credential:list
+                    - organization:project:list
+                    status: success
+                    url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                    widgets:
+                    - placement:
+                        config:
+                          tab_name: Quotes
+                        type: component
+                      type: table
+                      widget:
+                        columns:
+                        - title: Message
+                          type: string
+                          value: message
+                        - title: Author
+                          type: string
+                          value: author
+                        query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+                  name: P1
+                  registry:
+                    access: false
+                    created_at: 1503225026
+                    id: 1
+                    name: PR1
+                    status: connected
+                    updated_at: 1503335026
+                    url: http://pr1.com
+                - id: 2
+                  latest:
+                    configuration:
+                    - default: hello world and especially to you <3
+                      description: Message to display in the job
+                      key: message
+                      name: Message
+                      type: string
+                      widget: simple_text
+                    description: Test description plugin
+                    icon: https://placehold.co/50x50
+                    id: 1
+                    images:
+                    - https://placehold.co/600x400
+                    - https://placehold.co/600x400
+                    name: P1
+                    schema:
+                      driver:
+                        database_version: 3.50.4
+                        name: sqlite
+                      name: Plugins
+                      relations:
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        parent_columns:
+                        - id
+                        parent_table: authors
+                        table: quoates
+                      tables:
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: name
+                          type:
+                          - TEXT
+                          - 'null'
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: authors
+                          type: PRIMARY KEY
+                        def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                        name: authors
+                        type: table
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: message
+                          type:
+                          - TEXT
+                          - 'null'
+                        - name: author_id
+                          type: INT UNSIGNED
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: quotes
+                          type: PRIMARY KEY
+                        - columns:
+                          - author_id
+                          def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                          name: '- (Foreign key ID: 0)'
+                          referenced_columns:
+                          - id
+                          referenced_table: authors
+                          table: quotes
+                          type: FOREIGN KEY
+                        def: "CREATE TABLE quotes (\n\t\tid INTEGER PRIMARY KEY,\n\t\tmessage TEXT,\n\t\tauthor_id INT UNSIGNED NOT NULL,\n\n\n\t\tCONSTRAINT fk__quotes__authors\n\t\t\tFOREIGN KEY (author_id) REFERENCES authors (id)\n\t\t\tON DELETE CASCADE\n)"
+                        name: quotes
+                        type: table
+                    scope:
+                    - organization:credential:list
+                    - organization:project:list
+                    status: success
+                    url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                    widgets:
+                    - placement:
+                        config:
+                          tab_name: Quotes
+                        type: component
+                      type: table
+                      widget:
+                        columns:
+                        - title: Message
+                          type: string
+                          value: message
+                        - title: Author
+                          type: string
+                          value: author
+                        query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+                  name: P2
+                  registry:
+                    access: false
+                    created_at: 1503225026
+                    id: 1
+                    name: PR1
+                    status: connected
+                    updated_at: 1503335026
+                    url: http://pr1.com
+                pagination:
+                  index: 1
+                  size: 10
+                  total: 2
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List plugins
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugins/widget-views/{widget_view_id}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/widget_view_id'
+    put:
+      description: Update a plugin widget view
+      tags:
+      - Organization Plugins
+      operationId: updatePluginWidgetView
+      responses:
+        '204':
+          description: Widget view updated
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              type: object
+              required:
+              - enabled
+              - url_slug
+              properties:
+                enabled:
+                  type: boolean
+                url_slug:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - enabled
+              - url_slug
+              properties:
+                enabled:
+                  type: boolean
+                url_slug:
+                  type: string
+        required: true
+      summary: Update plugin widget view
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugins/{plugin_install_id}:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_install_id'
+    get:
+      description: Get a Plugin
+      tags:
+      - Organization Plugins
+      operationId: getPlugin
+      responses:
+        '200':
+          description: The data of the Plugin
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Plugin'
+              example:
+                data:
+                  id: 1
+                  install:
+                    configuration:
+                      message: hello world and especially to you <3
+                    created_at: 1503225026
+                    id: 1
+                    pm_secret: s3cr3t
+                    status: installed
+                    updated_at: 1503335026
+                    uuid: 00000000-0000-0000-0000-000000000001
+                    version:
+                      configuration:
+                      - default: hello world and especially to you <3
+                        description: Message to display in the job
+                        key: message
+                        name: Message
+                        type: string
+                        widget: simple_text
+                      description: Test description plugin
+                      icon: https://placehold.co/50x50
+                      id: 1
+                      images:
+                      - https://placehold.co/600x400
+                      - https://placehold.co/600x400
+                      name: P1
+                      scope:
+                      - organization:credential:list
+                      - organization:project:list
+                      status: success
+                      url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                  latest:
+                    configuration:
+                    - default: hello world and especially to you <3
+                      description: Message to display in the job
+                      key: message
+                      name: Message
+                      type: string
+                      widget: simple_text
+                    description: Test description plugin
+                    icon: https://placehold.co/50x50
+                    id: 1
+                    images:
+                    - https://placehold.co/600x400
+                    - https://placehold.co/600x400
+                    name: P1
+                    schema:
+                      driver:
+                        database_version: 3.50.4
+                        name: sqlite
+                      name: Plugins
+                      relations:
+                      - columns:
+                        - author_id
+                        def: FOREIGN KEY (author_id) REFERENCES authors (id) ON UPDATE NO ACTION ON DELETE CASCADE MATCH NONE
+                        parent_columns:
+                        - id
+                        parent_table: authors
+                        table: quotes
+                      tables:
+                      - columns:
+                        - name: id
+                          type:
+                          - INTEGER
+                          - 'null'
+                        - name: name
+                          type:
+                          - TEXT
+                          - 'null'
+                        constraints:
+                        - columns:
+                          - id
+                          def: PRIMARY KEY (id)
+                          name: id
+                          table: authors
+                          type: PRIMARY KEY
+                        def: "CREATE TABLE authors (\n\t\tid INTEGER PRIMARY KEY,\n\t\tname TEXT\n)"
+                        name: authors
+                        type: table
+                    scope:
+                    - organization:credential:list
+                    - organization:project:list
+                    status: success
+                    url: dregistry:5000/cycloid/cy-go-plugin:0.0.1
+                    widgets:
+                    - placement:
+                        config:
+                          tab_name: Quotes
+                        type: component
+                      type: table
+                      widget:
+                        columns:
+                        - title: Message
+                          type: string
+                          value: message
+                        - title: Author
+                          type: string
+                          value: author
+                        query: select q.message, a.name from quotes as q join authors as a on q.author_id = a.id
+                  name: P1
+                  owned: false
+                  registry:
+                    access: false
+                    created_at: 1503225026
+                    id: 1
+                    name: PR1
+                    status: connected
+                    updated_at: 1503335026
+                    url: http://pr1.com
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get plugin
+      x-summary-source: derived
+    put:
+      description: Update a Plugin Install
+      tags:
+      - Organization Plugins
+      operationId: updatePlugin
+      responses:
+        '200':
+          description: The updated Plugin Install
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginInstall'
+              example:
+                data:
+                  created_at: 1503225026
+                  id: 1
+                  name: Plugin1
+                  status: connected
+                  updated_at: 1503335026
+                  url: http://plugin1.com
+                  uuid: 00000000-0000-0000-0000-000000000001
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '411':
+          $ref: '#/components/responses/required_content_length_header'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdatePluginInstall'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdatePluginInstall'
+        description: Data for the Plugin Install update
+        required: true
+      summary: Update plugin
+      x-summary-source: derived
+    delete:
+      description: Delete a Plugin Install
+      tags:
+      - Organization Plugins
+      operationId: deletePlugin
+      responses:
+        '204':
+          description: Plugin Install deleted
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Delete plugin
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugins/{plugin_install_id}/logs:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_install_id'
+    get:
+      description: Get runtime and installation logs for a plugin install.
+      tags:
+      - Organization Plugins
+      operationId: listPluginLogs
+      responses:
+        '200':
+          description: Runtime and installation logs for the plugin
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginLogs'
+              example:
+                data:
+                  install_logs:
+                  - message: Pulling image docker-registry:5000/cycloid/cy-go-plugin:0.0.3
+                    timestamp: '2026-04-13T15:32:01Z'
+                  - message: Container started
+                    timestamp: '2026-04-13T15:32:12Z'
+                  runtime_logs:
+                  - id: 1
+                    message: Starting Sentry plugin...
+                    timestamp: '2026-04-13T15:32:13Z'
+                  - id: 2
+                    message: Initializing Sentry API client
+                    timestamp: '2026-04-13T15:32:14Z'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List plugin logs
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugins/{plugin_install_id}/refresh-status:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_install_id'
+    post:
+      description: Queries the Plugin Manager directly for the current status of a plugin install and updates the cached status. Safe to call for any install state.
+      tags:
+      - Organization Plugins
+      operationId: refreshPluginInstallStatus
+      responses:
+        '200':
+          description: The refreshed Plugin Install data
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginInstall'
+              example:
+                data:
+                  created_at: 1503225026
+                  id: 1
+                  status: running
+                  updated_at: 1503335026
+                  uuid: 00000000-0000-0000-0000-000000000001
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Refresh plugin install status
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugins/{plugin_install_id}/resync:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_install_id'
+    post:
+      description: Trigger an on-demand data resync on a running installed plugin. The call is proxied to the plugin container and returns once the resync has been accepted.
+      tags:
+      - Organization Plugins
+      operationId: resyncPluginInstall
+      responses:
+        '202':
+          description: Resync request accepted by the plugin
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Resync plugin install
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugins/{plugin_install_id}/sharing:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_install_id'
+    get:
+      description: Get the sharing configuration of a plugin install
+      tags:
+      - Organization Plugins
+      operationId: getPluginInstallSharing
+      responses:
+        '200':
+          description: The sharing configuration
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/PluginInstallSharing'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: Get plugin install sharing
+      x-summary-source: derived
+    put:
+      description: Update the sharing configuration of a plugin install
+      tags:
+      - Organization Plugins
+      operationId: updatePluginInstallSharing
+      responses:
+        '204':
+          description: Sharing configuration updated
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      requestBody:
+        content:
+          application/vnd.cycloid.io.v1+json:
+            schema:
+              type: object
+              required:
+              - visibility
+              properties:
+                mode:
+                  type: string
+                organizations:
+                  type: array
+                  items:
+                    type: string
+                visibility:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - visibility
+              properties:
+                mode:
+                  type: string
+                organizations:
+                  type: array
+                  items:
+                    type: string
+                visibility:
+                  type: string
+        required: true
+      summary: Update plugin install sharing
+      x-summary-source: derived
+  /organizations/{organization_canonical}/plugins/{plugin_install_id}/widget-views:
+    parameters:
+    - $ref: '#/components/parameters/organization_canonical'
+    - $ref: '#/components/parameters/plugin_install_id'
+    get:
+      description: List widget views for a plugin install
+      tags:
+      - Organization Plugins
+      operationId: listPluginWidgetViews
+      responses:
+        '200':
+          description: The list of widget views
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PluginWidgetView'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '403':
+          $ref: '#/components/responses/not_enough_permissions'
+        '404':
+          $ref: '#/components/responses/not_found_entity_in_path'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      summary: List plugin widget views
+      x-summary-source: derived
+components:
+  schemas:
+    PluginWidget:
+      description: A widget associated with an installed Plugin
+      type: object
+      title: Plugin Widget
+      required:
+      - type
+      - placement
+      - widget
+      - is_default
+      properties:
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_default:
+          description: Whether this is a default widget
+          type: boolean
+        placement:
+          description: 'Placement configuration of the widget. When type is "component", requires "tab_name" in config. When type is "sideMenuPage", requires "title" and "description" in config.
+
+            '
+          type: object
+        relation:
+          $ref: '#/components/schemas/PluginRelation'
+        type:
+          description: Type of the widget
+          type: string
+          enum:
+          - table
+          - iframe
+        url_slug:
+          description: URL-friendly slug derived from the widget title
+          type: string
+        widget:
+          description: Widget configuration
+          type: object
+        widget_key:
+          description: 'Stable key declared for the widget in the plugin''s widgets.yaml, used to match it across plugin version upgrades. Empty when the widget declares none.
+
+            '
+          type: string
+    UpdatePluginInstall:
+      description: The data needed to update a Plugin Install to a new Plugin Version
+      type: object
+      title: Update Plugin Install
+      required:
+      - plugin_version_id
+      - configuration
+      properties:
+        configuration:
+          description: Stack Forms syntax configuration
+          type: object
+          additionalProperties:
+            type: string
+        plugin_version_id:
+          description: ID of the new Plugin Version of the Plugin on the Plugin Registry
+          type: integer
+          format: uint32
+          minimum: 1
+        setup:
+          description: Optional runtime setup overrides
+          type:
+          - object
+          - 'null'
+          properties:
+            max_cpu:
+              type: string
+            max_memory:
+              type: string
+            max_replicas:
+              type: integer
+              format: int32
+            min_cpu:
+              type: string
+            min_memory:
+              type: string
+            min_replicas:
+              type: integer
+              format: int32
+            replicas:
+              type: integer
+              format: int32
+    PluginInstall:
+      description: The Plugin Install data
+      type: object
+      title: Plugin Install
+      required:
+      - id
+      - uuid
+      - configuration
+      - status
+      - pm_secret
+      - created_at
+      - updated_at
+      properties:
+        configuration:
+          description: Stack Forms syntax configuration
+          type: object
+          additionalProperties:
+            type: string
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        inherited:
+          description: Whether the install is inherited from a parent organization
+          type: boolean
+        owner_organization_canonical:
+          description: Canonical of the organization that owns the plugin install
+          type: string
+        pm_secret:
+          description: Secret used by the frontend to generate webhooks for the Plugin
+          type: string
+        read_only:
+          description: Whether the install is read-only (inherited from parent org)
+          type: boolean
+        setup:
+          description: Per-install runtime setup overrides
+          type:
+          - object
+          - 'null'
+          properties:
+            max_cpu:
+              description: K8s resource limit for CPU
+              type: string
+            max_memory:
+              description: K8s resource limit for memory
+              type: string
+            max_replicas:
+              description: HPA maximum replicas (mutually exclusive with replicas)
+              type: integer
+              format: int32
+            min_cpu:
+              description: K8s resource request for CPU
+              type: string
+            min_memory:
+              description: K8s resource request for memory
+              type: string
+            min_replicas:
+              description: HPA minimum replicas (mutually exclusive with replicas)
+              type: integer
+              format: int32
+            replicas:
+              description: Static replica count (mutually exclusive with min/max_replicas)
+              type: integer
+              format: int32
+        status:
+          description: Status of the Plugin deployment process on Plugin Manager
+          type: string
+          enum:
+          - pending
+          - running
+          - failed
+        updated_at:
+          type: integer
+          format: uint64
+        url_slug:
+          description: URL-friendly slug for the plugin install, unique per organization
+          type: string
+        uuid:
+          description: Unique identifier of the Plugin Install
+          type: string
+          format: uuid
+        version:
+          $ref: '#/components/schemas/PluginVersion'
+        visibility:
+          description: Visibility scope of the plugin install
+          type: string
+          enum:
+          - local
+          - shared
+    UpdatePlugin:
+      description: The Plugin data needed to update it
+      type: object
+      title: Update Plugin
+      required:
+      - name
+      properties:
+        name:
+          description: Name assigned to the Plugin
+          type: string
+    PluginInstallDeploymentLog:
+      description: Plugin Install deployment log entry
+      type: object
+      title: Plugin Install Deployment Log
+      required:
+      - timestamp
+      - message
+      properties:
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    UpdatePluginRegistry:
+      description: The Plugin Registry data needed to update it
+      type: object
+      title: Update Plugin Registry
+      required:
+      - name
+      properties:
+        name:
+          description: Name assigned to the Repository
+          type: string
+    PluginVersionLog:
+      description: The Plugin Version Log info
+      type: object
+      title: PluginVersionLog
+      required:
+      - id
+      - message
+      - timestamp
+      properties:
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        message:
+          description: Text of the log line
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    PluginVersion:
+      description: The Plugin that holds all the Versions
+      type: object
+      title: Plugin
+      required:
+      - id
+      - name
+      - url
+      - status
+      properties:
+        configuration:
+          description: Stack Forms syntax configuration
+          type: array
+          items:
+            type: object
+        description:
+          description: The Description of the Plugin Version
+          type: string
+        error:
+          description: If an error happen on the creation of the Version this will hold the info
+          type: string
+        icon:
+          description: Icon of the Plugin Version
+          type: string
+          format: uri
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        images:
+          description: Images to show the Plugin Version
+          type: array
+          items:
+            type: string
+            format: uri
+        name:
+          description: Name assigned to the Plugin
+          type: string
+        schema:
+          description: Schema of the SQLite schema
+          type: object
+        scope:
+          description: Policies in which the Plugin Version is scoped
+          type: array
+          items:
+            type: string
+        setup:
+          description: Runtime setup declared in the plugin manifest
+          type: object
+          properties:
+            max_cpu:
+              description: K8s resource limit for CPU
+              type: string
+            max_memory:
+              description: K8s resource limit for memory
+              type: string
+            min_cpu:
+              description: K8s resource request for CPU
+              type: string
+            min_memory:
+              description: K8s resource request for memory
+              type: string
+            readiness_path:
+              description: HTTP path for K8s readiness probe
+              type: string
+        status:
+          description: Status of the current Plugin Version creation process
+          type: string
+          enum:
+          - pending
+          - processing
+          - failed
+          - success
+        url:
+          description: URL of the Plugin Version
+          type: string
+          format: uri
+        widgets:
+          description: List of default Widgets configuration
+          type: array
+          items:
+            type: object
+    Pagination:
+      type: object
+      title: Pagination
+      required:
+      - total
+      - index
+      - size
+      properties:
+        index:
+          description: The index of the page sent (the first page is 1).
+          type: integer
+          format: uint64
+          minimum: 1
+        size:
+          description: The size of the page (the number of entities per page)
+          type: integer
+          format: uint64
+        total:
+          description: The total number of items.
+          type: integer
+          format: uint64
+    NewPluginInstall:
+      description: The data needed to create a Plugin Install
+      type: object
+      title: New Plugin Install
+      required:
+      - configuration
+      properties:
+        configuration:
+          description: Stack Forms syntax configuration
+          type: object
+          additionalProperties:
+            type: string
+        setup:
+          description: Optional runtime setup overrides
+          type:
+          - object
+          - 'null'
+          properties:
+            max_cpu:
+              type: string
+            max_memory:
+              type: string
+            max_replicas:
+              type: integer
+              format: int32
+            min_cpu:
+              type: string
+            min_memory:
+              type: string
+            min_replicas:
+              type: integer
+              format: int32
+            replicas:
+              type: integer
+              format: int32
+    PluginRelation:
+      description: The relation between a Plugin and a Component
+      type: object
+      title: Plugin Relation
+      required:
+      - relations
+      - enabled
+      properties:
+        enabled:
+          description: If the Plugin is enabled for the Component
+          type: boolean
+        relations:
+          description: List of relations between a Plugin and a Component
+          type: object
+    PluginWidgetView:
+      description: A resolved widget view for a plugin install
+      type: object
+      title: Plugin Widget View
+      required:
+      - id
+      - enabled
+      - url_slug
+      - effective_enabled
+      - effective_slug
+      - widget
+      properties:
+        effective_enabled:
+          description: The effective enabled state after inheritance resolution
+          type: boolean
+        effective_slug:
+          description: The effective URL slug after inheritance resolution
+          type: string
+        enabled:
+          description: Whether this widget view is enabled
+          type: boolean
+        has_override:
+          description: Whether a child-org override exists
+          type: boolean
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        is_inherited:
+          description: Whether the view is inherited from a parent organization
+          type: boolean
+        url_slug:
+          description: URL slug for the widget view
+          type: string
+        widget:
+          $ref: '#/components/schemas/PluginWidget'
+    PluginRegistry:
+      description: The Plugin Registry that holds all the available Plugins
+      type: object
+      title: Plugin Registry
+      required:
+      - id
+      - name
+      - url
+      - access
+      - status
+      - created_at
+      - updated_at
+      properties:
+        access:
+          description: If you have access to create Plugins
+          type: boolean
+        created_at:
+          type: integer
+          format: uint64
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        name:
+          description: Name assigned to the Repository
+          type: string
+        status:
+          description: Status of the Plugin Registry
+          type: string
+          enum:
+          - offline
+          - connected
+        updated_at:
+          type: integer
+          format: uint64
+        url:
+          description: URL of the Plugin Registry
+          type: string
+          format: uri
+    PluginInstallSharing:
+      description: Sharing configuration for a plugin install
+      type: object
+      title: Plugin Install Sharing
+      required:
+      - visibility
+      - mode
+      properties:
+        mode:
+          description: Sharing mode
+          type: string
+        organizations:
+          description: List of organization canonicals the plugin is shared with
+          type: array
+          items:
+            type: string
+        visibility:
+          description: Visibility scope
+          type: string
+    NewPluginRegistry:
+      description: The Plugin Registry data needed to create it
+      type: object
+      title: New Plugin Registry
+      required:
+      - name
+      - url
+      properties:
+        name:
+          description: Name assigned to the Repository
+          type: string
+        url:
+          description: URL of the Plugin Registry
+          type: string
+          format: uri
+    PluginLogs:
+      description: Combined runtime and installation logs for a plugin install
+      type: object
+      title: Plugin Logs
+      properties:
+        install_logs:
+          description: Deployment logs from the plugin installation process
+          type: array
+          items:
+            $ref: '#/components/schemas/PluginInstallDeploymentLog'
+        runtime_logs:
+          description: Output logs from the running plugin process
+          type: array
+          items:
+            $ref: '#/components/schemas/PluginInstallRuntimeLog'
+    ErrorPayload:
+      description: 'The payload used by the server to response to the client with an Error, those errors could be any of the ones listed [here](https://github.com/cycloidio/youdeploy-http-api/blob/develop/errors/code.go#L10), only the CODE of the error is the one that is guaranteed to not change between the same major version, the MESSAGE could change.
+
+        '
+      title: Error Payload
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetailsItem'
+        request_id:
+          type: string
+    Plugin:
+      description: The Plugin that holds all the Versions
+      type: object
+      title: Plugin
+      required:
+      - id
+      - name
+      - registry
+      - owned
+      properties:
+        id:
+          type: integer
+          format: uint32
+          minimum: 1
+        install:
+          $ref: '#/components/schemas/PluginInstall'
+        latest:
+          $ref: '#/components/schemas/PluginVersion'
+        name:
+          description: Name assigned to the Plugin
+          type: string
+        orphaned:
+          description: 'True when the local install has no corresponding registry plugin
+
+            (e.g. the registry plugin was deleted out-of-band, or the registry is
+
+            unreachable). When true, Latest/Version fields may be zero-valued and
+
+            update operations will be rejected. Defaults to false.
+
+            '
+          type: boolean
+        owned:
+          description: If the plugin is owned
+          type: boolean
+        registry:
+          $ref: '#/components/schemas/PluginRegistry'
+        relation:
+          description: The relation of the Plugin with the current component, if any
+          $ref: '#/components/schemas/PluginRelation'
+    NewPluginVersion:
+      description: The Plugin data needed to create it
+      type: object
+      title: New Plugin
+      required:
+      - url
+      properties:
+        url:
+          description: URL of the Plugin Version
+          type: string
+    NewPlugin:
+      description: The Plugin data needed to create it
+      type: object
+      title: New Plugin
+      required:
+      - name
+      properties:
+        name:
+          description: Name assigned to the Repository
+          type: string
+    ErrorDetailsItem:
+      description: Represents an item of the list of details of an error.
+      title: Error details item
+      required:
+      - message
+      - code
+      properties:
+        code:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+    PluginInstallRuntimeLog:
+      description: Plugin Install runtime log entry
+      type: object
+      title: Plugin Install Runtime Log
+      required:
+      - id
+      - timestamp
+      - message
+      properties:
+        id:
+          description: Log line number
+          type: integer
+          format: uint32
+          minimum: 1
+        message:
+          description: Text of the log line
+          type: string
+        timestamp:
+          description: Timestamp of the log line
+          type: string
+          format: date-time
+    PluginWidgetData:
+      description: The Plugin Widget query response data
+      type: object
+      title: Plugin Widget Data
+      required:
+      - data
+      properties:
+        data:
+          description: Data returned from executing query on the plugin
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+  parameters:
+    placement:
+      description: The placement type to filter widgets by (e.g. "tab", "component")
+      name: placement
+      in: query
+      required: true
+      schema:
+        type: string
+    widget_id:
+      description: A widget id
+      name: widget_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    api_key:
+      description: An API key used for authentication embedded in the URL path
+      name: api_key
+      in: path
+      required: true
+      schema:
+        type: string
+    plugin_id:
+      description: A plugin id
+      name: plugin_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    plugin_registry_id:
+      description: A plugin registry id
+      name: plugin_registry_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    plugin_install_slug:
+      description: A plugin install URL slug
+      name: plugin_install_slug
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 255
+        minLength: 1
+    plugin_install_id:
+      description: A plugin install id
+      name: plugin_install_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    organization_canonical:
+      description: A canonical of an organization.
+      name: organization_canonical
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+        minLength: 2
+        pattern: ^[a-z0-9]([a-z0-9\-_]*[a-z0-9])?$
+    plugin_version_id:
+      description: A plugin version id
+      name: plugin_version_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+    widget_view_id:
+      description: A widget view id
+      name: widget_view_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: uint32
+  responses:
+    unexpected_error:
+      description: The response sent when an unexpected error happened, as known as an internal server error.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unexpected
+              message: Server Internal error
+    not_enough_permissions:
+      description: The authenticated user cannot perform the operation because, it doesn't have permissions for such operation.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: Unauthorized
+              message: Not enough permissions to perform the operation
+    required_content_length_header:
+      description: The request has a body but it doesn't have a Content-Length header.
+    not_found_entity_in_path:
+      description: The response sent when any of the entities present in the path is not found.
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: NotFoundEntity
+              message: Entity not found
+    unprocessable_entity:
+      description: All the custom errors that are generated from the Cycloid API
+      headers:
+        Content-Length:
+          description: The length of the response body in octets (8-bit bytes).
+          schema:
+            type: integer
+            format: uint64
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorPayload'
+          example:
+            errors:
+            - code: SomeCode
+              message: some error
+  securitySchemes:
+    api_key:
+      description: The API authorization is done with JWT tokens
+      type: apiKey
+      name: Authorization
+      in: header
+    api_key_query:
+      description: The API authorization is done with JWT tokens in the query string
+      type: apiKey
+      name: api_key
+      in: query
