@@ -9,6 +9,9 @@ artifacts:
   authentication/cycloid-authentication.yml:
     method: derived
     evidence: declared in the artifact
+  capabilities/cycloid-capability-edges.yml:
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-api.opencollection.json:
     method: unknown
     evidence: no authorship recorded
@@ -16,29 +19,29 @@ artifacts:
     method: unknown
     evidence: no authorship recorded
   collections/cycloid-cloudcost-api.opencollection.json:
-    method: derived
-    evidence: openapi/cycloid-cloudcost-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-cloudcost-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-cloudcost-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-configrepositories-api.opencollection.json:
-    method: derived
-    evidence: openapi/cycloid-configrepositories-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-configrepositories-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-configrepositories-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-credentials-api.opencollection.json:
-    method: derived
-    evidence: openapi/cycloid-credentials-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-credentials-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-credentials-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-inventory-api.opencollection.json:
-    method: derived
-    evidence: openapi/cycloid-inventory-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-inventory-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-inventory-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-organizations-api.opencollection.json:
     method: derived
     evidence: openapi/cycloid-organizations-api
@@ -46,29 +49,35 @@ artifacts:
     method: derived
     evidence: openapi/cycloid-organizations-api
   collections/cycloid-pipelines-api.opencollection.json:
-    method: derived
-    evidence: openapi/cycloid-pipelines-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-pipelines-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-pipelines-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-projects-api.opencollection.json:
-    method: derived
-    evidence: openapi/cycloid-projects-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-projects-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-projects-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-servicecatalogs-api.opencollection.json:
-    method: derived
-    evidence: openapi/cycloid-servicecatalogs-api
+    method: unknown
+    evidence: no authorship recorded
   collections/cycloid-servicecatalogs-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-servicecatalogs-api
+    method: unknown
+    evidence: no authorship recorded
   finops/cycloid-finops.yml:
     method: generated
     evidence: declared in the artifact
   front-door-ai/2026-09-17.yml:
     method: unknown
     evidence: no authorship recorded
+  integrations/_index.yml:
+    method: generated
+    evidence: carries an API Evangelist house phrase
+  integrations/cycloid-integration-edges.yml:
+    method: searched
+    evidence: declared in the artifact
   json-ld/cycloid-context.jsonld:
     method: unknown
     evidence: no authorship recorded
@@ -78,127 +87,7 @@ artifacts:
   json-schema/cycloid-stack-schema.json:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-24T161608.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T125852.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T133943.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T143147.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T154045.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-26T215308.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T094438.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T103455.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T123021.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T132314.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T140727.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-28T221322.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T213958.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T230545.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T203505.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T220315.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-31T223420.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T063623.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T210448.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T222808.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T224043.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T161828.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T174231.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T062714.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T212454.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T224856.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T055819.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T072335.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T144739.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T195450.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T211839.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T011047.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T224210.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T200636.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T213054.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T214843.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T232836.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T204815.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T222408.yml:
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-12T062655.yml:
@@ -282,64 +171,235 @@ artifacts:
   kin/score-2026-09-24T161608.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   llms/cycloid-llms.txt:
     method: searched
     evidence: 'derive-llms-provenance.py: harvested'
-  openapi/_original/cycloid-api-openapi.yml:
+  openapi/_original/cycloid-openapi.json:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
-  openapi/cycloid-cloudcost-api-openapi.yml:
+    evidence: byte-identical to https://http-api.cycloid.io/swagger.json (sha256 4f3654bedd5f, fetched
+      2026-10-19)
+  openapi/cycloid-admin-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/cycloid-configrepositories-api-openapi.yml:
+  openapi/cycloid-appearance-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/cycloid-credentials-api-openapi.yml:
+  openapi/cycloid-authentications-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/cycloid-inventory-api-openapi.yml:
+  openapi/cycloid-cloud-providers-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-code-generation-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-component-pipeline-resources-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-component-pipeline-resources-versions-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-component-pipelines-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-component-pipelines-jobs-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-component-pipelines-jobs-builds-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-cost-estimation-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-cycloid-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-environment-pipelines-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-api-keys-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-appearances-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-authentications-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-children-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-cloud-accounts-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-cloud-cost-management-accounts-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-cloud-cost-management-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-cloud-cost-management-dashboard-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-cloud-cost-management-filter-vaules-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-cloud-cost-management-projects-dashboard-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-cloud-cost-management-provider-details-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-cloud-cost-management-provider-histograms-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-cloud-cost-management-tag-mappings-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-components-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-config-repositories-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-credentials-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-environment-types-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-environments-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-external-backends-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-forms-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-infrastructure-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-infrastructure-policies-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-inventory-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-inventory-plan-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-kpis-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-licence-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-logs-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-members-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-naming-rules-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-oidc-group-mappings-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-pipelines-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-plugin-managers-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-plugins-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-projects-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-roles-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-service-catalog-sources-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-subscriptions-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-team-members-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-teams-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-organization-workers-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   openapi/cycloid-organizations-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/cycloid-pipelines-api-openapi.yml:
+  openapi/cycloid-policies-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/cycloid-projects-api-openapi.yml:
+  openapi/cycloid-project-kpis-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/cycloid-servicecatalogs-api-openapi.yml:
+  openapi/cycloid-project-pipelines-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-saml2-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-service-catalogs-api-openapi.yml:
+    method: derived
+    evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  openapi/cycloid-user-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   plans/cycloid-plans-pricing.yml:
     method: generated
     evidence: declared in the artifact
   postman/cycloid-cloudcost-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-cloudcost-api
+    method: unknown
+    evidence: no authorship recorded
   postman/cycloid-configrepositories-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-configrepositories-api
+    method: unknown
+    evidence: no authorship recorded
   postman/cycloid-credentials-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-credentials-api
+    method: unknown
+    evidence: no authorship recorded
   postman/cycloid-inventory-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-inventory-api
+    method: unknown
+    evidence: no authorship recorded
   postman/cycloid-organizations-api.postman_collection.json:
     method: derived
     evidence: openapi/cycloid-organizations-api
   postman/cycloid-pipelines-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-pipelines-api
+    method: unknown
+    evidence: no authorship recorded
   postman/cycloid-projects-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-projects-api
+    method: unknown
+    evidence: no authorship recorded
   postman/cycloid-servicecatalogs-api.postman_collection.json:
-    method: derived
-    evidence: openapi/cycloid-servicecatalogs-api
+    method: unknown
+    evidence: no authorship recorded
   rate-limits/cycloid-rate-limits.yml:
     method: generated
     evidence: declared in the artifact
